@@ -2,15 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewEnemy : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
-    public NewBulletPoolManager BulletPoolManager;
-    public float shootRate = 1.0f;
+    public BulletPoolManager BulletPoolManager;      // What bullet manager is this bullet being used in
+    public float shootRate = 0.5f;                      // How fast a bullet spawns (in seconds)
 
     private float elapsedTime;
+
     // Start is called before the first frame update
     void Start()
     {
+        // Error management + logging
         if (BulletPoolManager == null)
         {
             Debug.Log("No bullet pool manager assigned to the enemy - Disabling enemy");
@@ -21,9 +23,13 @@ public class NewEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //
+        //  Delete debugging code and replace with actual enemy AI
+        //
+
         elapsedTime += Time.deltaTime;
 
-        // Attempt to shoot (without input) every frame
+        /*      DEBUG: SHOOTING W/OUT INPUT      */
 
         if (elapsedTime > shootRate)
         {
@@ -31,8 +37,7 @@ public class NewEnemy : MonoBehaviour
             BulletPoolManager.Shooting();
         }
 
-
-        // Attempt to shoot (with user input)
+        /*      DEBUG: SHOOTING USING LEFT MOUSE BUTTON        */
 
         /*if(Input.GetButtonDown("Fire1") && elapsedTime > shootRate)
         {
