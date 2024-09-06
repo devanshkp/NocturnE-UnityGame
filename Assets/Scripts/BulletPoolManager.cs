@@ -4,37 +4,57 @@ using UnityEngine;
 
 public class BulletPoolManager : MonoBehaviour
 {
-    public GameObject bulletToPool;
+    // BULLET POOL INFORMATION
+    public Queue<GameObject> bulletPool;
     public int poolSize = 20;
-    private Queue<GameObject> bulletPool;
+    public GameObject bulletObject;
+
+    public StandardBullet StandardBullet;
 
     // Start is called before the first frame update
     void Start()
     {
-        PoolBullets();
+
+        bulletPool = new Queue<GameObject>();
+
+        // Instantiates all the bullets in the manager and make them invisible @ frame 0 (zero)
+        for (int i = 0; i < poolSize; i++)
+        {
+            GameObject bullet = Instantiate(bulletObject);
+            bullet.SetActive(false);
+            bullet.transform.SetParent(transform, false);
+            bulletPool.Enqueue(bullet);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    void PoolBullets()
+    /*
+     *  Shooting method
+     */
+    public void Shooting()
     {
-        print("STARTING");
 
-        bulletPool = new Queue<GameObject>();
+        // Calls a bullet from the queue
+        GameObject bullet = GetBullet();    
 
-        for (int i = 0; i < poolSize; i++)
+        // 'Spawns' and moves the bullet
+        if (bullet != null)
         {
-            GameObject bullet = Instantiate(bulletToPool);
-            bullet.SetActive(false);
-            bullet.transform.parent = transform;
-            bulletPool.Enqueue(bullet);
+            bullet.SetActive(true);
+            bullet.transform.position = Vector3.zero;               // SET POSITION TO THAT OF THE ENEMY
+            bullet.transform.rotation = Quaternion.identity;        // SET ROTATION TO THAT OF THE ENEMY (have the bullets spawn always IN FRONT of the enemy)
+            bullet.GetComponent<Rigidbody>().velocity = Vector3.forward * StandardBullet.speed;
+
+            StartCoroutine(ReturnBulletToPool(bullet, StandardBullet.lifeTime));
         }
     }
 
+    // Picks the next sequential bullet to shoot
     public GameObject GetBullet()
     {
         if (bulletPool.Count > 0)
@@ -43,14 +63,12 @@ public class BulletPoolManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Bruh");
+            Debug.Log("No bullets available in the bullet pool queue");
             return null;
         }
-        /*bullet.SetActive(true);*/
-        /*bulletPool.Enqueue(bullet);*/
-        //return bullet;
     }
 
+    // Returns the bullet to the queue after its lifetime
     public IEnumerator ReturnBulletToPool(GameObject bullet, float lifeTime)
     {
         yield return new WaitForSeconds(lifeTime);
@@ -58,9 +76,5 @@ public class BulletPoolManager : MonoBehaviour
         bulletPool.Enqueue(bullet);
     }
 
-    public void tester()
-    {
-        print("HIHIHI");
-    }
-
+    
 }
