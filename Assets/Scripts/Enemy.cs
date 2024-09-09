@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public BulletPoolManager BulletPoolManager;      // What bullet manager is this bullet being used in
+    public SineBulletPoolManager BulletPoolManager;         // What bullet manager is this bullet being used in
     public float shootRate = 0.5f;                      // How fast a bullet spawns (in seconds)
 
     private float elapsedTime;
