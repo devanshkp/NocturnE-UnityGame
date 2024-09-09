@@ -9,6 +9,8 @@ public class BulletPoolManager : MonoBehaviour
     public int poolSize = 20;
     public GameObject bulletObject;
 
+    public GameObject enemy;
+
     public StandardBullet StandardBullet;
 
     // Start is called before the first frame update
@@ -46,8 +48,8 @@ public class BulletPoolManager : MonoBehaviour
         if (bullet != null)
         {
             bullet.SetActive(true);
-            bullet.transform.position = Vector3.zero;               // SET POSITION TO THAT OF THE ENEMY
-            bullet.transform.rotation = Quaternion.identity;        // SET ROTATION TO THAT OF THE ENEMY (have the bullets spawn always IN FRONT of the enemy)
+            bullet.transform.position = enemy.transform.position;               // SET POSITION TO THAT OF THE ENEMY
+            bullet.transform.rotation = enemy.transform.rotation;        // SET ROTATION TO THAT OF THE ENEMY (have the bullets spawn always IN FRONT of the enemy)
             bullet.GetComponent<Rigidbody>().velocity = Vector3.forward * StandardBullet.speed;
 
             StartCoroutine(ReturnBulletToPool(bullet, StandardBullet.lifeTime));

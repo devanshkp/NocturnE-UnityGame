@@ -12,6 +12,11 @@ public class SineBulletPoolManager : MonoBehaviour
     public int poolSize = 20;
     public GameObject bulletObject;
 
+    public float waveAmplitude = 2.5f;
+    public float frequency = 5.0f;
+
+    public GameObject enemy;
+
     public StandardBullet StandardBullet;
 
 
@@ -51,25 +56,12 @@ public class SineBulletPoolManager : MonoBehaviour
         if (bullet != null)
         {
             bullet.SetActive(true);
-            /*bullet.transform.position = Vector3.zero;               // SET POSITION TO THAT OF THE ENEMY*/
+            bullet.transform.position = enemy.transform.position;
+            bullet.transform.rotation = enemy.transform.rotation;
 
-
-
-
-            /*Vector3 pos = bullet.transform.position;
-
-            float sin = Mathf.Sin(pos.y);*/
-            //pos.x = sin;
-
-            //bullet.transform.position = pos;
-
-
-
-            bullet.transform.position = Vector3.zero;
-            bullet.transform.rotation = Quaternion.identity;        // SET ROTATION TO THAT OF THE ENEMY (have the bullets spawn always IN FRONT of the enemy)
-            //bullet.GetComponent<Rigidbody>().velocity = new Vector3(Mathf.Sin(3 * Time.time),StandardBullet.speed);
-
-            StartCoroutine(SineMovementCoroutine(StandardBullet.lifeTime));        // Makes the bullets follow a sine wave form
+            // Makes the bullets follow a sine wave form
+            StartCoroutine(SineMovementCoroutine(bullet, StandardBullet.lifeTime));
+            // Bullet queuing
             StartCoroutine(ReturnBulletToPool(bullet, StandardBullet.lifeTime));
         }
     }
@@ -96,22 +88,24 @@ public class SineBulletPoolManager : MonoBehaviour
         bulletPool.Enqueue(bullet);
     }
 
-    public IEnumerator SineMovementCoroutine(float lifeTime)
+    public IEnumerator SineMovementCoroutine(GameObject bullet, float lifeTime)
     {
         float timeElapsed = 0f;
+        Vector3 startPos = bullet.transform.position;
 
         while (timeElapsed < lifeTime)
         {
             timeElapsed += Time.deltaTime;
 
-            Vector3 forwardMovement = transform.forward * StandardBullet.speed * timeElapsed;
+            Vector3 forwardMovement = bullet.transform.forward * StandardBullet.speed * timeElapsed;
 
-            float sineOffset = Mathf.Sin(3 * timeElapsed);
-            Vector3 sineMovement = new Vector3(0,sineOffset,0);
+            float sineOffset = waveAmplitude * Mathf.Sin(frequency * timeElapsed);
+            Vector3 sineMovement = new Vector3(sineOffset,0,0);
 
-            transform.position = Vector3.zero + forwardMovement + sineMovement;
+            bullet.transform.position = startPos + forwardMovement + sineMovement;
 
-            yield return null;
+            // waits for next frame
+            yield return null;      
         }
 
     }
