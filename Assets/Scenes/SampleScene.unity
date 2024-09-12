@@ -654,6 +654,14 @@ PrefabInstance:
       propertyPath: enemy
       value: 
       objectReference: {fileID: 289558898}
+    - target: {fileID: 268807971854154567, guid: 8c25c6a31a05b8e429046e30fb423a57, type: 3}
+      propertyPath: bulletObject
+      value: 
+      objectReference: {fileID: 5514801358688389466, guid: d77de6317f985144097b555b7be2ee12, type: 3}
+    - target: {fileID: 268807971854154567, guid: 8c25c6a31a05b8e429046e30fb423a57, type: 3}
+      propertyPath: StandardBullet
+      value: 
+      objectReference: {fileID: 920077826179124443, guid: d77de6317f985144097b555b7be2ee12, type: 3}
     - target: {fileID: 3574850126797836463, guid: 8c25c6a31a05b8e429046e30fb423a57, type: 3}
       propertyPath: m_Name
       value: BulletPoolManager
@@ -913,6 +921,17 @@ Terrain:
   m_EnableHeightmapRayTracing: 1
   m_EnableTreesAndDetailsRayTracing: 0
   m_TreeMotionVectorModeOverride: 3
+--- !u!114 &1457143833 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5895305619886973618, guid: 7c35f8bee4eaa0347b3ce8c0ae1adad7, type: 3}
+  m_PrefabInstance: {fileID: 2281620713154252157}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fd4a5ffc56ed134d98d376386a0a7b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1610345847
 GameObject:
   m_ObjectHideFlags: 0
@@ -1136,7 +1155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b505e7e0e3bd3f048998b3bd86c093de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BulletPoolManager: {fileID: 0}
+  BulletPoolManager: {fileID: 1457143833}
   shootRate: 0.5
 --- !u!4 &1910182759 stripped
 Transform:
@@ -1206,7 +1225,7 @@ PrefabInstance:
     - target: {fileID: 5895305619886973618, guid: 7c35f8bee4eaa0347b3ce8c0ae1adad7, type: 3}
       propertyPath: bulletObject
       value: 
-      objectReference: {fileID: 5514801358688389466, guid: d77de6317f985144097b555b7be2ee12, type: 3}
+      objectReference: {fileID: 6162918528214467270, guid: 8d7b9beca0e68b140892820d18289449, type: 3}
     - target: {fileID: 5895305619886973618, guid: 7c35f8bee4eaa0347b3ce8c0ae1adad7, type: 3}
       propertyPath: waveAmplitude
       value: 2.5
@@ -1214,7 +1233,7 @@ PrefabInstance:
     - target: {fileID: 5895305619886973618, guid: 7c35f8bee4eaa0347b3ce8c0ae1adad7, type: 3}
       propertyPath: StandardBullet
       value: 
-      objectReference: {fileID: 920077826179124443, guid: d77de6317f985144097b555b7be2ee12, type: 3}
+      objectReference: {fileID: 7913548725778819995, guid: 8d7b9beca0e68b140892820d18289449, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
