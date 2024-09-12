@@ -5,6 +5,7 @@ using UnityEngine;
 public class NewBehaviourScript : MonoBehaviour
 {
     private MoveAroundObject cameraController;
+    private Animator animator;
 
     [Header("References")]
     public CharacterController controller;
@@ -29,6 +30,7 @@ public class NewBehaviourScript : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        animator = GetComponentInChildren<Animator>();
         cameraController = playerCamera.GetComponent<MoveAroundObject>();
         if (playerCamera == null)
         {
@@ -39,10 +41,14 @@ public class NewBehaviourScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Get horizontal velocity
+        Vector3 horizontalVelocity = new Vector3(controller.velocity.x, 0, controller.velocity.z);
+        animator.SetBool("isRunning", horizontalVelocity.magnitude > 0.1f);
         HandleRotation();
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             jumpRequested = true;
+            animator.SetBool("isJumping", true);
         }
     }
 
@@ -127,6 +133,11 @@ public class NewBehaviourScript : MonoBehaviour
         {
             verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
             jumpRequested = false; // Reset jump request
+        }
+
+        if (isGrounded && verticalVelocity <= 0.1f)
+        {
+            animator.SetBool("isJumping", false);  // Stop jump animation
         }
     }
 }
