@@ -6,6 +6,7 @@ public class NewBehaviourScript : MonoBehaviour
 {
     private MoveAroundObject cameraController;
     private Animator animator;
+    private Transform lockedEnemy;  // The enemy the player is locked onto
 
     [Header("References")]
     public CharacterController controller;
@@ -17,10 +18,21 @@ public class NewBehaviourScript : MonoBehaviour
     public float movementRotSpeed = 10;
     public float cameraBasedRotSpeed = 720f;  // Speed of player rotation (degrees per second)
 
+    [Header("Roll Settings")]
+    public float rollDistance = 10f;  // Speed of the roll
+    public float rollCooldown = 1.5f;  // Time between rolls
+    private bool isRolling = false;  // Is the player currently rolling?
+    private Vector3 rollDirection;  // Direction of the roll
+    private float rollCooldownTimer = 0f;  // Timer to track time since last roll
+
     [Header("Gravity Settings")]
     public float gravity = -9.81f;  // Gravity constant
     public float jumpHeight = 1.5f; // Height of jump
     private float verticalVelocity = 0f;  // Track vertical speed for gravity
+
+    [Header("Collider Settings")]
+    private Vector3 originalColliderCenter;
+    private float originalColliderHeight;
     
     private Vector3 movementDirection = Vector3.zero;
     private bool isGrounded;  // Check if the player is on the ground
@@ -36,15 +48,23 @@ public class NewBehaviourScript : MonoBehaviour
         {
             playerCamera = Camera.main; // Fallback to main camera if not assigned
         }
+
+        // Save original collider size
+        originalColliderCenter = controller.center;
+        originalColliderHeight = controller.height;
     }
 
     // Update is called once per frame
     void Update()
     {
+        checkRunning();
         // Get horizontal velocity
-        Vector3 horizontalVelocity = new Vector3(controller.velocity.x, 0, controller.velocity.z);
-        animator.SetBool("isRunning", horizontalVelocity.magnitude > 0.1f);
-        HandleRotation();
+        if (!isRolling)
+        {
+            // Handle rotation and regular movement while not rolling
+            HandleRotation();
+            HandleRollInput();
+        }
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             jumpRequested = true;
@@ -54,7 +74,13 @@ public class NewBehaviourScript : MonoBehaviour
 
     void FixedUpdate()
     {
-        HandleMovement();  // Movement is moved to FixedUpdate for smooth physics handling
+        if (!isRolling){
+            HandleMovement();  // Regular movement if not rolling
+        }
+        else{
+            HandleRoll();
+        }
+
         ApplyGravity();
     }
 
@@ -86,9 +112,14 @@ public class NewBehaviourScript : MonoBehaviour
         controller.Move(finalMovement * Time.fixedDeltaTime);
     }
 
+    void checkRunning(){
+        Vector3 horizontalVelocity = new Vector3(controller.velocity.x, 0, controller.velocity.z);
+        animator.SetBool("isRunning", horizontalVelocity.magnitude > 0.1f);
+    }
+
     // Handles player rotation based on movement direction
     void HandleRotation()
-    {
+    {        
         float horizontalInput = Input.GetAxisRaw("Horizontal"); // A/D or Left/Right Arrow keys
         float verticalInput = Input.GetAxisRaw("Vertical");     // W/S or Up/Down Arrow keys
 
@@ -138,6 +169,53 @@ public class NewBehaviourScript : MonoBehaviour
         if (isGrounded && verticalVelocity <= 0.1f)
         {
             animator.SetBool("isJumping", false);  // Stop jump animation
+        }
+    }
+
+    void HandleRollInput()
+    {
+        // Increment cooldown timer
+        rollCooldownTimer += Time.deltaTime;
+
+        // Check if enough time has passed since the last roll
+        if (Input.GetKeyDown(KeyCode.LeftShift) && rollCooldownTimer >= rollCooldown && !isRolling)
+        {
+            // Initiate roll
+            isRolling = true;
+            rollCooldownTimer = 0f;  // Reset cooldown timer
+
+            // Get current movement direction
+            rollDirection = movementDirection.normalized;
+
+            // Adjust collider for immunity frames
+            controller.height = originalColliderHeight * 0.5f;  // Halve the collider height
+            controller.center = new Vector3(controller.center.x, originalColliderCenter.y - 0.5f, controller.center.z); // Lower collider
+
+            // Trigger roll animation (assuming you have one set up)
+            animator.SetBool("isRolling", true);
+        }
+    }
+
+    private void HandleRoll(){
+        // Calculate the roll movement direction
+        Vector3 rollMovement = rollDirection * rollDistance * Time.fixedDeltaTime;
+        
+        // Combine with vertical velocity (gravity) to ensure the character doesn't float
+        rollMovement.y = verticalVelocity;
+
+        // Move the character
+        controller.Move(rollMovement);
+
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        if (stateInfo.normalizedTime >= 1.0f){
+            // Restore collider after roll
+            controller.height = originalColliderHeight;
+            controller.center = originalColliderCenter;
+
+            // End rolling
+            isRolling = false;
+            animator.SetBool("isRolling", false);
         }
     }
 }
