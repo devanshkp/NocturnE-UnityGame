@@ -18,12 +18,14 @@ public class NewBehaviourScript : MonoBehaviour
     public float movementRotSpeed = 10;
     public float cameraBasedRotSpeed = 720f;  // Speed of player rotation (degrees per second)
 
-    [Header("Roll Settings")]
-    public float rollDistance = 10f;  // Speed of the roll
-    public float rollCooldown = 1.5f;  // Time between rolls
+    [Header("Roll")]
+    public AnimationCurve rollCurve;
     private bool isRolling = false;  // Is the player currently rolling?
-    private Vector3 rollDirection;  // Direction of the roll
+    private float rollTimer;
     private float rollCooldownTimer = 0f;  // Timer to track time since last roll
+    public float rollCooldown = 1.5f;  // Time between rolls
+
+    private Vector3 rollDirection;  // Direction of the roll
 
     [Header("Gravity Settings")]
     public float gravity = -9.81f;  // Gravity constant
@@ -34,7 +36,7 @@ public class NewBehaviourScript : MonoBehaviour
     private Vector3 originalColliderCenter;
     private float originalColliderHeight;
     
-    private Vector3 movementDirection = Vector3.zero;
+    private Vector3 direction = Vector3.zero;
     private bool isGrounded;  // Check if the player is on the ground
     private bool jumpRequested = false;  // Track if the jump is requested
 
@@ -52,23 +54,30 @@ public class NewBehaviourScript : MonoBehaviour
         // Save original collider size
         originalColliderCenter = controller.center;
         originalColliderHeight = controller.height;
+
+        Keyframe rollLastFrame = rollCurve[rollCurve.length - 1];
+        rollTimer = rollLastFrame.time;
+        // Allow player to roll immediately
+        rollCooldownTimer = rollTimer;
     }
 
     // Update is called once per frame
     void Update()
     {
         checkRunning();
-        // Get horizontal velocity
+        HandleRotation();
+        rollCooldownTimer += Time.deltaTime;
         if (!isRolling)
         {
-            // Handle rotation and regular movement while not rolling
-            HandleRotation();
-            HandleRollInput();
-        }
-        if (Input.GetButtonDown("Jump") && isGrounded)
-        {
-            jumpRequested = true;
-            animator.SetBool("isJumping", true);
+            if (Input.GetKeyDown(KeyCode.LeftShift) && rollCooldownTimer >= rollCooldown && direction.magnitude != 0)
+            {
+                StartCoroutine(Roll());
+            }
+            if (Input.GetButtonDown("Jump") && isGrounded)
+            {
+                jumpRequested = true;
+                animator.SetBool("isJumping", true);
+            }
         }
     }
 
@@ -76,12 +85,8 @@ public class NewBehaviourScript : MonoBehaviour
     {
         if (!isRolling){
             HandleMovement();  // Regular movement if not rolling
+            ApplyGravity();
         }
-        else{
-            HandleRoll();
-        }
-
-        ApplyGravity();
     }
 
     // Handles player movement based on user input
@@ -102,14 +107,9 @@ public class NewBehaviourScript : MonoBehaviour
         cameraRight.Normalize();
 
         // Combine the input with the camera's direction to get the movement direction
-        Vector3 inputDirection = (cameraForward * verticalInput + cameraRight * horizontalInput).normalized;
+        direction = (cameraForward * verticalInput + cameraRight * horizontalInput).normalized;
 
-        // Store the movement direction
-        movementDirection = inputDirection * playerSpeed;
-
-        // Combine horizontal movement with vertical velocity (gravity/jump)
-        Vector3 finalMovement = movementDirection + Vector3.up * verticalVelocity;
-        controller.Move(finalMovement * Time.fixedDeltaTime);
+        controller.Move((direction * playerSpeed + Vector3.up * verticalVelocity) * Time.fixedDeltaTime);
     }
 
     void checkRunning(){
@@ -120,29 +120,11 @@ public class NewBehaviourScript : MonoBehaviour
     // Handles player rotation based on movement direction
     void HandleRotation()
     {        
-        float horizontalInput = Input.GetAxisRaw("Horizontal"); // A/D or Left/Right Arrow keys
-        float verticalInput = Input.GetAxisRaw("Vertical");     // W/S or Up/Down Arrow keys
-
-        // Get the camera's forward and right vectors
-        Vector3 cameraForward = playerCamera.transform.forward;
-        Vector3 cameraRight = playerCamera.transform.right;
-
-        // Ignore the Y component
-        cameraForward.y = 0f;
-        cameraRight.y = 0f;
-
-        cameraForward.Normalize();
-        cameraRight.Normalize();
-
-        // Combine the input with the camera's direction to get the movement direction
-        Vector3 inputDirection = (cameraForward * verticalInput + cameraRight * horizontalInput).normalized;
-
-        // If there is input, rotate the player towards the direction of movement
-        if (inputDirection != Vector3.zero)
-        {
-            Quaternion desiredRotation = Quaternion.LookRotation(inputDirection, Vector3.up);
-            transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, movementRotSpeed * Time.deltaTime);
-        }
+        if (direction.magnitude == 0) return;
+        float rotSpeed = movementRotSpeed;
+        if (isRolling) rotSpeed = movementRotSpeed * 0.75f;
+        Quaternion desiredRotation = Quaternion.LookRotation(direction, Vector3.up);
+        transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, rotSpeed * Time.deltaTime);
     }
 
     // Apply gravity to the player
@@ -174,48 +156,26 @@ public class NewBehaviourScript : MonoBehaviour
 
     void HandleRollInput()
     {
-        // Increment cooldown timer
-        rollCooldownTimer += Time.deltaTime;
-
-        // Check if enough time has passed since the last roll
-        if (Input.GetKeyDown(KeyCode.LeftShift) && rollCooldownTimer >= rollCooldown && !isRolling)
-        {
-            // Initiate roll
-            isRolling = true;
-            rollCooldownTimer = 0f;  // Reset cooldown timer
-
-            // Get current movement direction
-            rollDirection = movementDirection.normalized;
-
-            // Adjust collider for immunity frames
-            controller.height = originalColliderHeight * 0.5f;  // Halve the collider height
-            controller.center = new Vector3(controller.center.x, originalColliderCenter.y - 0.5f, controller.center.z); // Lower collider
-
-            // Trigger roll animation (assuming you have one set up)
-            animator.SetBool("isRolling", true);
-        }
     }
 
-    private void HandleRoll(){
-        // Calculate the roll movement direction
-        Vector3 rollMovement = rollDirection * rollDistance * Time.fixedDeltaTime;
-        
-        // Combine with vertical velocity (gravity) to ensure the character doesn't float
-        rollMovement.y = verticalVelocity;
-
-        // Move the character
-        controller.Move(rollMovement);
-
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-
-        if (stateInfo.normalizedTime >= 1.0f){
-            // Restore collider after roll
-            controller.height = originalColliderHeight;
-            controller.center = originalColliderCenter;
-
-            // End rolling
-            isRolling = false;
-            animator.SetBool("isRolling", false);
+    IEnumerator Roll()
+    {
+        animator.SetBool("isRolling", true);
+        isRolling = true;
+        rollCooldownTimer = 0f;  // Reset cooldown timer
+        controller.height = originalColliderHeight * 0.5f;  // Halve the collider height
+        controller.center = new Vector3(0, 0.5f, 0); // Lower collider
+        float timer = 0;
+        while (timer < rollTimer){
+            float speed = rollCurve.Evaluate(timer);
+            Vector3 dir = (transform.forward * speed) + (Vector3.up * verticalVelocity);
+            controller.Move(dir * Time.deltaTime);
+            timer += Time.deltaTime;
+            yield return null;
         }
+        controller.height = originalColliderHeight;
+        controller.center = originalColliderCenter;
+        isRolling = false;
+        animator.SetBool("isRolling", false);
     }
 }

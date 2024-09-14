@@ -47,7 +47,7 @@ public class MoveAroundObject : MonoBehaviour
         offsetPosition.y += heightOffset;  // Add the height offset
 
         // Apply horizontal offset relative to the target's right vector
-        offsetPosition += transform.right * horizontalOffset;
+        offsetPosition += target.right * horizontalOffset;
 
         transform.position = offsetPosition;
     }
