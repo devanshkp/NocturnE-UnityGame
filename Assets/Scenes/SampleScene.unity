@@ -704,6 +704,82 @@ PrefabInstance:
       propertyPath: rollDistance
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
+      propertyPath: rollCurve.m_Curve.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
+      propertyPath: rollCurve.m_Curve.Array.data[1].time
+      value: 0.27619871
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
+      propertyPath: rollCurve.m_Curve.Array.data[2].time
+      value: 0.834
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
+      propertyPath: rollCurve.m_Curve.Array.data[0].value
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
+      propertyPath: rollCurve.m_Curve.Array.data[1].value
+      value: 7.2707434
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
+      propertyPath: rollCurve.m_Curve.Array.data[2].value
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
+      propertyPath: rollCurve.m_Curve.Array.data[0].inSlope
+      value: 8.221412
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
+      propertyPath: rollCurve.m_Curve.Array.data[1].inSlope
+      value: 0.28251123
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
+      propertyPath: rollCurve.m_Curve.Array.data[2].inSlope
+      value: -7.656389
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
+      propertyPath: rollCurve.m_Curve.Array.data[0].outSlope
+      value: 8.221412
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
+      propertyPath: rollCurve.m_Curve.Array.data[1].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
+      propertyPath: rollCurve.m_Curve.Array.data[1].outSlope
+      value: 0.28251123
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
+      propertyPath: rollCurve.m_Curve.Array.data[2].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
+      propertyPath: rollCurve.m_Curve.Array.data[2].outSlope
+      value: -7.656389
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
+      propertyPath: rollCurve.m_Curve.Array.data[0].outWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
+      propertyPath: rollCurve.m_Curve.Array.data[1].outWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
+      propertyPath: rollCurve.m_Curve.Array.data[0].tangentMode
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
+      propertyPath: rollCurve.m_Curve.Array.data[1].tangentMode
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
+      propertyPath: rollCurve.m_Curve.Array.data[2].tangentMode
+      value: 34
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
