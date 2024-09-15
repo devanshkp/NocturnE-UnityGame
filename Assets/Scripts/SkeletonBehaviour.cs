@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 
 public class SkeletonBehaviour : MonoBehaviour
 {
@@ -16,7 +17,21 @@ public class SkeletonBehaviour : MonoBehaviour
     }
 
     public GameObject[] destinationList;
-    protected Vector3 destinationPos;
+    private Vector3 destinationPos;
+    private int currentDestination = 0;
+
+    //  Destination buffer variables
+    private float setDestinationTime = 0;
+    //  rate at which destination is checked (sec)
+    private float setDestinationWaitTime = 0.2f;
+
+    //  Line-of-sight variables
+    private float playerOutOfSightTime = 0;
+    private float maxOutOfSightTime = 2f;
+
+    private Transform playerTransform;
+    private Rigidbody _rigidbody;
+    private NavMeshAgent nav;
 
     // Current NPC state
     public FSMState curState;
@@ -35,16 +50,18 @@ public class SkeletonBehaviour : MonoBehaviour
     // Bullet variables (NOTE: most bullet variables are in their respective bullet script)
     [Header("Bullet Related Variables")]
     public float shootRate = 0.5f;
-    public float elapsedTime;
+    private float elapsedTime;
 
-    protected Transform playerTransform;
-    private Rigidbody _rigidbody;
-    private NavMeshAgent nav;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        nav = GetComponent<NavMeshAgent>();
+        // Set first destination
+        nav.SetDestination(destinationList[0].transform.position);
+
+        // NPC initialises in patrol state
         curState = FSMState.Patrol;
 
         elapsedTime = shootRate;
@@ -67,6 +84,8 @@ public class SkeletonBehaviour : MonoBehaviour
             case FSMState.Dead: UpdateDeadState(); break;
         }
 
+        elapsedTime += Time.deltaTime;
+
         if (health <= 0)
         {
             curState = FSMState.Dead;
@@ -84,6 +103,29 @@ public class SkeletonBehaviour : MonoBehaviour
      */
     void UpdatePatrolState()
     {
+        //  NPC reaches the current destination
+        if (Vector3.Distance(transform.position, destinationList[currentDestination].transform.position)
+            < 2.5f)
+        {
+            //  Increment destination
+            currentDestination++;
+
+            //  NPC reaches final destination
+            if (currentDestination > destinationList.Length - 1)
+            {
+                //  Reset to first destination
+                currentDestination = 0;
+            }
+
+            nav.SetDestination(destinationList[currentDestination].transform.position);
+        }
+
+        //  Transitions
+        //  Attack state when player enters attack range
+        if (Vector3.Distance(transform.position, playerTransform.position) <= attackRange)
+        {
+            curState = FSMState.Attack;
+        }
 
     }
 
@@ -92,6 +134,43 @@ public class SkeletonBehaviour : MonoBehaviour
      */
     void UpdateAttackState()
     {
+        setDestinationTime += Time.deltaTime;
+
+        if (setDestinationTime > setDestinationWaitTime)
+        {
+            //  NPC can see player
+            if (PlayerInView())
+            {
+                playerOutOfSightTime = 0f;
+
+                //  Follow player
+                nav.SetDestination(playerTransform.position);
+                /*nav.isStopped = true;     rather than stopping, perhaps slow movement speed? */
+                setDestinationTime = 0;
+            }
+            //  NPC cannot see player
+            else
+            {
+                playerOutOfSightTime += Time.deltaTime;
+                nav.SetDestination(destinationList[currentDestination].transform.position);
+
+                //  NPC reaction buffer to no longer seeing player
+                if (playerOutOfSightTime > maxOutOfSightTime)
+                {
+                    /*nav.isStopped = false;    see comment roughly line 147 */
+                    curState = FSMState.Patrol;
+                    return;
+                }
+            }
+        }
+
+        //  Transitions
+        //  Patrol state when player exits attack range
+        if (Vector3.Distance(transform.position, playerTransform.position) > attackRange)
+        {
+            /*nav.isStopped = false;    see comment roughly line 147 */
+            curState = FSMState.Patrol;
+        }
 
     }
 
@@ -104,15 +183,29 @@ public class SkeletonBehaviour : MonoBehaviour
 
     }
 
-    public void Movement()
+    private bool PlayerInView()
     {
-        // Movement is incomplete, fix this future me
+        Vector3 directionToPlayer = playerTransform.position - transform.position;
 
-        nav.SetDestination(destinationPos);
+        if (Physics.Raycast(transform.position, directionToPlayer, out RaycastHit hit, attackRange))
+        {
+            Debug.DrawLine(transform.position, playerTransform.position, Color.red);
+
+            if (hit.transform == playerTransform)
+            {
+                /*  Incorrecly returning a false when true and vise versa 
+                    FIX THIS 
+                    PS. likely due to player model complexity messing with the ray hitting the player transform */
+                return true;
+            }
+        }
+        return false;
     }
 
-    public void LocateDestinationWaypoint(GameObject location)
-    {
 
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 }
