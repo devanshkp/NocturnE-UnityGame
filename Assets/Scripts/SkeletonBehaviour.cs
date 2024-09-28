@@ -46,9 +46,11 @@ public class SkeletonBehaviour : MonoBehaviour
     // Movement variables
     [Header("Movement")]
     public float moveSpeed = 10f;
+    public float targettingSpeed = 3f;
 
     // Bullet variables (NOTE: most bullet variables are in their respective bullet script)
     [Header("Bullet Related Variables")]
+    public BulletPoolManager bulletPoolManager;
     public float shootRate = 0.5f;
     private float elapsedTime;
 
@@ -57,9 +59,17 @@ public class SkeletonBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Error management + logging
+        if (bulletPoolManager == null)
+        {
+            Debug.Log("No bullet pool manager assigned to the enemy - Disabling enemy");
+            gameObject.SetActive(false);
+        }
+
         nav = GetComponent<NavMeshAgent>();
         // Set first destination
         nav.SetDestination(destinationList[0].transform.position);
+        nav.speed = moveSpeed;
 
         // NPC initialises in patrol state
         curState = FSMState.Patrol;
@@ -124,6 +134,7 @@ public class SkeletonBehaviour : MonoBehaviour
         //  Attack state when player enters attack range
         if (Vector3.Distance(transform.position, playerTransform.position) <= attackRange)
         {
+            nav.speed = targettingSpeed;
             curState = FSMState.Attack;
         }
 
@@ -145,8 +156,10 @@ public class SkeletonBehaviour : MonoBehaviour
 
                 //  Follow player
                 nav.SetDestination(playerTransform.position);
-                /*nav.isStopped = true;     rather than stopping, perhaps slow movement speed? */
                 setDestinationTime = 0;
+
+                ShootingPlayer();
+
             }
             //  NPC cannot see player
             else
@@ -157,7 +170,6 @@ public class SkeletonBehaviour : MonoBehaviour
                 //  NPC reaction buffer to no longer seeing player
                 if (playerOutOfSightTime > maxOutOfSightTime)
                 {
-                    /*nav.isStopped = false;    see comment roughly line 147 */
                     curState = FSMState.Patrol;
                     return;
                 }
@@ -168,7 +180,7 @@ public class SkeletonBehaviour : MonoBehaviour
         //  Patrol state when player exits attack range
         if (Vector3.Distance(transform.position, playerTransform.position) > attackRange)
         {
-            /*nav.isStopped = false;    see comment roughly line 147 */
+            nav.speed = moveSpeed;
             curState = FSMState.Patrol;
         }
 
@@ -183,6 +195,7 @@ public class SkeletonBehaviour : MonoBehaviour
 
     }
 
+    /*  Returns if the player is in view via raycast  */
     private bool PlayerInView()
     {
         Vector3 directionToPlayer = playerTransform.position - transform.position;
@@ -193,13 +206,22 @@ public class SkeletonBehaviour : MonoBehaviour
 
             if (hit.transform == playerTransform)
             {
-                /*  Incorrecly returning a false when true and vise versa 
-                    FIX THIS 
-                    PS. likely due to player model complexity messing with the ray hitting the player transform */
                 return true;
             }
         }
         return false;
+    }
+
+    /*  Shooting method for the skeletons: shoots at the shoot rate  */
+    private void ShootingPlayer()
+    {
+        elapsedTime += Time.deltaTime;
+
+        if (elapsedTime >= shootRate)
+        {
+            elapsedTime = 0;
+            bulletPoolManager.Shooting();
+        }
     }
 
 

@@ -48,9 +48,13 @@ public class BulletPoolManager : MonoBehaviour
         if (bullet != null)
         {
             bullet.SetActive(true);
-            bullet.transform.position = enemy.transform.position;               // SET POSITION TO THAT OF THE ENEMY
-            bullet.transform.rotation = enemy.transform.rotation;        // SET ROTATION TO THAT OF THE ENEMY (have the bullets spawn always IN FRONT of the enemy)
-            bullet.GetComponent<Rigidbody>().velocity = Vector3.forward * StandardBullet.speed;
+            bullet.transform.position = enemy.transform.position;
+            bullet.transform.rotation = enemy.transform.rotation;
+
+            // Bullets shoot towards the front of the enemy
+            Vector3 shootDirection = enemy.transform.forward;
+
+            bullet.GetComponent<Rigidbody>().velocity = shootDirection * StandardBullet.speed;
 
             StartCoroutine(ReturnBulletToPool(bullet, StandardBullet.lifeTime));
         }
