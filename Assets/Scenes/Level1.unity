@@ -175,6 +175,10 @@ PrefabInstance:
       value: Skeleton
       objectReference: {fileID: 0}
     - target: {fileID: 2273133582124002083, guid: 270b56399fecf7f4499376697b9df8e1, type: 3}
+      propertyPath: shootRate
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2273133582124002083, guid: 270b56399fecf7f4499376697b9df8e1, type: 3}
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 1939248280}
@@ -4207,6 +4211,10 @@ PrefabInstance:
       value: Skeleton (1)
       objectReference: {fileID: 0}
     - target: {fileID: 2273133582124002083, guid: 270b56399fecf7f4499376697b9df8e1, type: 3}
+      propertyPath: shootRate
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2273133582124002083, guid: 270b56399fecf7f4499376697b9df8e1, type: 3}
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 2141385667}
@@ -4731,6 +4739,54 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4733772755456769034, guid: 3ad7a1cffb2556547a8b7e60fd320431, type: 3}
   m_PrefabInstance: {fileID: 980172100}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &982393958
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 982393960}
+  - component: {fileID: 982393959}
+  m_Layer: 0
+  m_Name: Level Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &982393959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 982393958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1849899ebf98a644af0b2c949686495, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  level1DoorOpen: 0
+  level2DoorOpen: 0
+  level3DoorOpen: 0
+  isNightTime: 0
+--- !u!4 &982393960
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 982393958}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 53.765083, y: 162.5423, z: 43.810497}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &984287027
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9949,6 +10005,10 @@ PrefabInstance:
       value: Skeleton (2)
       objectReference: {fileID: 0}
     - target: {fileID: 2273133582124002083, guid: 270b56399fecf7f4499376697b9df8e1, type: 3}
+      propertyPath: shootRate
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2273133582124002083, guid: 270b56399fecf7f4499376697b9df8e1, type: 3}
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 1662429299}
@@ -11269,3 +11329,4 @@ SceneRoots:
   - {fileID: 1025633387}
   - {fileID: 1670813537}
   - {fileID: 622194614}
+  - {fileID: 982393960}
