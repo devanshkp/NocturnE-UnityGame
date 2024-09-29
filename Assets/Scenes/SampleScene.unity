@@ -151,10 +151,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2127816152}
   - {fileID: 838980843}
   - {fileID: 1734000853}
   - {fileID: 1327725780}
-  - {fileID: 2127816152}
   m_Father: {fileID: 1393246285}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &183843248 stripped
@@ -272,6 +272,54 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &682813479
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 682813481}
+  - component: {fileID: 682813480}
+  m_Layer: 0
+  m_Name: Level Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &682813480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 682813479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1849899ebf98a644af0b2c949686495, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  level1DoorOpen: 0
+  level2DoorOpen: 0
+  level3DoorOpen: 0
+  isNightTime: 0
+--- !u!4 &682813481
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 682813479}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 8.181307, y: 162.5423, z: -11.4476}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -668,7 +716,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &921651969
 Transform:
   m_ObjectHideFlags: 0
@@ -1538,6 +1586,7 @@ GameObject:
   - component: {fileID: 1723146462}
   - component: {fileID: 1723146461}
   - component: {fileID: 1723146465}
+  - component: {fileID: 1723146466}
   m_Layer: 0
   m_Name: Werewolf
   m_TagString: Untagged
@@ -1625,7 +1674,7 @@ Transform:
   m_GameObject: {fileID: 1723146459}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.9135036, y: 4.2877684, z: -17.2436}
+  m_LocalPosition: {x: 26.186497, y: 4.2877684, z: 2.8463993}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1643,8 +1692,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b505e7e0e3bd3f048998b3bd86c093de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BulletPoolManager: {fileID: 1457143833}
+  curState: 0
+  health: 2
+  attackRange: 20
+  dayMoveSpeed: 20
+  nightMoveSpeed: 10
+  nightTargettingSpeed: 3
+  sinBulletPoolManager: {fileID: 1457143833}
   shootRate: 0.5
+  levelManager: {fileID: 682813480}
+--- !u!195 &1723146466
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1723146459}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.5
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1001 &1734000851
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1974,3 +2052,4 @@ SceneRoots:
   - {fileID: 1019903241}
   - {fileID: 643888387}
   - {fileID: 1393246285}
+  - {fileID: 682813481}
