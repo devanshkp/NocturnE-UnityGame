@@ -92,15 +92,17 @@ public class SineBulletPoolManager : MonoBehaviour
     {
         float timeElapsed = 0f;
         Vector3 startPos = bullet.transform.position;
+        Vector3 initialForward = bullet.transform.forward;
 
         while (timeElapsed < lifeTime)
         {
             timeElapsed += Time.deltaTime;
 
-            Vector3 forwardMovement = bullet.transform.forward * StandardBullet.speed * timeElapsed;
+            Vector3 forwardMovement = initialForward * StandardBullet.speed * timeElapsed;
 
+            //  Calculates wave based local space relative to inital forward direction
             float sineOffset = waveAmplitude * Mathf.Sin(frequency * timeElapsed);
-            Vector3 sineMovement = new Vector3(sineOffset,0,0);
+            Vector3 sineMovement = bullet.transform.right * sineOffset;
 
             bullet.transform.position = startPos + forwardMovement + sineMovement;
 
