@@ -5,6 +5,15 @@ using UnityEngine.AI;
 
 public class WerewolfBehaviour : MonoBehaviour
 {
+    //
+    //
+    //  When the NPC shoots at night, the bullets shift his pos. Deactivating the collider helps for now, but when player attacking is implemented, that'd need to be addressed
+    //
+    //
+
+
+
+
     //  NPC States
     public enum FSMState
     {
@@ -22,6 +31,11 @@ public class WerewolfBehaviour : MonoBehaviour
 
     //  Total times the NPC can get hit until destruction
     public int health = 2;
+
+    //  Destination buffer variables
+    private float setDestinationTime = 0;
+    //  rate at which destination is checked (sec)
+    private float setDestinationWaitTime = 0.1f;
 
     //  Line-of-sight variables
     private float playerOutOfSightTime = 0;
@@ -43,6 +57,7 @@ public class WerewolfBehaviour : MonoBehaviour
 
     // Imports the sinewave bullet manager
     [Header("Bullet Related Variables")]
+    public BulletPoolManager bulletPoolManager;
     public SineBulletPoolManager sinBulletPoolManager;
     public float shootRate = 0.2f;
     private float elapsedTime;
@@ -55,6 +70,10 @@ public class WerewolfBehaviour : MonoBehaviour
     {
         // Error management + logging
         if (sinBulletPoolManager == null)
+        {
+            Debug.Log("No sine bullet pool manager assigned to the enemy - Disabling enemy");
+            gameObject.SetActive(false);
+        } else if (bulletPoolManager == null)
         {
             Debug.Log("No bullet pool manager assigned to the enemy - Disabling enemy");
             gameObject.SetActive(false);
@@ -72,6 +91,7 @@ public class WerewolfBehaviour : MonoBehaviour
 
         nav = GetComponent<NavMeshAgent>();
         nav.speed = dayMoveSpeed;
+        nav.isStopped = true;
 
         elapsedTime = shootRate;
 
@@ -114,6 +134,8 @@ public class WerewolfBehaviour : MonoBehaviour
      */
     void UpdateIdleState()
     {
+        nav.isStopped = true;
+        nav.SetDestination(transform.position);
         IdleActions();
     }
 
@@ -122,7 +144,16 @@ public class WerewolfBehaviour : MonoBehaviour
      */
     void UpdateDayRunAwayState()
     {
+        nav.isStopped = false;
+        nav.speed = dayMoveSpeed;
 
+        //  NPC runs some units in the opposite direction to player 
+        Vector3 oppositeDirection = -(playerTransform.position - transform.position).normalized;
+        oppositeDirection.y = 0;
+
+        Vector3 runAwayDestination = transform.position + oppositeDirection * 5f;
+
+        nav.SetDestination(runAwayDestination);
 
         IdleActions();
     }
@@ -132,9 +163,36 @@ public class WerewolfBehaviour : MonoBehaviour
      */
     void UpdateDayAttackState()
     {
+        //  NPC freezes while attacking
+        nav.isStopped = true;
+        nav.speed = 0;
 
+        Vector3 direction = (playerTransform.position - transform.position).normalized;
 
+        direction.y = 0;
+
+        Quaternion lookRotation = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+
+        //  Light of sight check + transitions
         IdleActions();
+
+        setDestinationTime += Time.deltaTime;
+
+        if(setDestinationTime > setDestinationWaitTime)
+        {
+            //  Follow player
+            nav.SetDestination(playerTransform.position);
+            setDestinationTime = 0;
+
+            DayShootingPlayer();
+        }
+
+        //  NPC doesn't chase to the player after attacking
+        if (Vector3.Distance(transform.position, playerTransform.position) > attackRange)
+        {
+            nav.SetDestination(transform.position);
+        }
     }
 
     /*
@@ -142,7 +200,28 @@ public class WerewolfBehaviour : MonoBehaviour
      */
     void UpdateNightAttackState()
     {
+        nav.isStopped = false;
+        nav.speed = nightTargettingSpeed;
 
+        //  Light of sight check + transitions
+        IdleActions();
+
+        setDestinationTime += Time.deltaTime;
+
+        if (setDestinationTime > setDestinationWaitTime)
+        {
+            //  Follow player
+            nav.SetDestination(playerTransform.position);
+            setDestinationTime = 0;
+
+            NightShootingPlayer();
+        }
+
+        //  NPC doesn't chase to the player after attacking
+        if (Vector3.Distance(transform.position, playerTransform.position) > attackRange)
+        {
+            nav.SetDestination(transform.position);
+        }
 
         IdleActions();
     }
@@ -152,9 +231,19 @@ public class WerewolfBehaviour : MonoBehaviour
      */
     void UpdateNightChaseState()
     {
-
+        nav.isStopped = false;
+        nav.speed = nightMoveSpeed;
 
         IdleActions();
+
+        setDestinationTime += Time.deltaTime;
+
+        if (setDestinationTime > setDestinationWaitTime)
+        {
+            //  Follow player
+            nav.SetDestination(playerTransform.position);
+            setDestinationTime = 0;
+        }
     }
 
     /*
@@ -182,8 +271,8 @@ public class WerewolfBehaviour : MonoBehaviour
         return false;
     }
 
-    /*  Shooting method for the skeletons: shoots at the shoot rate  */
-    private void ShootingPlayer()
+    /*  Shooting method for the night  */
+    private void NightShootingPlayer()
     {
         elapsedTime += Time.deltaTime;
 
@@ -191,6 +280,18 @@ public class WerewolfBehaviour : MonoBehaviour
         {
             elapsedTime = 0;
             sinBulletPoolManager.Shooting();
+        }
+    }
+
+    /*  Shooting method for the day  */
+    private void DayShootingPlayer()
+    {
+        elapsedTime += Time.deltaTime;
+
+        if (elapsedTime >= shootRate)
+        {
+            elapsedTime = 0;
+            bulletPoolManager.Shooting();
         }
     }
 
@@ -203,9 +304,16 @@ public class WerewolfBehaviour : MonoBehaviour
             playerOutOfSightTime = 0;
             Transitions();
         }
+        //  NPC cannot see player
         else
         {
-            curState = FSMState.Idle;
+            playerOutOfSightTime += Time.deltaTime;
+
+            //  NPC reaction buffer to no longer seeing player
+            if(playerOutOfSightTime > maxOutOfSightTime)
+            {
+                curState = FSMState.Idle;
+            }
         }
     }
 
