@@ -23,11 +23,6 @@ public class ImpBehaviour : MonoBehaviour
     //  Total times the NPC can get hit until destruction
     public int health = 1;
 
-    //  Destination buffer variables
-    private float setDestinationTime = 0;
-    //  rate at which destination is checked (sec)
-    private float setDestinationWaitTime = 0.1f;
-
     //  Line-of-sight variables
     private float playerOutOfSightTime = 0;
     private float maxOutOfSightTime = 2f;
@@ -46,15 +41,6 @@ public class ImpBehaviour : MonoBehaviour
 
     public Queue<GameObject> trapPool;
     private int totalTraps;
-/*
-    [Header("Trap Object")]
-    public GameObject trapObject;*/
-
-    /*// Imports the bullet manager
-    [Header("Bullet Related Variables")]
-    public BulletPoolManager bulletPoolManager;
-    public float shootRate = 0.2f;
-    private float elapsedTime;*/
 
     // Start is called before the first frame update
     void Start()
@@ -65,18 +51,12 @@ public class ImpBehaviour : MonoBehaviour
         trapPool = new Queue<GameObject>();
         totalTraps = transform.childCount;
 
-        // Instantiate all the traps and make them invisible @ frame 0 (zero)
+        // Collect all the traps into the queue and make them invisible @ frame 0 (zero)
         for (int i = 0; i < totalTraps; i++)
         {
-/*            GameObject trap = Instantiate(trapObject);
-            trap.SetActive(false);
-            trap.transform.SetParent(transform, false);
-            trapPool.Enqueue(trap);*/
-            
             GameObject trap = transform.GetChild(i).gameObject;
             trap.SetActive(false);
             trapPool.Enqueue(trap);
-
         }
 
         curState = FSMState.Idle;
@@ -98,8 +78,6 @@ public class ImpBehaviour : MonoBehaviour
             case FSMState.TrapPlacing: UpdateTrapPlacingState(); break;
             case FSMState.Dead: UpdateDeadState(); break;
         }
-
-        /*elapsedTime += Time.deltaTime;*/
 
         if (health <= 0)
         {
@@ -151,10 +129,6 @@ public class ImpBehaviour : MonoBehaviour
 
         //  Set traps to a random location within range
         ValidTrapPlacing();
-        //  ACTIVATE (NOT instantiate) 3-5 traps within the range, trap total determined by rng
-
-        //  When the IMP sees the player, the traps shoot. Therefore, the traps are controlled and NOT autonomous. Possibly an idle action?
-        //print("shooting now");
 
         IdleActions();
     }
@@ -167,28 +141,11 @@ public class ImpBehaviour : MonoBehaviour
 
     }
 
-    /*  Returns if the player is in view via raycast  */
-    public bool PlayerInView()
-    {
-        Vector3 directionToPlayer = playerTransform.position - transform.position;
-
-        if (Physics.Raycast(transform.position, directionToPlayer, out RaycastHit hit))
-        {
-            Debug.DrawLine(transform.position, playerTransform.position, Color.red);
-
-            if (hit.transform == playerTransform)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private void IdleActions()
     {
         // Transitions
         // NPC can see player
-        if (PlayerInView())
+        if (PlayerInView(transform.position))
         {
             playerOutOfSightTime = 0;
             Transitions();
@@ -220,6 +177,24 @@ public class ImpBehaviour : MonoBehaviour
             curState = FSMState.RunAway;
         }
     }
+    
+    /*  Returns if the player is in view via raycast  */
+    public bool PlayerInView(Vector3 position)
+    {
+        Vector3 directionToPlayer = playerTransform.position - position;
+
+        if (Physics.Raycast(position, directionToPlayer, out RaycastHit hit))
+        {
+            Debug.DrawLine(position, playerTransform.position, Color.red);
+
+            if (hit.transform == playerTransform)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     private void ValidTrapPlacing()
     {
@@ -231,14 +206,25 @@ public class ImpBehaviour : MonoBehaviour
 
             if (agent != null)
             {
-                Vector3 randomPosition = GetRandomNavMeshPosition();
+                Vector3 randomPosition = Vector3.zero;
 
-                //  If the random position is valid, set a trap to that position and activate it
-                if (randomPosition != Vector3.zero)
+                bool isPositionVisible = false;
+
+                //  Generate new random positions until the player can see it
+                while (!isPositionVisible)
                 {
-                    agent.Warp(randomPosition);
-                    trap.SetActive(true);
+                    randomPosition = GetRandomNavMeshPosition();
+
+                    //  Check if player can see it
+                    if (randomPosition != Vector3.zero)
+                    {
+                        isPositionVisible = PlayerInView(randomPosition);
+                    }
                 }
+
+                //  Once player can see it, set trap to the position and activate
+                agent.Warp(randomPosition);
+                trap.SetActive(true);
             }
         }
     }

@@ -130,8 +130,8 @@ MonoBehaviour:
   curState: 0
   health: 1
   attackRange: 30
-  moveSpeed: 10
-  targettingSpeed: 3
+  moveSpeed: 5
+  targettingSpeed: 2
   bulletPoolManager: {fileID: 0}
   shootRate: 0.25
 --- !u!136 &4028759119595572163
