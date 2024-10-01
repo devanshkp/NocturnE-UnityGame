@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using TreeEditor;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 public class ImpBehaviour : MonoBehaviour
 {
@@ -42,28 +44,42 @@ public class ImpBehaviour : MonoBehaviour
     [Header("Movement")]
     public float runningSpeed = 20f;
 
-    // Imports the sinewave bullet manager
+    public Queue<GameObject> trapPool;
+    private int totalTraps;
+/*
+    [Header("Trap Object")]
+    public GameObject trapObject;*/
+
+    /*// Imports the bullet manager
     [Header("Bullet Related Variables")]
     public BulletPoolManager bulletPoolManager;
     public float shootRate = 0.2f;
-    private float elapsedTime;
+    private float elapsedTime;*/
 
     // Start is called before the first frame update
     void Start()
     {
-        // Error management + logging
-        if (bulletPoolManager == null)
-        {
-            Debug.Log("No bullet pool manager assigned to the enemy - Disabling enemy");
-            gameObject.SetActive(false);
-        }
-
         nav = GetComponent<NavMeshAgent>();
         nav.speed = runningSpeed;
 
-        curState = FSMState.Idle;
+        trapPool = new Queue<GameObject>();
+        totalTraps = transform.childCount;
 
-        elapsedTime = shootRate;
+        // Instantiate all the traps and make them invisible @ frame 0 (zero)
+        for (int i = 0; i < totalTraps; i++)
+        {
+/*            GameObject trap = Instantiate(trapObject);
+            trap.SetActive(false);
+            trap.transform.SetParent(transform, false);
+            trapPool.Enqueue(trap);*/
+            
+            GameObject trap = transform.GetChild(i).gameObject;
+            trap.SetActive(false);
+            trapPool.Enqueue(trap);
+
+        }
+
+        curState = FSMState.Idle;
 
         // Locates the player before initialisation
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
@@ -83,7 +99,7 @@ public class ImpBehaviour : MonoBehaviour
             case FSMState.Dead: UpdateDeadState(); break;
         }
 
-        elapsedTime += Time.deltaTime;
+        /*elapsedTime += Time.deltaTime;*/
 
         if (health <= 0)
         {
@@ -131,7 +147,15 @@ public class ImpBehaviour : MonoBehaviour
      */
     void UpdateTrapPlacingState()
     {
-        print("placing traps");
+        nav.isStopped = true;
+
+        //  Set traps to a random location within range
+        ValidTrapPlacing();
+        //  ACTIVATE (NOT instantiate) 3-5 traps within the range, trap total determined by rng
+
+        //  When the IMP sees the player, the traps shoot. Therefore, the traps are controlled and NOT autonomous. Possibly an idle action?
+        //print("shooting now");
+
         IdleActions();
     }
 
@@ -144,7 +168,7 @@ public class ImpBehaviour : MonoBehaviour
     }
 
     /*  Returns if the player is in view via raycast  */
-    private bool PlayerInView()
+    public bool PlayerInView()
     {
         Vector3 directionToPlayer = playerTransform.position - transform.position;
 
@@ -195,6 +219,49 @@ public class ImpBehaviour : MonoBehaviour
         {
             curState = FSMState.RunAway;
         }
+    }
+
+    private void ValidTrapPlacing()
+    {
+        //  Assign positions (and activates) for all traps in the pool
+        while (trapPool.Count > 0)
+        {
+            GameObject trap = trapPool.Dequeue();
+            NavMeshAgent agent = trap.GetComponent<NavMeshAgent>();
+
+            if (agent != null)
+            {
+                Vector3 randomPosition = GetRandomNavMeshPosition();
+
+                //  If the random position is valid, set a trap to that position and activate it
+                if (randomPosition != Vector3.zero)
+                {
+                    agent.Warp(randomPosition);
+                    trap.SetActive(true);
+                }
+            }
+        }
+    }
+
+    Vector3 GetRandomNavMeshPosition()
+    {
+        //  Checks for points within the circular range
+        Vector2 randomPointWithinCircularRange = Random.insideUnitCircle * trapPlacingRange;
+
+        //  Assigns random position within the range
+        Vector3 randomPosition = new Vector3((transform.position.x + randomPointWithinCircularRange.x), 0, (transform.position.z + randomPointWithinCircularRange.y));
+
+        NavMeshHit hit;
+
+        //  Try to find valid position on the NavMesh around randomPosition
+        if (NavMesh.SamplePosition(randomPosition, out hit, trapPlacingRange, NavMesh.AllAreas))
+        {
+            //  Return valid position on NavMesh
+            return hit.position;
+        }
+
+        //  Return if no valid positions
+        return Vector3.zero;
     }
 
     void OnDrawGizmos()
