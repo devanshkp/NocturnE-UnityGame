@@ -42,7 +42,7 @@ public class BulletPoolManager : MonoBehaviour
     {
 
         // Calls a bullet from the queue
-        GameObject bullet = GetBullet();    
+        GameObject bullet = GetBullet();
 
         // 'Spawns' and moves the bullet
         if (bullet != null)

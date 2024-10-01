@@ -163,7 +163,7 @@ public class WerewolfBehaviour : MonoBehaviour
      */
     void UpdateDayAttackState()
     {
-        //  NPC freezes while attacking
+        //  NPC freezes position while attacking
         nav.isStopped = true;
         nav.speed = 0;
 
@@ -171,6 +171,7 @@ public class WerewolfBehaviour : MonoBehaviour
 
         direction.y = 0;
 
+        //  Rotates to face player
         Quaternion lookRotation = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
 
