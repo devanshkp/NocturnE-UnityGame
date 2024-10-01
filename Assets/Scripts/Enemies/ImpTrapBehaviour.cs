@@ -57,7 +57,7 @@ public class ImpTrapBehaviour : MonoBehaviour
         if (setDestinationTime > setDestinationWaitTime)
         {
             //  Imp controlling trap can see player
-            if (impBehaviour.PlayerInView())
+            if (impBehaviour.PlayerInView(impController.transform.position))
             {
                 Vector3 direction = (playerTransform.position - transform.position).normalized;
 
