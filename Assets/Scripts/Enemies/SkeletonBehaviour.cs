@@ -131,8 +131,8 @@ public class SkeletonBehaviour : MonoBehaviour
         }
 
         //  Transitions
-        //  Attack state when player enters attack range
-        if (Vector3.Distance(transform.position, playerTransform.position) <= attackRange)
+        //  Attack state when player enters attack range and is in view
+        if ((Vector3.Distance(transform.position, playerTransform.position) <= attackRange) && PlayerInView())
         {
             nav.speed = targettingSpeed;
             curState = FSMState.Attack;
@@ -155,6 +155,7 @@ public class SkeletonBehaviour : MonoBehaviour
                 playerOutOfSightTime = 0f;
 
                 //  Follow player
+                nav.isStopped = false;
                 nav.SetDestination(playerTransform.position);
                 setDestinationTime = 0;
 
@@ -164,12 +165,16 @@ public class SkeletonBehaviour : MonoBehaviour
             //  NPC cannot see player
             else
             {
+                //  NPC freezes for a moment
                 playerOutOfSightTime += Time.deltaTime;
-                nav.SetDestination(destinationList[currentDestination].transform.position);
+                nav.isStopped = true;
 
                 //  NPC reaction buffer to no longer seeing player
                 if (playerOutOfSightTime > maxOutOfSightTime)
                 {
+                    nav.isStopped = false;
+                    nav.SetDestination(destinationList[currentDestination].transform.position);
+                    nav.speed = moveSpeed;
                     curState = FSMState.Patrol;
                     return;
                 }
