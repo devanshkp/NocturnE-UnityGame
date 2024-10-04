@@ -4299,7 +4299,7 @@ MonoBehaviour:
   level1DoorOpen: 0
   level2DoorOpen: 0
   level3DoorOpen: 0
-  isNightTime: 1
+  isNightTime: 0
 --- !u!4 &982393960
 Transform:
   m_ObjectHideFlags: 0
