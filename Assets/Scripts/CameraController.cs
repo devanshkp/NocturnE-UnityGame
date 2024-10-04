@@ -12,9 +12,7 @@ public class MoveAroundObject : MonoBehaviour
     public Transform target;
 
     [Header("Camera Offset Settings")]
-    public float distanceFromTarget = 3.0f;   // Distance from the player (Z offset)
-    public float heightOffset = 1.0f;         // Height offset from the player's position (Y offset)
-    public float horizontalOffset = 0.2f;     // Horizontal offset (X offset)
+    public float distanceFromTarget = 4.0f;   // Distance from the player (Z offset)
 
     private Vector3 currentRotation;
     public Vector3 smoothVelocity = Vector3.zero;
@@ -43,12 +41,6 @@ public class MoveAroundObject : MonoBehaviour
         currentRotation = Vector3.SmoothDamp(currentRotation, nextRotation, ref smoothVelocity, smoothTime);
         transform.localEulerAngles = currentRotation;
 
-        Vector3 offsetPosition = target.position - transform.forward * distanceFromTarget;
-        offsetPosition.y += heightOffset;  // Add the height offset
-
-        // Apply horizontal offset relative to the target's right vector
-        offsetPosition += target.right * horizontalOffset;
-
-        transform.position = offsetPosition;
+        transform.position = target.position - transform.forward * distanceFromTarget;
     }
 }
