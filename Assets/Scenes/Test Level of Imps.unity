@@ -5877,7 +5877,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -13917,6 +13917,10 @@ PrefabInstance:
       propertyPath: levelManager
       value: 
       objectReference: {fileID: 982393959}
+    - target: {fileID: 3337756556329474864, guid: c63f987a2a2536a428a27ca46fcfe05e, type: 3}
+      propertyPath: gateActivationRange
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 3337756556329474864, guid: c63f987a2a2536a428a27ca46fcfe05e, type: 3}
       propertyPath: gateEnemyList.Array.size
       value: 3

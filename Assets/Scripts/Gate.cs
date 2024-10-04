@@ -7,6 +7,7 @@ public class Gate : MonoBehaviour
     [Header("Gate Variables")]
     public float gateTimeMax;
     public float gateTime = 0;
+    public float gateActivationRange = 30f;
 
     /*public bool level2GateOpen = false;
     public bool level3GateOpen = false;*/
@@ -40,7 +41,8 @@ public class Gate : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (PlayerInView())
+        //  Activate defenses when player sees and is within gate activation range
+        if (PlayerInView() && Vector3.Distance(transform.position, playerTransform.position) <= gateActivationRange)
         {
             //  Spawn gate enemy units when gate is under attack
             for (int i = 0; i < gateEnemyList.Length; i++)
@@ -76,5 +78,11 @@ public class Gate : MonoBehaviour
             }
         }
         return false;
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, gateActivationRange);
     }
 }
