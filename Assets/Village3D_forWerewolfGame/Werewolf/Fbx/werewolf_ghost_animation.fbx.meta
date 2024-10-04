@@ -1,0 +1,189 @@
+fileFormatVersion: 2
+guid: a488461e3aa2d427c97e6a55a4cb398f
+ModelImporter:
+  serializedVersion: 21300
+  internalIDToNameTable:
+  - first:
+      74: 1306044086340108217
+    second: ghost_wolf_attack1
+  - first:
+      74: -8286393639536371679
+    second: ghost_wolf_attack1_charge
+  - first:
+      74: -8020288234423325208
+    second: ghost_wolf_attack2
+  - first:
+      74: 6601204836835511586
+    second: ghost_wolf_attack2_charge
+  - first:
+      74: -7472749139069101889
+    second: ghost_wolf_attack3
+  - first:
+      74: -7481740149250713529
+    second: ghost_wolf_attack3_charge
+  - first:
+      74: -1503416289075083338
+    second: ghost_wolf_caught
+  - first:
+      74: 7769403549953884804
+    second: ghost_wolf_caught_down
+  - first:
+      74: 3455107045757428495
+    second: ghost_wolf_caught_faint
+  - first:
+      74: -6966102355746108127
+    second: ghost_wolf_damage
+  - first:
+      74: -6634838536993911592
+    second: ghost_wolf_disguise
+  - first:
+      74: -5384021768083442452
+    second: ghost_wolf_down
+  - first:
+      74: -6096013169937293807
+    second: ghost_wolf_down_forward
+  - first:
+      74: 1488292703058028291
+    second: ghost_wolf_hanged
+  - first:
+      74: 5926716341446284982
+    second: ghost_wolf_howl
+  - first:
+      74: 3286723725712683395
+    second: ghost_wolf_howling
+  - first:
+      74: 8075401927467722861
+    second: ghost_wolf_idle
+  - first:
+      74: 1788746920706114495
+    second: ghost_wolf_idle_energy
+  - first:
+      74: -1497987390203561974
+    second: ghost_wolf_idle_laugh
+  - first:
+      74: 1428331558601057659
+    second: ghost_wolf_idle_lookaround
+  - first:
+      74: 6157798620133540270
+    second: ghost_wolf_jump_default
+  - first:
+      74: -9219102841390426454
+    second: ghost_wolf_jump_fall
+  - first:
+      74: 7459659789771900591
+    second: ghost_wolf_jump_rise
+  - first:
+      74: 7001914199725931297
+    second: ghost_wolf_move
+  - first:
+      74: 952345088215046907
+    second: ghost_wolf_search
+  - first:
+      74: 831184579845216464
+    second: ghost_wolf_surprised
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material_WereWolfGhost
+    second: {fileID: 2100000, guid: 802bdbbd676204f29b2a25a5ac1e18be, type: 2}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 1
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
