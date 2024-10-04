@@ -892,9 +892,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1849899ebf98a644af0b2c949686495, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  level1DoorOpen: 0
-  level2DoorOpen: 0
-  level3DoorOpen: 0
+  level1Gate: {fileID: 0}
+  levelEndTrigger: {fileID: 0}
+  level1GateOpen: 0
+  enemiesList: []
   isNightTime: 0
 --- !u!4 &682813481
 Transform:
@@ -1771,6 +1772,14 @@ PrefabInstance:
       value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 6800306773354073896, guid: 71c9ee3bf8252b147b76aad1475353ec, type: 3}
+      propertyPath: heightOffset
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6800306773354073896, guid: 71c9ee3bf8252b147b76aad1475353ec, type: 3}
+      propertyPath: horizontalOffset
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6800306773354073896, guid: 71c9ee3bf8252b147b76aad1475353ec, type: 3}
       propertyPath: distanceFromTarget
       value: 4
       objectReference: {fileID: 0}
@@ -2072,7 +2081,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
       propertyPath: rollCurve.m_Curve.Array.data[1].time
-      value: 0.27619871
+      value: 0.30489287
       objectReference: {fileID: 0}
     - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
       propertyPath: rollCurve.m_Curve.Array.data[2].time
@@ -2084,7 +2093,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
       propertyPath: rollCurve.m_Curve.Array.data[1].value
-      value: 7.2707434
+      value: 6.4648237
       objectReference: {fileID: 0}
     - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
       propertyPath: rollCurve.m_Curve.Array.data[2].value
@@ -2092,19 +2101,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
       propertyPath: rollCurve.m_Curve.Array.data[0].inSlope
-      value: 8.221412
+      value: 4.8043885
       objectReference: {fileID: 0}
     - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
       propertyPath: rollCurve.m_Curve.Array.data[1].inSlope
-      value: 0.28251123
+      value: -0.8720236
       objectReference: {fileID: 0}
     - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
       propertyPath: rollCurve.m_Curve.Array.data[2].inSlope
-      value: -7.656389
+      value: -6.5484357
       objectReference: {fileID: 0}
     - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
       propertyPath: rollCurve.m_Curve.Array.data[0].outSlope
-      value: 8.221412
+      value: 4.8043885
       objectReference: {fileID: 0}
     - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
       propertyPath: rollCurve.m_Curve.Array.data[1].inWeight
@@ -2112,7 +2121,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
       propertyPath: rollCurve.m_Curve.Array.data[1].outSlope
-      value: 0.28251123
+      value: -0.8720236
       objectReference: {fileID: 0}
     - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
       propertyPath: rollCurve.m_Curve.Array.data[2].inWeight
@@ -2120,7 +2129,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
       propertyPath: rollCurve.m_Curve.Array.data[2].outSlope
-      value: -7.656389
+      value: -6.5484357
       objectReference: {fileID: 0}
     - target: {fileID: 7142730332493025315, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
       propertyPath: rollCurve.m_Curve.Array.data[0].outWeight
