@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    // What bullet manager is this bullet being used in
+    // 
     //
-    // FIX TO MAKE IT NOT JUST USE EXCLUSIVELY BULLETPOOLMANAGER, BUT USE OTHER MANAGERS
+    //      Proto-Enemy tester, used for testing the relationship enemies have with bullet managers
+    //      Will delete
     //
+    //
+
     public BulletPoolManager BulletPoolManager;
     // How fast a bullet spawns (in seconds)
     public float shootRate = 0.5f;
