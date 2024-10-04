@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// ORIGINAL COLLIDER HEIGHT = 1.8
+// ORIGINAL COLLIDER CENTER = (0,0.075,0)
+
 public class NewBehaviourScript : MonoBehaviour
 {
     private MoveAroundObject cameraController;
@@ -10,7 +13,7 @@ public class NewBehaviourScript : MonoBehaviour
 
     [Header("References")]
     public CharacterController controller;
-    public Transform head;
+    public Transform cameraTarget;
     public Camera playerCamera;
 
     [Header("Movement Settings")]
@@ -24,8 +27,6 @@ public class NewBehaviourScript : MonoBehaviour
     private float rollTimer;
     private float rollCooldownTimer = 0f;  // Timer to track time since last roll
     public float rollCooldown = 1.5f;  // Time between rolls
-
-    private Vector3 rollDirection;  // Direction of the roll
 
     [Header("Gravity Settings")]
     public float gravity = -9.81f;  // Gravity constant
@@ -65,32 +66,19 @@ public class NewBehaviourScript : MonoBehaviour
     void Update()
     {
         checkRunning();
+        RecordInputs();
         HandleRotation();
         rollCooldownTimer += Time.deltaTime;
-        if (!isRolling)
-        {
-            if (Input.GetKeyDown(KeyCode.LeftShift) && rollCooldownTimer >= rollCooldown && direction.magnitude != 0)
-            {
-                StartCoroutine(Roll());
-            }
-            if (Input.GetButtonDown("Jump") && isGrounded)
-            {
-                jumpRequested = true;
-                animator.SetBool("isJumping", true);
-            }
-        }
     }
 
     void FixedUpdate()
     {
-        if (!isRolling){
-            HandleMovement();  // Regular movement if not rolling
-            ApplyGravity();
-        }
+        if (!isRolling) HandleMovement();  // Regular movement if not rolling
+        HandleVerticalMovement();
     }
 
     // Handles player movement based on user input
-    void HandleMovement()
+    void RecordInputs()
     {
         float horizontalInput = Input.GetAxisRaw("Horizontal"); // A/D or Left/Right Arrow keys
         float verticalInput = Input.GetAxisRaw("Vertical");     // W/S or Up/Down Arrow keys
@@ -109,10 +97,29 @@ public class NewBehaviourScript : MonoBehaviour
         // Combine the input with the camera's direction to get the movement direction
         direction = (cameraForward * verticalInput + cameraRight * horizontalInput).normalized;
 
+        if (!isRolling)
+        {
+            // Roll mechanic
+            if (Input.GetKeyDown(KeyCode.LeftShift) && rollCooldownTimer >= rollCooldown && direction.magnitude != 0)
+            {
+                StartCoroutine(Roll());
+            }
+            // Jump mechanic
+            if (Input.GetButtonDown("Jump") && isGrounded)
+            {
+                jumpRequested = true;
+                animator.SetBool("isJumping", true);
+            }
+        }
+    }
+
+    void HandleMovement()
+    {
         controller.Move((direction * playerSpeed + Vector3.up * verticalVelocity) * Time.fixedDeltaTime);
     }
 
-    void checkRunning(){
+    void checkRunning()
+    {
         Vector3 horizontalVelocity = new Vector3(controller.velocity.x, 0, controller.velocity.z);
         animator.SetBool("isRunning", horizontalVelocity.magnitude > 0.1f);
     }
@@ -122,13 +129,13 @@ public class NewBehaviourScript : MonoBehaviour
     {        
         if (direction.magnitude == 0) return;
         float rotSpeed = movementRotSpeed;
-        if (isRolling) rotSpeed = movementRotSpeed * 0.75f;
+        if (isRolling) rotSpeed *= 0.5f;
         Quaternion desiredRotation = Quaternion.LookRotation(direction, Vector3.up);
         transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, rotSpeed * Time.deltaTime);
     }
 
     // Apply gravity to the player
-    void ApplyGravity()
+    void HandleVerticalMovement()
     {
         // Check if the player is grounded
         isGrounded = controller.isGrounded;
@@ -154,21 +161,17 @@ public class NewBehaviourScript : MonoBehaviour
         }
     }
 
-    void HandleRollInput()
-    {
-    }
-
     IEnumerator Roll()
     {
         animator.SetBool("isRolling", true);
         isRolling = true;
         rollCooldownTimer = 0f;  // Reset cooldown timer
         controller.height = originalColliderHeight * 0.5f;  // Halve the collider height
-        controller.center = new Vector3(0, 0.5f, 0); // Lower collider
+        controller.center = new Vector3(0, -0.375f, 0); // Lower collider
         float timer = 0;
         while (timer < rollTimer){
             float speed = rollCurve.Evaluate(timer);
-            Vector3 dir = (transform.forward * speed) + (Vector3.up * verticalVelocity);
+            Vector3 dir = (transform.forward * speed + (Vector3.up * verticalVelocity));
             controller.Move(dir * Time.deltaTime);
             timer += Time.deltaTime;
             yield return null;
