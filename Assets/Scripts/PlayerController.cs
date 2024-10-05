@@ -17,7 +17,8 @@ public class NewBehaviourScript : MonoBehaviour
     public Camera playerCamera;
 
     [Header("Movement Settings")]
-    public float playerSpeed = 5f;
+    public float walkSpeed = 4f;
+    public float runSpeed = 7f;
     public float movementRotSpeed = 10;
     public float cameraBasedRotSpeed = 720f;  // Speed of player rotation (degrees per second)
 
@@ -37,6 +38,7 @@ public class NewBehaviourScript : MonoBehaviour
     private Vector3 originalColliderCenter;
     private float originalColliderHeight;
     
+    private float playerSpeed = 5f;
     private Vector3 direction = Vector3.zero;
     private bool isGrounded;  // Check if the player is on the ground
     private bool jumpRequested = false;  // Track if the jump is requested
@@ -69,6 +71,10 @@ public class NewBehaviourScript : MonoBehaviour
         RecordInputs();
         HandleRotation();
         rollCooldownTimer += Time.deltaTime;
+        
+        // Get horizontal velocity for animator
+        Vector3 horizontalVelocity = new Vector3(controller.velocity.x, 0, controller.velocity.z);
+        animator.SetFloat("velocity", horizontalVelocity.magnitude, 0.1f, Time.deltaTime);
     }
 
     void FixedUpdate()
@@ -82,6 +88,15 @@ public class NewBehaviourScript : MonoBehaviour
     {
         float horizontalInput = Input.GetAxisRaw("Horizontal"); // A/D or Left/Right Arrow keys
         float verticalInput = Input.GetAxisRaw("Vertical");     // W/S or Up/Down Arrow keys
+
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            playerSpeed = runSpeed; // Increase speed to runSpeed when Left Shift is pressed
+        }
+        else
+        {
+            playerSpeed = walkSpeed; // Reset to default walk speed
+        }
 
         // Get the camera's forward and right vectors
         Vector3 cameraForward = playerCamera.transform.forward;
@@ -100,12 +115,12 @@ public class NewBehaviourScript : MonoBehaviour
         if (!isRolling)
         {
             // Roll mechanic
-            if (Input.GetKeyDown(KeyCode.LeftShift) && rollCooldownTimer >= rollCooldown && direction.magnitude != 0)
+            if (Input.GetKeyDown(KeyCode.Space) && rollCooldownTimer >= rollCooldown && direction.magnitude != 0)
             {
                 StartCoroutine(Roll());
             }
             // Jump mechanic
-            if (Input.GetButtonDown("Jump") && isGrounded)
+            if (Input.GetKeyDown(KeyCode.F) && isGrounded)
             {
                 jumpRequested = true;
                 animator.SetBool("isJumping", true);
