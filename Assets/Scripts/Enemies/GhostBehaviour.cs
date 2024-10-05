@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro.EditorUtilities;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -118,7 +120,7 @@ public class GhostBehaviour : MonoBehaviour
     void UpdatePatrolState()
     {
         //  NPC walking animation
-        _animator.CrossFade(MoveState, 0.1f, 0, 0);
+        //_animator.CrossFade("Base Layer.move", 0.1f, 0, 0);
 
         //  NPC reaches the current destination
         if (Vector3.Distance(transform.position, destinationList[currentDestination].transform.position)

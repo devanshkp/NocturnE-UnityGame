@@ -4541,7 +4541,7 @@ MonoBehaviour:
   - {fileID: 1455711222}
   - {fileID: 2019316606}
   - {fileID: 882211790}
-  isNightTime: 0
+  isNightTime: 1
 --- !u!4 &982393960
 Transform:
   m_ObjectHideFlags: 0
@@ -7192,7 +7192,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

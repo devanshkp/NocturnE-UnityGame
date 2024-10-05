@@ -144,6 +144,8 @@ public class WerewolfBehaviour : MonoBehaviour
      */
     void UpdateIdleState()
     {
+        _animator.Play("Base Layer.lookaround");
+
         nav.isStopped = true;
         nav.SetDestination(transform.position);
         IdleActions();
@@ -243,7 +245,7 @@ public class WerewolfBehaviour : MonoBehaviour
     void UpdateNightChaseState()
     {
         //  NPC running animation
-        _animator.CrossFade(RunningState, 0.1f, 0, 0);
+        _animator.Play("Base Layer.running2");
 
         nav.isStopped = false;
         nav.speed = nightMoveSpeed;
@@ -293,9 +295,8 @@ public class WerewolfBehaviour : MonoBehaviour
         if (elapsedTime >= shootRate)
         {
             elapsedTime = 0;
-            //  NPC attacking animations
-            _animator.CrossFade(Attack1State, 0.1f, 0, 0);
-            _animator.CrossFade(Attack2State, 0.1f, 0, 0);
+            //  NPC running animation
+            _animator.CrossFade("Base Layer.attack2", 0.1f, 0, 0);
             sinBulletPoolManager.Shooting();
         }
     }
@@ -314,8 +315,7 @@ public class WerewolfBehaviour : MonoBehaviour
 
     private void IdleActions()
     {
-        //  NPC idle animation
-        _animator.CrossFade(IdleLookingState, 0.1f, 0, 0);
+        
 
         // Transitions
         // NPC can see player
@@ -349,9 +349,9 @@ public class WerewolfBehaviour : MonoBehaviour
         else if ((levelManager.isNightTime == false) && Vector3.Distance(transform.position, playerTransform.position) <= attackRange)
         {
             curState = FSMState.DayAttack;
-        }
 
-        //  Night time & not attackable
+            //  Night time & not attackable
+        }
         else if ((levelManager.isNightTime == true) && Vector3.Distance(transform.position, playerTransform.position) > attackRange)
         {
             curState = FSMState.NightChase;
