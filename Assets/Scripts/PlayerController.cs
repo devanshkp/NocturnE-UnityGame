@@ -22,6 +22,12 @@ public class NewBehaviourScript : MonoBehaviour
     public float movementRotSpeed = 10;
     public float cameraBasedRotSpeed = 720f;  // Speed of player rotation (degrees per second)
 
+    [Header("Combat Settings")]
+    public float comboResetTime = 2.0f;  // Time to reset the combo
+    private int comboCounter = 0;  // Tracks which slash is next
+    private bool isSlashing = false;  // Tracks if the player is currently slashing
+    private float comboTimer = 0f;  // Timer to reset the combo
+
     [Header("Roll")]
     public AnimationCurve rollCurve;
     private bool isRolling = false;  // Is the player currently rolling?
@@ -81,6 +87,14 @@ public class NewBehaviourScript : MonoBehaviour
     {
         if (!isRolling) HandleMovement();  // Regular movement if not rolling
         HandleVerticalMovement();
+        if (isSlashing)
+        {
+            comboTimer += Time.fixedDeltaTime;
+            if (comboTimer > comboResetTime)
+            {
+                ResetCombo();
+            }
+        }
     }
 
     // Handles player movement based on user input
@@ -112,7 +126,7 @@ public class NewBehaviourScript : MonoBehaviour
         // Combine the input with the camera's direction to get the movement direction
         direction = (cameraForward * verticalInput + cameraRight * horizontalInput).normalized;
 
-        if (!isRolling)
+        if (!isRolling && !isSlashing)
         {
             // Roll mechanic
             if (Input.GetKeyDown(KeyCode.Space) && rollCooldownTimer >= rollCooldown && direction.magnitude != 0)
@@ -124,6 +138,10 @@ public class NewBehaviourScript : MonoBehaviour
             {
                 jumpRequested = true;
                 animator.SetBool("isJumping", true);
+            }
+            if (Input.GetKeyDown(KeyCode.Mouse0) && isGrounded)
+            {
+                PerformSlash();
             }
         }
     }
@@ -196,4 +214,34 @@ public class NewBehaviourScript : MonoBehaviour
         isRolling = false;
         animator.SetBool("isRolling", false);
     }
+
+    void PerformSlash()
+    {
+        // If already slashing, only allow second slash to be triggered within the animation sequence
+        if (isSlashing && comboCounter == 1)
+        {
+            // Perform second slash
+            comboCounter = 2;
+            animator.SetInteger("comboIndex", comboCounter);
+        }
+        else if (!isSlashing)
+        {
+            // Start first slash
+            isSlashing = true;
+            comboCounter = 1;
+            animator.SetInteger("comboIndex", comboCounter);
+            animator.SetTrigger("Slash");
+        }
+
+        // Reset the combo timer so it doesn't time out too early
+        comboTimer = 0f;
+    }
+
+    void ResetCombo()
+    {
+        comboCounter = 0;
+        isSlashing = false;
+        animator.SetInteger("comboIndex", comboCounter);
+    }
+
 }
