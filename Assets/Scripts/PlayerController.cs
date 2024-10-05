@@ -21,12 +21,16 @@ public class NewBehaviourScript : MonoBehaviour
     public float runSpeed = 7f;
     public float movementRotSpeed = 10;
     public float cameraBasedRotSpeed = 720f;  // Speed of player rotation (degrees per second)
+    private float playerSpeed;
+    private Vector3 horizontalVelocity;
+    private Vector3 direction = Vector3.zero;
 
     [Header("Combat Settings")]
-    public float comboResetTime = 2.0f;  // Time to reset the combo
+    public float comboResetTime = 1.0f;  // Time to reset the combo
     private int comboCounter = 0;  // Tracks which slash is next
     private bool isSlashing = false;  // Tracks if the player is currently slashing
     private float comboTimer = 0f;  // Timer to reset the combo
+    private bool slowSlash = false;
 
     [Header("Roll")]
     public AnimationCurve rollCurve;
@@ -44,8 +48,6 @@ public class NewBehaviourScript : MonoBehaviour
     private Vector3 originalColliderCenter;
     private float originalColliderHeight;
     
-    private float playerSpeed = 5f;
-    private Vector3 direction = Vector3.zero;
     private bool isGrounded;  // Check if the player is on the ground
     private bool jumpRequested = false;  // Track if the jump is requested
 
@@ -79,13 +81,13 @@ public class NewBehaviourScript : MonoBehaviour
         rollCooldownTimer += Time.deltaTime;
         
         // Get horizontal velocity for animator
-        Vector3 horizontalVelocity = new Vector3(controller.velocity.x, 0, controller.velocity.z);
+        horizontalVelocity = new Vector3(controller.velocity.x, 0, controller.velocity.z);
         animator.SetFloat("velocity", horizontalVelocity.magnitude, 0.1f, Time.deltaTime);
     }
 
     void FixedUpdate()
     {
-        if (!isRolling) HandleMovement();  // Regular movement if not rolling
+        if (!isRolling && !slowSlash) HandleMovement();  // Regular movement if not rolling
         HandleVerticalMovement();
         if (isSlashing)
         {
@@ -139,7 +141,7 @@ public class NewBehaviourScript : MonoBehaviour
                 jumpRequested = true;
                 animator.SetBool("isJumping", true);
             }
-            if (Input.GetKeyDown(KeyCode.Mouse0) && isGrounded)
+            if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 PerformSlash();
             }
@@ -226,6 +228,13 @@ public class NewBehaviourScript : MonoBehaviour
         }
         else if (!isSlashing)
         {
+            if (horizontalVelocity.magnitude < 0.01){
+                slowSlash = true;
+                comboResetTime = 1.5f;
+            }
+            else{
+                comboResetTime = 1f;
+            }
             // Start first slash
             isSlashing = true;
             comboCounter = 1;
@@ -240,6 +249,7 @@ public class NewBehaviourScript : MonoBehaviour
     void ResetCombo()
     {
         comboCounter = 0;
+        slowSlash = false;
         isSlashing = false;
         animator.SetInteger("comboIndex", comboCounter);
     }
