@@ -167,12 +167,12 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.4
+  m_TransitionDuration: 0.6
   m_TransitionOffset: 0
   m_ExitTime: 0.8
   m_HasExitTime: 1
   m_HasFixedDuration: 1
-  m_InterruptionSource: 0
+  m_InterruptionSource: 2
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
 --- !u!1101 &-6117931920475461518
@@ -643,7 +643,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: SwordSlash 1
-  m_Speed: 1
+  m_Speed: 0.8
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -6654208749370888284}
@@ -676,6 +676,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 4
     m_ConditionEvent: velocity
     m_EventTreshold: 0.01
+  - m_ConditionMode: 2
+    m_ConditionEvent: isJumping
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1351862067333774141}
   m_Solo: 0
