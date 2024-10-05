@@ -10,7 +10,7 @@ public class GhostBehaviour : MonoBehaviour
     //
 
 
-    // NPC states
+    //  NPC states
     public enum FSMState
     {
         None,
@@ -31,34 +31,38 @@ public class GhostBehaviour : MonoBehaviour
     private Transform playerTransform;
     private Rigidbody _rigidbody;
     private NavMeshAgent nav;
+    private Animator _animator;
 
-    // Current NPC state
+    //  Current NPC state
     public FSMState curState;
 
-    // Total times the NPC can get hit until destruction
+    //  Total times the NPC can get hit until destruction
     public int health = 1;
 
-    // Range variables
+    //  Range variables
     [Header("Ranges")]
     public float attackRange = 20;
 
-    // Movement variables
+    //  Movement variables
     [Header("Movement")]
     public float moveSpeed = 4f;
     public float targettingSpeed = 2f;
 
-    // Bullet variables (NOTE: most bullet variables are in their respective bullet script)
+    //  Bullet variables (NOTE: most bullet variables are in their respective bullet script)
     [Header("Bullet Related Variables")]
     public BulletPoolManager bulletPoolManager;
     public float shootRate = 0.5f;
     private float elapsedTime;
 
-
+    //  Animation states
+    private static readonly int MoveState = Animator.StringToHash("Base Layer.move");
+    private static readonly int AttackState = Animator.StringToHash("Base Layer.attack_shift");
+    private static readonly int DissolveState = Animator.StringToHash("Base Layer.dissolve");
 
     // Start is called before the first frame update
     void Start()
     {
-        // Error management + logging
+        //  Error management + logging
         if (bulletPoolManager == null)
         {
             Debug.Log("No bullet pool manager assigned to the enemy - Disabling enemy");
@@ -66,20 +70,22 @@ public class GhostBehaviour : MonoBehaviour
         }
 
         nav = GetComponent<NavMeshAgent>();
-        // Set first destination
+        //  Set first destination
         nav.SetDestination(destinationList[0].transform.position);
         nav.speed = moveSpeed;
 
-        // NPC initialises in patrol state
+        //  NPC initialises in patrol state
         curState = FSMState.Patrol;
 
         elapsedTime = shootRate;
 
-        // Locates the player before initialisation
+        //  Locates the player before initialisation
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
 
-        // Calls rigidbody before initialisation
+        //  Calls rigidbody before initialisation
         _rigidbody = GetComponent<Rigidbody>();
+
+        _animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -111,6 +117,9 @@ public class GhostBehaviour : MonoBehaviour
      */
     void UpdatePatrolState()
     {
+        //  NPC walking animation
+        _animator.CrossFade(MoveState, 0.1f, 0, 0);
+
         //  NPC reaches the current destination
         if (Vector3.Distance(transform.position, destinationList[currentDestination].transform.position)
             < 2.5f)
@@ -172,7 +181,7 @@ public class GhostBehaviour : MonoBehaviour
      */
     void UpdateDeadState()
     {
-
+        _animator.CrossFade(DissolveState, 0.1f, 0, 0);
     }
 
     /*  Returns if the player is in view via raycast  */
@@ -200,6 +209,8 @@ public class GhostBehaviour : MonoBehaviour
         if (elapsedTime >= shootRate)
         {
             elapsedTime = 0;
+            //  attacking animation per shot
+            _animator.CrossFade(AttackState, shootRate, 0, 0);
             bulletPoolManager.Shooting();
         }
     }

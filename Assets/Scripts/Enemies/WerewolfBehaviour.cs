@@ -44,6 +44,7 @@ public class WerewolfBehaviour : MonoBehaviour
     private Transform playerTransform;
     private Rigidbody _rigidbody;
     private NavMeshAgent nav;
+    private Animator _animator;
 
     // Range variables
     [Header("Ranges")]
@@ -64,6 +65,13 @@ public class WerewolfBehaviour : MonoBehaviour
 
     [Header("Level Manager")]
     public LevelManager levelManager;
+
+    //  Animation states
+    private static readonly int RunningState = Animator.StringToHash("Base Layer.move");
+    private static readonly int Attack1State = Animator.StringToHash("Base Layer.attack1");
+    private static readonly int Attack2State = Animator.StringToHash("Base Layer.attack1");
+    private static readonly int IdleLookingState = Animator.StringToHash("Base Layer.lookaround");
+
 
     // Start is called before the first frame update
     void Start()
@@ -100,6 +108,8 @@ public class WerewolfBehaviour : MonoBehaviour
 
         // Calls rigidbody before initialisation
         _rigidbody = GetComponent<Rigidbody>();
+
+        _animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -232,6 +242,9 @@ public class WerewolfBehaviour : MonoBehaviour
      */
     void UpdateNightChaseState()
     {
+        //  NPC running animation
+        _animator.CrossFade(RunningState, 0.1f, 0, 0);
+
         nav.isStopped = false;
         nav.speed = nightMoveSpeed;
 
@@ -280,6 +293,9 @@ public class WerewolfBehaviour : MonoBehaviour
         if (elapsedTime >= shootRate)
         {
             elapsedTime = 0;
+            //  NPC attacking animations
+            _animator.CrossFade(Attack1State, 0.1f, 0, 0);
+            _animator.CrossFade(Attack2State, 0.1f, 0, 0);
             sinBulletPoolManager.Shooting();
         }
     }
@@ -298,6 +314,9 @@ public class WerewolfBehaviour : MonoBehaviour
 
     private void IdleActions()
     {
+        //  NPC idle animation
+        _animator.CrossFade(IdleLookingState, 0.1f, 0, 0);
+
         // Transitions
         // NPC can see player
         if (PlayerInView())
