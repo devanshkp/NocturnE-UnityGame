@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 877c23274cc661f49a55b39457440e6b
+guid: f1b5d9ec78b036040982950cdb9d7ab4
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -8,32 +8,32 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: pCube1Mat
-    second: {fileID: 2100000, guid: 04af8db3a17982744b06f2c10cb9d251, type: 2}
+    second: {fileID: 2100000, guid: c12aeebaa41a0994b8344f9f3ee7843a, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: pCube2Mat
-    second: {fileID: 2100000, guid: 429c228dd34c03a42bf864a3b6cdd816, type: 2}
+    second: {fileID: 2100000, guid: 93adea47acbc69b428ce54cdd033993e, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: pCylinder1Mat
-    second: {fileID: 2100000, guid: 40829094634acb74c8a65207966c341e, type: 2}
+    second: {fileID: 2100000, guid: e07cd9866b7890e4d86f73a84313aaaa, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: phong1SG
-    second: {fileID: 2100000, guid: 04af8db3a17982744b06f2c10cb9d251, type: 2}
+    second: {fileID: 2100000, guid: c12aeebaa41a0994b8344f9f3ee7843a, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: phong2SG
-    second: {fileID: 2100000, guid: 429c228dd34c03a42bf864a3b6cdd816, type: 2}
+    second: {fileID: 2100000, guid: 93adea47acbc69b428ce54cdd033993e, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: phong3SG
-    second: {fileID: 2100000, guid: 40829094634acb74c8a65207966c341e, type: 2}
+    second: {fileID: 2100000, guid: e07cd9866b7890e4d86f73a84313aaaa, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
