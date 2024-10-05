@@ -30,6 +30,7 @@ public class ImpBehaviour : MonoBehaviour
     private Transform playerTransform;
     private Rigidbody _rigidbody;
     private NavMeshAgent nav;
+    private Animator _animator;
 
     // Range variables
     [Header("Ranges")]
@@ -55,6 +56,16 @@ public class ImpBehaviour : MonoBehaviour
         for (int i = 0; i < totalTraps; i++)
         {
             GameObject trap = transform.GetChild(i).gameObject;
+
+            //  Skip the asset gameobjects (only disable the trap children)
+            if(trap.name.Contains("cap") || trap.name.Contains("RigGob1"))
+            {
+                continue;
+            }
+
+            /*// remove the asset gameobjects from totalTraps count
+            totalTraps =- 2;*/
+
             trap.SetActive(false);
             trapPool.Enqueue(trap);
         }
@@ -66,6 +77,8 @@ public class ImpBehaviour : MonoBehaviour
 
         // Calls rigidbody before initialisation
         _rigidbody = GetComponent<Rigidbody>();
+
+        _animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -106,6 +119,9 @@ public class ImpBehaviour : MonoBehaviour
      */
     void UpdateRunAwayState()
     {
+        //  NPC running animation
+        _animator.Play("Base Layer.running");
+
         nav.isStopped = false;
         nav.speed = runningSpeed;
 
@@ -125,6 +141,9 @@ public class ImpBehaviour : MonoBehaviour
      */
     void UpdateTrapPlacingState()
     {
+        //  NPC idle animation
+        _animator.Play("Base Layer.idle");
+
         nav.isStopped = true;
 
         //  Set traps to a random location within range

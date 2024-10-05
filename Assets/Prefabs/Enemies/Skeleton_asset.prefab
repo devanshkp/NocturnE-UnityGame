@@ -161,8 +161,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.5019064, y: 3.4118972, z: -2.6944942}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4320996798150070442}
   - {fileID: 7926160937346542861}
@@ -208,8 +208,8 @@ MonoBehaviour:
   curState: 0
   health: 1
   attackRange: 20
-  moveSpeed: 10
-  targettingSpeed: 3
+  moveSpeed: 5
+  targettingSpeed: 2.5
   bulletPoolManager: {fileID: 0}
   shootRate: 0.5
 --- !u!195 &6211829490706946261

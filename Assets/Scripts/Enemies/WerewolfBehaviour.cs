@@ -66,12 +66,6 @@ public class WerewolfBehaviour : MonoBehaviour
     [Header("Level Manager")]
     public LevelManager levelManager;
 
-    //  Animation states
-    private static readonly int RunningState = Animator.StringToHash("Base Layer.move");
-    private static readonly int Attack1State = Animator.StringToHash("Base Layer.attack1");
-    private static readonly int Attack2State = Animator.StringToHash("Base Layer.attack1");
-    private static readonly int IdleLookingState = Animator.StringToHash("Base Layer.lookaround");
-
 
     // Start is called before the first frame update
     void Start()

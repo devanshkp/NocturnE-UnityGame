@@ -32,6 +32,7 @@ public class SkeletonBehaviour : MonoBehaviour
     private Transform playerTransform;
     private Rigidbody _rigidbody;
     private NavMeshAgent nav;
+    private Animator _animator;
 
     // Current NPC state
     public FSMState curState;
@@ -82,6 +83,7 @@ public class SkeletonBehaviour : MonoBehaviour
         // Calls rigidbody before initialisation
         _rigidbody = GetComponent<Rigidbody>();
 
+        _animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -113,6 +115,9 @@ public class SkeletonBehaviour : MonoBehaviour
      */
     void UpdatePatrolState()
     {
+        //  NPC running animation
+        _animator.Play("Base Layer.running");
+
         //  NPC reaches the current destination
         if (Vector3.Distance(transform.position, destinationList[currentDestination].transform.position)
             < 2.5f)
@@ -145,6 +150,9 @@ public class SkeletonBehaviour : MonoBehaviour
      */
     void UpdateAttackState()
     {
+        //  NPC walking animation
+        _animator.Play("Base Layer.walking");
+
         setDestinationTime += Time.deltaTime;
 
         if (setDestinationTime > setDestinationWaitTime)
@@ -168,6 +176,7 @@ public class SkeletonBehaviour : MonoBehaviour
                 //  NPC freezes for a moment
                 playerOutOfSightTime += Time.deltaTime;
                 nav.isStopped = true;
+                _animator.CrossFade("Base Layer.idle", maxOutOfSightTime, 0, 0);
 
                 //  NPC reaction buffer to no longer seeing player
                 if (playerOutOfSightTime > maxOutOfSightTime)
