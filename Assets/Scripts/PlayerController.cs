@@ -18,11 +18,6 @@ public class NewBehaviourScript : MonoBehaviour
     public Transform cameraTarget;
     public Camera playerCamera;
 
-    [Header("Health Settings")]
-    public float maxHealth = 100f;
-    private float currentHealth;
-    public Image healthBar; // Reference to the health bar UI
-
     [Header("Movement Settings")]
     public float walkSpeed = 4f;
     public float runSpeed = 7f;
@@ -84,7 +79,6 @@ public class NewBehaviourScript : MonoBehaviour
 
         // Initialise variables
         rollCooldownTimer = rollTimer;
-        currentHealth = maxHealth;
     }
 
     // Update is called once per frame
@@ -267,25 +261,6 @@ public class NewBehaviourScript : MonoBehaviour
         stationarySlash = false;
         isSlashing = false;
         animator.SetInteger("comboIndex", comboCounter);
-    }
-
-    void UpdateHealthBar()
-    {
-        float healthRatio = currentHealth / maxHealth;
-        healthBar.fillAmount = healthRatio;
-        // float newWidth = originalHealthBarWidth * (currentHealth / 100);
-        // float currentHeight = healthBar.rectTransform.rect.height;
-        // healthBar.rectTransform.sizeDelta = new Vector2(newWidth, currentHeight);
-    }
-
-    public void applyDamage(float damage)
-    {
-        currentHealth -= damage;
-        UpdateHealthBar();
-        if (currentHealth <= 0){
-            currentHealth = 0;
-            Die();
-        }
     }
 
     void Die()
