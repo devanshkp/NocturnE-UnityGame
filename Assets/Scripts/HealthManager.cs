@@ -33,11 +33,11 @@ public class HealthManager : MonoBehaviour
     void setLerpSpeed(float healthDifference)
     {
         if (healthDifference >= 60 && healthDifference <= 100)
-            lerpSpeed = 3f;  // Larger difference, faster ease
+            lerpSpeed = 3f;
         else if (healthDifference >= 20 && healthDifference < 60)
-            lerpSpeed = 2.5f;  // Moderate difference, medium speed
+            lerpSpeed = 2.5f;
         else
-            lerpSpeed = 2f;  // Smaller difference, normal speed
+            lerpSpeed = 2f;
     }
 
     public void applyDamage(float damage)
