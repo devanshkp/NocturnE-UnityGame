@@ -1937,10 +1937,12 @@ MonoBehaviour:
   controller: {fileID: 6420089957452934779}
   cameraTarget: {fileID: 0}
   playerCamera: {fileID: 0}
+  maxHealth: 100
+  healthBar: {fileID: 7455625206295610916, guid: e53798796938ec64d90026740132375d, type: 3}
   walkSpeed: 4
   runSpeed: 7
   accelerationRate: 5
-  decelerationRate: 5
+  decelerationRate: 8
   movementRotSpeed: 10
   cameraBasedRotSpeed: 720
   comboResetTime: 1.5
