@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 // ORIGINAL COLLIDER HEIGHT = 1.8
 // ORIGINAL COLLIDER CENTER = (0,0.075,0)
@@ -15,6 +17,11 @@ public class NewBehaviourScript : MonoBehaviour
     public CharacterController controller;
     public Transform cameraTarget;
     public Camera playerCamera;
+
+    [Header("Health Settings")]
+    public float maxHealth = 100f;
+    private float currentHealth;
+    public Image healthBar; // Reference to the health bar UI
 
     [Header("Movement Settings")]
     public float walkSpeed = 4f;
@@ -32,15 +39,19 @@ public class NewBehaviourScript : MonoBehaviour
     public float comboResetTime = 1.5f;  // Time to reset the combo
     private int comboCounter = 0;  // Tracks which slash is next
     private bool isSlashing = false;  // Tracks if the player is currently slashing
-    private float comboTimer = 0f;  // Timer to reset the combo
+    private float comboTimer = 0f;  // Timer to track time since last slash
     private bool stationarySlash = false;
 
     [Header("Roll")]
     public AnimationCurve rollCurve;
+    public float rollCooldown = 1.5f; 
+    private float rollCooldownTimer = 0f;  // Timer to track time since last roll
     private bool isRolling = false;  // Is the player currently rolling?
     private float rollTimer;
-    private float rollCooldownTimer = 0f;  // Timer to track time since last roll
-    public float rollCooldown = 1.5f;  // Time between rolls
+
+    [Header("Jump")]
+    private bool isGrounded;  // Check if the player is on the ground
+    private bool jumpRequested = false;  // Track if the jump is requested
 
     [Header("Gravity Settings")]
     public float gravity = -9.81f;  // Gravity constant
@@ -50,20 +61,19 @@ public class NewBehaviourScript : MonoBehaviour
     [Header("Collider Settings")]
     private Vector3 originalColliderCenter;
     private float originalColliderHeight;
-    
-    private bool isGrounded;  // Check if the player is on the ground
-    private bool jumpRequested = false;  // Track if the jump is requested
 
     // Start is called before the first frame update
     void Start()
     {
         controller = GetComponent<CharacterController>();
         animator = GetComponentInChildren<Animator>();
-        cameraController = playerCamera.GetComponent<MoveAroundObject>();
         if (playerCamera == null)
         {
-            playerCamera = Camera.main; // Fallback to main camera if not assigned
+            playerCamera = Camera.main;
         }
+        cameraController = playerCamera.GetComponent<MoveAroundObject>();
+
+        // originalHealthBarWidth = healthBar.rectTransform.rect.width;
 
         // Save original collider size
         originalColliderCenter = controller.center;
@@ -71,8 +81,10 @@ public class NewBehaviourScript : MonoBehaviour
 
         Keyframe rollLastFrame = rollCurve[rollCurve.length - 1];
         rollTimer = rollLastFrame.time;
-        // Allow player to roll immediately
+
+        // Initialise variables
         rollCooldownTimer = rollTimer;
+        currentHealth = maxHealth;
     }
 
     // Update is called once per frame
@@ -81,6 +93,7 @@ public class NewBehaviourScript : MonoBehaviour
         checkRunning();
         RecordInputs();
         HandleRotation();
+
         rollCooldownTimer += Time.deltaTime;
         
         // Get horizontal velocity for animator
@@ -90,7 +103,7 @@ public class NewBehaviourScript : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!isRolling && !stationarySlash) HandleMovement();  // Regular movement if not rolling
+        if (!isRolling && !stationarySlash) HandleMovement();  // Allow movement if not rolling or attacking while stationary
         HandleVerticalMovement();
         if (isSlashing)
         {
@@ -256,4 +269,27 @@ public class NewBehaviourScript : MonoBehaviour
         animator.SetInteger("comboIndex", comboCounter);
     }
 
+    void UpdateHealthBar()
+    {
+        float healthRatio = currentHealth / maxHealth;
+        healthBar.fillAmount = healthRatio;
+        // float newWidth = originalHealthBarWidth * (currentHealth / 100);
+        // float currentHeight = healthBar.rectTransform.rect.height;
+        // healthBar.rectTransform.sizeDelta = new Vector2(newWidth, currentHeight);
+    }
+
+    public void applyDamage(float damage)
+    {
+        currentHealth -= damage;
+        UpdateHealthBar();
+        if (currentHealth <= 0){
+            currentHealth = 0;
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        Debug.Log("Player is dead");
+    }
 }
