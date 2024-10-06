@@ -19,18 +19,21 @@ public class NewBehaviourScript : MonoBehaviour
     [Header("Movement Settings")]
     public float walkSpeed = 4f;
     public float runSpeed = 7f;
+    public float accelerationRate = 5f;
+    public float decelerationRate = 5f;
     public float movementRotSpeed = 10;
     public float cameraBasedRotSpeed = 720f;  // Speed of player rotation (degrees per second)
-    private float playerSpeed;
+
+    private float playerSpeed = 0f;
     private Vector3 horizontalVelocity;
     private Vector3 direction = Vector3.zero;
 
     [Header("Combat Settings")]
-    public float comboResetTime = 1.0f;  // Time to reset the combo
+    public float comboResetTime = 1.5f;  // Time to reset the combo
     private int comboCounter = 0;  // Tracks which slash is next
     private bool isSlashing = false;  // Tracks if the player is currently slashing
     private float comboTimer = 0f;  // Timer to reset the combo
-    private bool slowSlash = false;
+    private bool stationarySlash = false;
 
     [Header("Roll")]
     public AnimationCurve rollCurve;
@@ -41,7 +44,7 @@ public class NewBehaviourScript : MonoBehaviour
 
     [Header("Gravity Settings")]
     public float gravity = -9.81f;  // Gravity constant
-    public float jumpHeight = 1.5f; // Height of jump
+    public float jumpHeight = 1.25f; // Height of jump
     private float verticalVelocity = 0f;  // Track vertical speed for gravity
 
     [Header("Collider Settings")]
@@ -87,7 +90,7 @@ public class NewBehaviourScript : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!isRolling && !slowSlash) HandleMovement();  // Regular movement if not rolling
+        if (!isRolling && !stationarySlash) HandleMovement();  // Regular movement if not rolling
         HandleVerticalMovement();
         if (isSlashing)
         {
@@ -105,14 +108,7 @@ public class NewBehaviourScript : MonoBehaviour
         float horizontalInput = Input.GetAxisRaw("Horizontal"); // A/D or Left/Right Arrow keys
         float verticalInput = Input.GetAxisRaw("Vertical");     // W/S or Up/Down Arrow keys
 
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            playerSpeed = runSpeed; // Increase speed to runSpeed when Left Shift is pressed
-        }
-        else
-        {
-            playerSpeed = walkSpeed; // Reset to default walk speed
-        }
+        float targetSpeed = (Input.GetKey(KeyCode.LeftShift)) ? runSpeed : walkSpeed;
 
         // Get the camera's forward and right vectors
         Vector3 cameraForward = playerCamera.transform.forward;
@@ -127,6 +123,15 @@ public class NewBehaviourScript : MonoBehaviour
 
         // Combine the input with the camera's direction to get the movement direction
         direction = (cameraForward * verticalInput + cameraRight * horizontalInput).normalized;
+
+        if (direction.magnitude > 0) 
+        {
+            playerSpeed = Mathf.MoveTowards(playerSpeed, targetSpeed, accelerationRate * Time.deltaTime);
+        }
+        else 
+        {
+            playerSpeed = Mathf.MoveTowards(playerSpeed, 0, decelerationRate * Time.deltaTime);
+        }
 
         if (!isRolling && !isSlashing)
         {
@@ -158,6 +163,7 @@ public class NewBehaviourScript : MonoBehaviour
         Vector3 horizontalVelocity = new Vector3(controller.velocity.x, 0, controller.velocity.z);
         animator.SetBool("isRunning", horizontalVelocity.magnitude > 0.1f);
     }
+
 
     // Handles player rotation based on movement direction
     void HandleRotation()
@@ -229,11 +235,7 @@ public class NewBehaviourScript : MonoBehaviour
         else if (!isSlashing)
         {
             if (horizontalVelocity.magnitude < 0.01){
-                slowSlash = true;
-                comboResetTime = 1.5f;
-            }
-            else{
-                comboResetTime = 1f;
+                stationarySlash = true;
             }
             // Start first slash
             isSlashing = true;
@@ -249,7 +251,7 @@ public class NewBehaviourScript : MonoBehaviour
     void ResetCombo()
     {
         comboCounter = 0;
-        slowSlash = false;
+        stationarySlash = false;
         isSlashing = false;
         animator.SetInteger("comboIndex", comboCounter);
     }
