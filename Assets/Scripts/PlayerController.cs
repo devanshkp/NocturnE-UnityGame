@@ -26,7 +26,7 @@ public class NewBehaviourScript : MonoBehaviour
     [Header("Movement Settings")]
     public float walkSpeed = 4f;
     public float runSpeed = 7f;
-    public float accelerationRate = 5f;
+    public float accelerationRate = 8f;
     public float decelerationRate = 5f;
     public float movementRotSpeed = 10;
     public float cameraBasedRotSpeed = 720f;  // Speed of player rotation (degrees per second)
