@@ -1958,7 +1958,12 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 128
+  obstructionLayers:
+    serializedVersion: 2
+    m_Bits: 1
   targetRange: 15
+  unlockDistance: 25
+  cameraLockSpeed: 5
   rollCurve:
     serializedVersion: 2
     m_Curve:
@@ -2700,6 +2705,10 @@ PrefabInstance:
     - target: {fileID: 5700014723687627635, guid: f411530f6ca2876438a86c199d524e13, type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 6911962037470233946, guid: f411530f6ca2876438a86c199d524e13, type: 3}
+      propertyPath: isEnemy
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6911962037470233946, guid: f411530f6ca2876438a86c199d524e13, type: 3}
       propertyPath: character
