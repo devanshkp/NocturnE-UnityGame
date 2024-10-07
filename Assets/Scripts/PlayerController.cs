@@ -25,10 +25,25 @@ public class NewBehaviourScript : MonoBehaviour
     public float decelerationRate = 5f;
     public float movementRotSpeed = 10;
     public float cameraBasedRotSpeed = 720f;  // Speed of player rotation (degrees per second)
-
     private float playerSpeed = 0f;
     private Vector3 horizontalVelocity;
     private Vector3 direction = Vector3.zero;
+
+    [Header("FOV Settings")]
+    public float normalFOV = 60f;
+    public float sprintFOV = 75f;
+    public float fovTransitionSpeed = 5f;
+    public float fovTransitionThres = 5.5f;
+
+    [Header("Stamina Settings")]
+    public Slider staminaSlider;
+    public float maxStamina = 100f;
+    private float currentStamina;
+    public float staminaRegenRate = 5f;
+    public float staminaDepletionRate = 10f; // Depletion rate when running
+    public float jumpStaminaCost = 15f;
+    public float staminaRegenCooldown = 2f; 
+    private float staminaCooldownTimer = 0f;  // Timer to track cooldown before stamina starts regenerating
 
     [Header("Combat Settings")]
     public float comboResetTime = 1.5f;  // Time to reset the combo
@@ -37,7 +52,7 @@ public class NewBehaviourScript : MonoBehaviour
     private float comboTimer = 0f;  // Timer to track time since last slash
     private bool stationarySlash = false;
 
-    [Header("Roll")]
+    [Header("Roll Settings")]
     public AnimationCurve rollCurve;
     public float rollCooldown = 1.5f; 
     private float rollCooldownTimer = 0f;  // Timer to track time since last roll
@@ -79,20 +94,19 @@ public class NewBehaviourScript : MonoBehaviour
 
         // Initialise variables
         rollCooldownTimer = rollTimer;
+        currentStamina = maxStamina;
+        staminaSlider.value = currentStamina;
     }
 
     // Update is called once per frame
     void Update()
     {
-        checkRunning();
         RecordInputs();
+        UpdateVelocityAndFOV();
         HandleRotation();
-
+        UpdateStamina();
+        isGrounded = controller.isGrounded;
         rollCooldownTimer += Time.deltaTime;
-        
-        // Get horizontal velocity for animator
-        horizontalVelocity = new Vector3(controller.velocity.x, 0, controller.velocity.z);
-        animator.SetFloat("velocity", horizontalVelocity.magnitude, 0.1f, Time.deltaTime);
     }
 
     void FixedUpdate()
@@ -115,7 +129,11 @@ public class NewBehaviourScript : MonoBehaviour
         float horizontalInput = Input.GetAxisRaw("Horizontal"); // A/D or Left/Right Arrow keys
         float verticalInput = Input.GetAxisRaw("Vertical");     // W/S or Up/Down Arrow keys
 
-        float targetSpeed = (Input.GetKey(KeyCode.LeftShift)) ? runSpeed : walkSpeed;
+        bool isRunning = Input.GetKey(KeyCode.LeftShift) && currentStamina > 0; // Can only run if stamina is available
+        float targetSpeed = isRunning ? runSpeed : walkSpeed;
+
+        // Deplete stamina while running
+        if (isRunning) DepleteStamina();
 
         // Get the camera's forward and right vectors
         Vector3 cameraForward = playerCamera.transform.forward;
@@ -148,10 +166,13 @@ public class NewBehaviourScript : MonoBehaviour
                 StartCoroutine(Roll());
             }
             // Jump mechanic
-            if (Input.GetKeyDown(KeyCode.F) && isGrounded)
+            if (Input.GetKeyDown(KeyCode.F) && isGrounded && currentStamina >= jumpStaminaCost)
             {
                 jumpRequested = true;
                 animator.SetBool("isJumping", true);
+                currentStamina -= jumpStaminaCost;
+                staminaSlider.value = currentStamina;
+                staminaCooldownTimer = 0f;
             }
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
@@ -160,15 +181,41 @@ public class NewBehaviourScript : MonoBehaviour
         }
     }
 
+    void DepleteStamina()
+    {
+        currentStamina -= staminaDepletionRate * Time.deltaTime;
+        currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
+        staminaSlider.value = currentStamina;
+        staminaCooldownTimer = 0f;
+    }
+
+    void UpdateStamina()
+    {
+        staminaCooldownTimer += Time.deltaTime;
+        if (staminaCooldownTimer >= staminaRegenCooldown && currentStamina < maxStamina && playerSpeed <= walkSpeed && isGrounded)
+        {
+            currentStamina += staminaRegenRate * Time.deltaTime;
+            currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina); // Ensure it doesn't exceed max stamina
+            staminaSlider.value = currentStamina;
+        }
+    }
+
     void HandleMovement()
     {
         controller.Move((direction * playerSpeed + Vector3.up * verticalVelocity) * Time.fixedDeltaTime);
     }
 
-    void checkRunning()
+    void UpdateVelocityAndFOV()
     {
-        Vector3 horizontalVelocity = new Vector3(controller.velocity.x, 0, controller.velocity.z);
-        animator.SetBool("isRunning", horizontalVelocity.magnitude > 0.1f);
+        // Get horizontal velocity for animator
+        horizontalVelocity = new Vector3(controller.velocity.x, 0, controller.velocity.z);
+        animator.SetFloat("velocity", horizontalVelocity.magnitude, 0.1f, Time.deltaTime);
+        if (horizontalVelocity.magnitude >= fovTransitionThres)
+            playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, sprintFOV, fovTransitionSpeed * Time.deltaTime);
+        else{
+            float multiplier = decelerationRate/accelerationRate;
+            playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, normalFOV, fovTransitionSpeed * multiplier * Time.deltaTime);
+        }
     }
 
 
@@ -186,7 +233,6 @@ public class NewBehaviourScript : MonoBehaviour
     void HandleVerticalMovement()
     {
         // Check if the player is grounded
-        isGrounded = controller.isGrounded;
 
         if (isGrounded && verticalVelocity < 0)
         {

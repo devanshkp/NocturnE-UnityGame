@@ -10,9 +10,10 @@ public class MoveAroundObject : MonoBehaviour
     private float _rotationX;
 
     public Transform target;
-
-    [Header("Camera Offset Settings")]
-    public float distanceFromTarget = 4.0f;   // Distance from the player (Z offset)
+    public float distanceFromTarget = 4.0f;   // Desired distance from the player (Z offset)
+    public float minDistanceFromTarget = 1.0f; // Minimum distance to prevent the camera from getting too close
+    public float maxDistanceFromTarget = 4.0f; // Max distance to avoid zooming too far away
+    public float collisionOffset = 0.2f; // Offset to avoid clipping into walls
 
     private Vector3 currentRotation;
     public Vector3 smoothVelocity = Vector3.zero;
@@ -21,11 +22,22 @@ public class MoveAroundObject : MonoBehaviour
 
     public Vector2 _rotationXMinMax = new Vector2(-40, 40);
 
+    public LayerMask collisionLayers; // Layers to detect for collision
+
+    private float currentDistance; // Store the current distance of the camera
+
     public float RotationY => _rotationY;
     public float RotationX => _rotationX;
 
+    void Start()
+    {
+        // Initialize the current distance to the max distance (desired distance)
+        currentDistance = maxDistanceFromTarget;
+    }
+
     void Update()
     {
+        // Handle camera rotation based on mouse input
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
 
@@ -41,6 +53,20 @@ public class MoveAroundObject : MonoBehaviour
         currentRotation = Vector3.SmoothDamp(currentRotation, nextRotation, ref smoothVelocity, smoothTime);
         transform.localEulerAngles = currentRotation;
 
-        transform.position = target.position - transform.forward * distanceFromTarget;
+        Vector3 desiredCameraPos = target.position - transform.forward * maxDistanceFromTarget;
+
+        // Perform collision detection using raycasting
+        RaycastHit hit;
+        if (Physics.Raycast(target.position, (desiredCameraPos - target.position).normalized, out hit, maxDistanceFromTarget, collisionLayers)){
+            float adjustedDistance = hit.distance - collisionOffset;
+            // Immediately adjust to prevent clipping
+            currentDistance = Mathf.Clamp(adjustedDistance, minDistanceFromTarget, maxDistanceFromTarget);
+        }
+        else{
+            // If no collision detected, smoothly move the camera back to the max distance
+            currentDistance = Mathf.Lerp(currentDistance, maxDistanceFromTarget, Time.deltaTime * 5f);
+        }
+
+        transform.position = target.position - transform.forward * currentDistance;
     }
 }
