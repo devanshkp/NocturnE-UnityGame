@@ -1948,7 +1948,7 @@ MonoBehaviour:
   normalFOV: 60
   sprintFOV: 75
   fovTransitionSpeed: 5
-  fovTransitionThres: 5.5
+  fovTransitionThres: 5
   staminaSlider: {fileID: 2000067486475720502}
   maxStamina: 100
   staminaRegenRate: 5
