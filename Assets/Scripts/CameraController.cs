@@ -35,6 +35,7 @@ public class MoveAroundObject : MonoBehaviour
     void Start()
     {
         currentDistance = maxDistanceFromTarget;
+        if (target == null) target = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     void Update()
@@ -99,7 +100,6 @@ public class MoveAroundObject : MonoBehaviour
         // Optional: Clamp the vertical movement of the camera to prevent odd angles
         _rotationX = Mathf.Clamp(_rotationX, rotationXMinMax.x, rotationXMinMax.y);
     }
-
 
 
     // Handles camera collision with walls and adjusts the camera's distance from the player accordingly

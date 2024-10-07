@@ -12,18 +12,25 @@ public class HealthManager : MonoBehaviour
     public Slider easeHealthSlider;
     public float lerpSpeed = 20f;
     private float diffMultiplier;
+    public bool isEnemy;
+
+    private bool healthBarVisible = false;
+    private GameObject healthBar;
 
     void Start()
     {
         currentHealth = maxHealth;
+    
+        if (isEnemy){
+            Transform enemyCanvas = character.GetComponentInChildren<Canvas>().transform;
+            healthBar = enemyCanvas.Find("Health Bar").gameObject;
+        }
     }
 
     void Update()
     {
         if (healthSlider.value != currentHealth)
             healthSlider.value = currentHealth;
-        if (Input.GetKeyDown(KeyCode.Space))
-            applyDamage(10);
         if (healthSlider.value != easeHealthSlider.value){
             setLerpSpeed(currentHealth - easeHealthSlider.value);
             easeHealthSlider.value = Mathf.Lerp(easeHealthSlider.value, currentHealth, lerpSpeed * Time.deltaTime);
@@ -47,5 +54,7 @@ public class HealthManager : MonoBehaviour
             currentHealth = 0;
             character.SendMessage("Die");
         }
+        if (isEnemy && currentHealth < maxHealth && !healthBarVisible)
+            healthBar.SetActive(true);
     }
 }

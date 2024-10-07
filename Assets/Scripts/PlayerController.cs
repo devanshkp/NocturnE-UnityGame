@@ -58,6 +58,7 @@ public class NewBehaviourScript : MonoBehaviour
     public float unlockDistance = 25f;
     private Transform lockedEnemy;  // The enemy the player is locked onto
     public float cameraLockSpeed = 5f;
+    private EnemyUIManager enemyUIManager;
 
     [Header("Roll Settings")]
     public AnimationCurve rollCurve;
@@ -327,13 +328,13 @@ public class NewBehaviourScript : MonoBehaviour
             if (closestTarget != null){
                 lockedEnemy = closestTarget;
                 cameraController.SetLockedTarget(lockedEnemy);
+
+                enemyUIManager = lockedEnemy.GetComponentInChildren<EnemyUIManager>();
+                enemyUIManager.EnableLockOnIcon();
+                enemyUIManager.EnableHealthBar();
+
                 Debug.Log("Target Locked: " + lockedEnemy.name);
             }
-        }
-        else{
-            lockedEnemy = null;
-            cameraController.SetLockedTarget(lockedEnemy);
-            Debug.Log("No target in range.");
         }
     }
 
@@ -374,6 +375,7 @@ public class NewBehaviourScript : MonoBehaviour
 
     void UnlockTarget() 
     {
+        if (enemyUIManager != null) enemyUIManager.DisableLockOnIcon();
         lockedEnemy = null;
         cameraController.SetLockedTarget(lockedEnemy);
         // targetIcon.SetActive(false);
