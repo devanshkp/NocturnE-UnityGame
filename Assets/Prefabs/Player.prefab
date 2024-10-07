@@ -1947,8 +1947,7 @@ MonoBehaviour:
   cameraBasedRotSpeed: 720
   normalFOV: 60
   sprintFOV: 75
-  fovTransitionSpeed: 5
-  fovTransitionThres: 5
+  fovTransitionSpeed: 12.5
   staminaSlider: {fileID: 2000067486475720502}
   maxStamina: 100
   staminaRegenRate: 5
@@ -1956,6 +1955,10 @@ MonoBehaviour:
   jumpStaminaCost: 15
   staminaRegenCooldown: 2
   comboResetTime: 1.5
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  targetRange: 15
   rollCurve:
     serializedVersion: 2
     m_Curve:
@@ -2702,6 +2705,14 @@ PrefabInstance:
       propertyPath: character
       value: 
       objectReference: {fileID: 6999110119677877512}
+    - target: {fileID: 7218068371647053436, guid: f411530f6ca2876438a86c199d524e13, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7218068371647053436, guid: f411530f6ca2876438a86c199d524e13, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7660386132334762267, guid: f411530f6ca2876438a86c199d524e13, type: 3}
       propertyPath: m_Pivot.x
       value: 0

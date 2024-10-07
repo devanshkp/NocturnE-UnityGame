@@ -11,7 +11,6 @@ public class NewBehaviourScript : MonoBehaviour
 {
     private MoveAroundObject cameraController;
     private Animator animator;
-    private Transform lockedEnemy;  // The enemy the player is locked onto
 
     [Header("References")]
     public CharacterController controller;
@@ -26,14 +25,14 @@ public class NewBehaviourScript : MonoBehaviour
     public float movementRotSpeed = 10;
     public float cameraBasedRotSpeed = 720f;  // Speed of player rotation (degrees per second)
     private float playerSpeed = 0f;
+    private bool isRunning = false;
     private Vector3 horizontalVelocity;
     private Vector3 direction = Vector3.zero;
 
     [Header("FOV Settings")]
     public float normalFOV = 60f;
     public float sprintFOV = 75f;
-    public float fovTransitionSpeed = 5f;
-    public float fovTransitionThres = 5f;
+    public float fovTransitionSpeed = 12.5f;
 
     [Header("Stamina Settings")]
     public Slider staminaSlider;
@@ -46,11 +45,19 @@ public class NewBehaviourScript : MonoBehaviour
     private float staminaCooldownTimer = 0f;  // Timer to track cooldown before stamina starts regenerating
 
     [Header("Combat Settings")]
-    public float comboResetTime = 1.5f;  // Time to reset the combo
-    private int comboCounter = 0;  // Tracks which slash is next
-    private bool isSlashing = false;  // Tracks if the player is currently slashing
+    public float comboResetTime = 1.5f;
+    private int comboCounter = 0;
+    private bool isSlashing = false;
     private float comboTimer = 0f;  // Timer to track time since last slash
     private bool stationarySlash = false;
+
+    [Header ("Target Settings")]
+    public LayerMask targetLayer;
+    public LayerMask obstructionLayers;
+    public float targetRange = 15f;
+    public float unlockDistance = 25f;
+    private Transform lockedEnemy;  // The enemy the player is locked onto
+    public float cameraLockSpeed = 5f;
 
     [Header("Roll Settings")]
     public AnimationCurve rollCurve;
@@ -64,7 +71,7 @@ public class NewBehaviourScript : MonoBehaviour
     private bool jumpRequested = false;  // Track if the jump is requested
 
     [Header("Gravity Settings")]
-    public float gravity = -9.81f;  // Gravity constant
+    public float gravity = -9.81f;
     public float jumpHeight = 1.25f; // Height of jump
     private float verticalVelocity = 0f;  // Track vertical speed for gravity
 
@@ -72,15 +79,12 @@ public class NewBehaviourScript : MonoBehaviour
     private Vector3 originalColliderCenter;
     private float originalColliderHeight;
 
-    // Start is called before the first frame update
     void Start()
     {
         controller = GetComponent<CharacterController>();
         animator = GetComponentInChildren<Animator>();
         if (playerCamera == null)
-        {
             playerCamera = Camera.main;
-        }
         cameraController = playerCamera.GetComponent<MoveAroundObject>();
 
         // originalHealthBarWidth = healthBar.rectTransform.rect.width;
@@ -98,13 +102,17 @@ public class NewBehaviourScript : MonoBehaviour
         staminaSlider.value = currentStamina;
     }
 
-    // Update is called once per frame
     void Update()
     {
         RecordInputs();
-        UpdateVelocityAndFOV();
-        HandleRotation();
+        UpdateVelocity();
+        UpdateFOV();
         UpdateStamina();
+        HandleRotation();
+        if (lockedEnemy != null){
+            PanCameraToTarget();
+            CheckUnlockConditions();
+        }
         isGrounded = controller.isGrounded;
         rollCooldownTimer += Time.deltaTime;
     }
@@ -113,13 +121,10 @@ public class NewBehaviourScript : MonoBehaviour
     {
         if (!isRolling && !stationarySlash) HandleMovement();  // Allow movement if not rolling or attacking while stationary
         HandleVerticalMovement();
-        if (isSlashing)
-        {
+        if (isSlashing){
             comboTimer += Time.fixedDeltaTime;
             if (comboTimer > comboResetTime)
-            {
                 ResetCombo();
-            }
         }
     }
 
@@ -129,7 +134,7 @@ public class NewBehaviourScript : MonoBehaviour
         float horizontalInput = Input.GetAxisRaw("Horizontal"); // A/D or Left/Right Arrow keys
         float verticalInput = Input.GetAxisRaw("Vertical");     // W/S or Up/Down Arrow keys
 
-        bool isRunning = Input.GetKey(KeyCode.LeftShift) && currentStamina > 0; // Can only run if stamina is available
+        isRunning = Input.GetKey(KeyCode.LeftShift) && currentStamina > 0; // Can only run if stamina is available
         float targetSpeed = isRunning ? runSpeed : walkSpeed;
 
         // Deplete stamina while running
@@ -150,24 +155,19 @@ public class NewBehaviourScript : MonoBehaviour
         direction = (cameraForward * verticalInput + cameraRight * horizontalInput).normalized;
 
         if (direction.magnitude > 0) 
-        {
             playerSpeed = Mathf.MoveTowards(playerSpeed, targetSpeed, accelerationRate * Time.deltaTime);
-        }
         else 
-        {
             playerSpeed = Mathf.MoveTowards(playerSpeed, 0, decelerationRate * Time.deltaTime);
-        }
 
-        if (!isRolling && !isSlashing)
-        {
+        if (Input.GetMouseButtonDown(2))
+            SetTarget();
+
+        if (!isRolling && !isSlashing){
             // Roll mechanic
             if (Input.GetKeyDown(KeyCode.Space) && rollCooldownTimer >= rollCooldown && direction.magnitude != 0)
-            {
                 StartCoroutine(Roll());
-            }
             // Jump mechanic
-            if (Input.GetKeyDown(KeyCode.F) && isGrounded && currentStamina >= jumpStaminaCost)
-            {
+            if (Input.GetKeyDown(KeyCode.F) && isGrounded && currentStamina >= jumpStaminaCost){
                 jumpRequested = true;
                 animator.SetBool("isJumping", true);
                 currentStamina -= jumpStaminaCost;
@@ -175,9 +175,7 @@ public class NewBehaviourScript : MonoBehaviour
                 staminaCooldownTimer = 0f;
             }
             if (Input.GetKeyDown(KeyCode.Mouse0))
-            {
                 PerformSlash();
-            }
         }
     }
 
@@ -200,23 +198,27 @@ public class NewBehaviourScript : MonoBehaviour
         }
     }
 
-    void HandleMovement()
-    {
-        controller.Move((direction * playerSpeed + Vector3.up * verticalVelocity) * Time.fixedDeltaTime);
-    }
-
-    void UpdateVelocityAndFOV()
+    void UpdateVelocity()
     {
         // Get horizontal velocity for animator
         horizontalVelocity = new Vector3(controller.velocity.x, 0, controller.velocity.z);
         animator.SetFloat("velocity", horizontalVelocity.magnitude, 0.1f, Time.deltaTime);
-        if (isRolling) return;
-        if (horizontalVelocity.magnitude >= fovTransitionThres)
+    }
+
+    void UpdateFOV()
+    {
+        if (isRolling) 
+            return;
+        if (isRunning)
             playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, sprintFOV, fovTransitionSpeed * Time.deltaTime);
         else
             playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, normalFOV, fovTransitionSpeed * Time.deltaTime);
     }
 
+    void HandleMovement()
+    {
+        controller.Move((direction * playerSpeed + Vector3.up * verticalVelocity) * Time.fixedDeltaTime);
+    }
 
     // Handles player rotation based on movement direction
     void HandleRotation()
@@ -231,28 +233,22 @@ public class NewBehaviourScript : MonoBehaviour
     // Apply gravity to the player
     void HandleVerticalMovement()
     {
-        // Check if the player is grounded
-
         if (isGrounded && verticalVelocity < 0)
-        {
             verticalVelocity = -2f;  // Small downward velocity to keep the player grounded
-        }
 
         // Apply gravity
         verticalVelocity += gravity * Time.fixedDeltaTime;        
 
         // Jump logic
-        if (jumpRequested && isGrounded)
-        {
+        if (jumpRequested && isGrounded){
             verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
             jumpRequested = false; // Reset jump request
         }
 
         if (isGrounded && verticalVelocity <= 0.1f)
-        {
             animator.SetBool("isJumping", false);  // Stop jump animation
-        }
     }
+
 
     IEnumerator Roll()
     {
@@ -279,17 +275,14 @@ public class NewBehaviourScript : MonoBehaviour
     void PerformSlash()
     {
         // If already slashing, only allow second slash to be triggered within the animation sequence
-        if (isSlashing && comboCounter == 1)
-        {
+        if (isSlashing && comboCounter == 1){
             // Perform second slash
             comboCounter = 2;
             animator.SetInteger("comboIndex", comboCounter);
         }
-        else if (!isSlashing)
-        {
-            if (horizontalVelocity.magnitude < 0.01){
+        else if (!isSlashing){
+            if (horizontalVelocity.magnitude < 0.01)
                 stationarySlash = true;
-            }
             // Start first slash
             isSlashing = true;
             comboCounter = 1;
@@ -309,8 +302,106 @@ public class NewBehaviourScript : MonoBehaviour
         animator.SetInteger("comboIndex", comboCounter);
     }
 
+    void SetTarget()
+    {
+        if (lockedEnemy != null){
+            UnlockTarget();
+            return;
+        } 
+
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, targetRange, targetLayer);
+        
+        if (hitColliders.Length > 0){
+            Transform closestTarget = null;
+            float closestDistance = Mathf.Infinity;
+
+            // Loop through all colliders and find the closest enemy
+            foreach (Collider hitCollider in hitColliders){
+                float distanceToTarget = Vector3.Distance(transform.position, hitCollider.transform.position);
+                if (distanceToTarget < closestDistance && !TargetObstructed(hitCollider.transform)){
+                    closestDistance = distanceToTarget;
+                    closestTarget = hitCollider.transform;
+                }
+            }
+
+            if (closestTarget != null){
+                lockedEnemy = closestTarget;
+                cameraController.SetLockedTarget(lockedEnemy);
+                Debug.Log("Target Locked: " + lockedEnemy.name);
+            }
+        }
+        else{
+            lockedEnemy = null;
+            cameraController.SetLockedTarget(lockedEnemy);
+            Debug.Log("No target in range.");
+        }
+    }
+
+    void PanCameraToTarget() 
+    {
+        // Get the position of the enemy and the player
+        Vector3 targetPosition = lockedEnemy.position;
+        Vector3 playerPosition = transform.position;
+        
+        // Calculate the midpoint between the player and the enemy
+        Vector3 midpoint = (playerPosition + targetPosition) / 2f;
+
+        // Adjust the camera to look at the midpoint between the player and the enemy
+        Vector3 directionToMidpoint = midpoint - playerCamera.transform.position;
+
+        // Smoothly rotate the camera to look at the midpoint
+        Quaternion targetRotation = Quaternion.LookRotation(directionToMidpoint);
+        playerCamera.transform.rotation = Quaternion.Slerp(playerCamera.transform.rotation, targetRotation, Time.deltaTime * cameraLockSpeed);
+    }
+
+    void CheckUnlockConditions() 
+    {
+        // Check distance
+        float distanceToEnemy = Vector3.Distance(transform.position, lockedEnemy.position);
+        if (distanceToEnemy > unlockDistance || TargetObstructed(lockedEnemy))
+            UnlockTarget();
+    }
+
+    bool TargetObstructed(Transform target)
+    {
+        RaycastHit hit;
+        if(Physics.Linecast(transform.position + Vector3.up * 0.5f, target.position, out hit, obstructionLayers)){
+            if(hit.collider.transform != target) return true;
+        }
+        return false;
+    }
+
+
+    void UnlockTarget() 
+    {
+        lockedEnemy = null;
+        cameraController.SetLockedTarget(lockedEnemy);
+        // targetIcon.SetActive(false);
+        Debug.Log("Target unlocked.");
+    }
+
     void Die()
     {
         Debug.Log("Player is dead");
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, targetRange);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, unlockDistance);
+
+        if (lockedEnemy != null)
+        {
+            // Set gizmo color for locked target (yellow)
+            Gizmos.color = Color.yellow;
+            
+            // Draw a line from the player to the locked enemy
+            Gizmos.DrawLine(transform.position, lockedEnemy.position);
+
+            // Draw a wire sphere at the locked enemy's position
+            Gizmos.DrawWireSphere(lockedEnemy.position, 1f);  // The radius can be adjusted as needed
+        }
     }
 }
