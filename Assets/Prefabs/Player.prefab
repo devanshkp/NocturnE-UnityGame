@@ -1937,14 +1937,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 6420089957452934779}
-  cameraTarget: {fileID: 0}
-  playerCamera: {fileID: 0}
+  cameraTarget: {fileID: 13557675731197689}
+  playerCamera: {fileID: 1951995266222432561, guid: 71c9ee3bf8252b147b76aad1475353ec, type: 3}
   walkSpeed: 4
   runSpeed: 7
   accelerationRate: 8
   decelerationRate: 5
   movementRotSpeed: 10
   cameraBasedRotSpeed: 720
+  normalFOV: 60
+  sprintFOV: 75
+  fovTransitionSpeed: 5
+  fovTransitionThres: 5.5
+  staminaSlider: {fileID: 2000067486475720502}
+  maxStamina: 100
+  staminaRegenRate: 5
+  staminaDepletionRate: 10
+  jumpStaminaCost: 15
+  staminaRegenCooldown: 2
   comboResetTime: 1.5
   rollCurve:
     serializedVersion: 2
@@ -2785,6 +2795,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f411530f6ca2876438a86c199d524e13, type: 3}
+--- !u!114 &2000067486475720502 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4235444674352350775, guid: f411530f6ca2876438a86c199d524e13, type: 3}
+  m_PrefabInstance: {fileID: 2379862911710793985}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &5425096115127207962 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7660386132334762267, guid: f411530f6ca2876438a86c199d524e13, type: 3}
