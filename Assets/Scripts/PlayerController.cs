@@ -33,7 +33,7 @@ public class NewBehaviourScript : MonoBehaviour
     public float normalFOV = 60f;
     public float sprintFOV = 75f;
     public float fovTransitionSpeed = 5f;
-    public float fovTransitionThres = 5.5f;
+    public float fovTransitionThres = 5f;
 
     [Header("Stamina Settings")]
     public Slider staminaSlider;
@@ -212,10 +212,8 @@ public class NewBehaviourScript : MonoBehaviour
         animator.SetFloat("velocity", horizontalVelocity.magnitude, 0.1f, Time.deltaTime);
         if (horizontalVelocity.magnitude >= fovTransitionThres)
             playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, sprintFOV, fovTransitionSpeed * Time.deltaTime);
-        else{
-            float multiplier = decelerationRate/accelerationRate;
-            playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, normalFOV, fovTransitionSpeed * multiplier * Time.deltaTime);
-        }
+        else
+            playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, normalFOV, fovTransitionSpeed * Time.deltaTime);
     }
 
 
