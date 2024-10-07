@@ -210,6 +210,7 @@ public class NewBehaviourScript : MonoBehaviour
         // Get horizontal velocity for animator
         horizontalVelocity = new Vector3(controller.velocity.x, 0, controller.velocity.z);
         animator.SetFloat("velocity", horizontalVelocity.magnitude, 0.1f, Time.deltaTime);
+        if (isRolling) return;
         if (horizontalVelocity.magnitude >= fovTransitionThres)
             playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, sprintFOV, fovTransitionSpeed * Time.deltaTime);
         else
@@ -260,9 +261,10 @@ public class NewBehaviourScript : MonoBehaviour
         rollCooldownTimer = 0f;  // Reset cooldown timer
         controller.height = originalColliderHeight * 0.5f;  // Halve the collider height
         controller.center = new Vector3(0, -0.375f, 0); // Lower collider
+        float rollSpeedMultiplier = (playerSpeed == walkSpeed) ? 0.7f : 1.0f;
         float timer = 0;
         while (timer < rollTimer){
-            float speed = rollCurve.Evaluate(timer);
+            float speed = rollCurve.Evaluate(timer) * rollSpeedMultiplier;
             Vector3 dir = (transform.forward * speed + (Vector3.up * verticalVelocity));
             controller.Move(dir * Time.deltaTime);
             timer += Time.deltaTime;
