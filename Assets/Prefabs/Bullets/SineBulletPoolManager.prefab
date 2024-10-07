@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2100273124650913275}
   - component: {fileID: 5895305619886973618}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SineBulletPoolManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,4 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poolSize: 20
   bulletObject: {fileID: 5514801358688389466, guid: d77de6317f985144097b555b7be2ee12, type: 3}
+  waveAmplitude: 2.5
+  frequency: 5
+  enemy: {fileID: 0}
   StandardBullet: {fileID: 920077826179124443, guid: d77de6317f985144097b555b7be2ee12, type: 3}

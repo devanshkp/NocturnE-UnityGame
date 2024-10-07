@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4483221255852930375}
   - component: {fileID: 268807971854154567}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BulletPoolManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,4 +46,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poolSize: 20
   bulletObject: {fileID: 5514801358688389466, guid: d77de6317f985144097b555b7be2ee12, type: 3}
+  enemy: {fileID: 0}
   StandardBullet: {fileID: 920077826179124443, guid: d77de6317f985144097b555b7be2ee12, type: 3}
