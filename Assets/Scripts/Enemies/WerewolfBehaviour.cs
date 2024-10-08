@@ -44,7 +44,8 @@ public class WerewolfBehaviour : MonoBehaviour
     private Transform playerTransform;
     private Rigidbody _rigidbody;
     private NavMeshAgent nav;
-    private Animator _animator;
+    private Animator werewolf_animator;
+    private Animator human_animator;
 
     // Range variables
     [Header("Ranges")]
@@ -63,8 +64,10 @@ public class WerewolfBehaviour : MonoBehaviour
     public float shootRate = 0.2f;
     private float elapsedTime;
 
-    [Header("Level Manager")]
+    [Header("Level Manager and NPC Models")]
     public LevelManager levelManager;
+    public GameObject humanModel;
+    public GameObject werewolfModel;
 
 
     // Start is called before the first frame update
@@ -81,7 +84,8 @@ public class WerewolfBehaviour : MonoBehaviour
             gameObject.SetActive(false);
         }
 
-        // When a manager is applied, set NPC to idle
+        //  When a manager is applied, set NPC to idle
+        //  Determine which model to use depending on the time
         if (levelManager == null)
         {
             Debug.Log("No level manager, please add the manager");
@@ -89,6 +93,17 @@ public class WerewolfBehaviour : MonoBehaviour
         else
         {
             curState = FSMState.Idle;
+
+            if (levelManager.isNightTime)
+            {
+                humanModel.SetActive(false);
+                werewolfModel.SetActive(true);
+            }
+            else
+            {
+                humanModel.SetActive(true);
+                werewolfModel.SetActive(false);
+            }
         }
 
         nav = GetComponent<NavMeshAgent>();
@@ -103,7 +118,8 @@ public class WerewolfBehaviour : MonoBehaviour
         // Calls rigidbody before initialisation
         _rigidbody = GetComponent<Rigidbody>();
 
-        _animator = GetComponent<Animator>();
+        werewolf_animator = werewolfModel.GetComponent<Animator>();
+        human_animator = humanModel.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -138,7 +154,20 @@ public class WerewolfBehaviour : MonoBehaviour
      */
     void UpdateIdleState()
     {
-        _animator.Play("Base Layer.lookaround");
+        if (levelManager.isNightTime)
+        {
+            werewolfModel.SetActive(true);
+            humanModel.SetActive(false);
+
+            werewolf_animator.Play("Base Layer.lookaround");
+        }
+        else
+        {
+            werewolfModel.SetActive(false);
+            humanModel.SetActive(true);
+
+            human_animator.Play("Base Layer.idle");
+        }
 
         nav.isStopped = true;
         nav.SetDestination(transform.position);
@@ -150,6 +179,9 @@ public class WerewolfBehaviour : MonoBehaviour
      */
     void UpdateDayRunAwayState()
     {
+        //  NPC running animation
+        human_animator.Play("Base Layer.running");
+
         nav.isStopped = false;
         nav.speed = dayMoveSpeed;
 
@@ -169,6 +201,9 @@ public class WerewolfBehaviour : MonoBehaviour
      */
     void UpdateDayAttackState()
     {
+        //  NPC idles
+        human_animator.CrossFade("Base Layer.idle", 0.1f, 0, 0);
+
         //  NPC freezes position while attacking
         nav.isStopped = true;
         nav.speed = 0;
@@ -239,7 +274,7 @@ public class WerewolfBehaviour : MonoBehaviour
     void UpdateNightChaseState()
     {
         //  NPC running animation
-        _animator.Play("Base Layer.running2");
+        werewolf_animator.Play("Base Layer.running2");
 
         nav.isStopped = false;
         nav.speed = nightMoveSpeed;
@@ -289,8 +324,8 @@ public class WerewolfBehaviour : MonoBehaviour
         if (elapsedTime >= shootRate)
         {
             elapsedTime = 0;
-            //  NPC running animation
-            _animator.CrossFade("Base Layer.attack2", 0.1f, 0, 0);
+            //  NPC attacking animation
+            werewolf_animator.CrossFade("Base Layer.attack2", 0.1f, 0, 0);
             sinBulletPoolManager.Shooting();
         }
     }
@@ -336,24 +371,32 @@ public class WerewolfBehaviour : MonoBehaviour
         //  Day time & not attackable
         if ((levelManager.isNightTime == false) && Vector3.Distance(transform.position, playerTransform.position) > attackRange)
         {
+            werewolfModel.SetActive(false);
+            humanModel.SetActive(true);
             curState = FSMState.DayRunAway;
 
             //  Day time & attackable
         }
         else if ((levelManager.isNightTime == false) && Vector3.Distance(transform.position, playerTransform.position) <= attackRange)
         {
+            werewolfModel.SetActive(false);
+            humanModel.SetActive(true);
             curState = FSMState.DayAttack;
 
             //  Night time & not attackable
         }
         else if ((levelManager.isNightTime == true) && Vector3.Distance(transform.position, playerTransform.position) > attackRange)
         {
+            werewolfModel.SetActive(true);
+            humanModel.SetActive(false);
             curState = FSMState.NightChase;
 
             //  Night time & attackable
         }
         else if ((levelManager.isNightTime == true) && Vector3.Distance(transform.position, playerTransform.position) <= attackRange)
         {
+            werewolfModel.SetActive(true);
+            humanModel.SetActive(false);
             curState = FSMState.NightAttack;
         }
     }
