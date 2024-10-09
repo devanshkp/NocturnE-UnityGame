@@ -241,15 +241,12 @@ MonoBehaviour:
   distanceFromTarget: 4
   minDistanceFromTarget: 1
   maxDistanceFromTarget: 4
-  collisionOffset: 1
-  rotationXMinMax: {x: -40, y: 40}
+  maxDistanceFromTargetinCombat: 5
+  collisionOffset: 0.2
   smoothTime: 0.1
   collisionLayers:
     serializedVersion: 2
     m_Bits: 1
-  cameraLockSpeed: 3
-  cameraDrag: 1
-  lockOnDistance: 10
 --- !u!114 &4483172576189301660
 MonoBehaviour:
   m_ObjectHideFlags: 0

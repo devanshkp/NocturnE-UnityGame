@@ -10669,6 +10669,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 622194614}
     m_Modifications:
     - target: {fileID: -393127590963389436, guid: b5a7c5eb579cfa141b590285ae71cf06, type: 3}
+      propertyPath: curState
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -393127590963389436, guid: b5a7c5eb579cfa141b590285ae71cf06, type: 3}
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 689549171}
