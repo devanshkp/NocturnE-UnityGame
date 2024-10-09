@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 // ORIGINAL COLLIDER HEIGHT = 1.8
 // ORIGINAL COLLIDER CENTER = (0,0.075,0)
 
-public class NewBehaviourScript : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     private MoveAroundObject cameraController;
     private Animator animator;
@@ -47,8 +47,8 @@ public class NewBehaviourScript : MonoBehaviour
     [Header("Combat Settings")]
     public float comboResetTime = 1.5f;
     private int comboCounter = 0;
-    private bool isSlashing = false;
-    private float comboTimer = 0f;  // Timer to track time since last slash
+    public bool isSlashing = false;
+    public float comboTimer = 0f;  // Timer to track time since last slash
     private bool stationarySlash = false;
 
     [Header ("Target Settings")]

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6817728047561246239}
   m_Layer: 0
   m_Name: Werewolf_asset 1
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100,7 +100,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -184,6 +184,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: werewolf_asset
       objectReference: {fileID: 0}
+    - target: {fileID: 6477393441154601531, guid: a1276a93a6d770549968afb8b10fe3df, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 6949958813093539945, guid: a1276a93a6d770549968afb8b10fe3df, type: 3}
       propertyPath: m_Camera
       value: 
@@ -242,6 +246,10 @@ PrefabInstance:
     - target: {fileID: 5621944649269002245, guid: d9cf57b15d939324e86260ef5c6a001e, type: 3}
       propertyPath: m_Name
       value: human_asset
+      objectReference: {fileID: 0}
+    - target: {fileID: 5621944649269002245, guid: d9cf57b15d939324e86260ef5c6a001e, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

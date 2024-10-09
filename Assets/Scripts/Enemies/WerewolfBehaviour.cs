@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class WerewolfBehaviour : MonoBehaviour
+public class WerewolfBehaviour : MonoBehaviour, InterfaceEnemy
 {
     //
     //
@@ -30,7 +30,8 @@ public class WerewolfBehaviour : MonoBehaviour
     public FSMState curState;
 
     //  Total times the NPC can get hit until destruction
-    public int health = 2;
+    public float health = 20;
+    public float Health => health;
 
     //  Destination buffer variables
     private float setDestinationTime = 0;
@@ -297,6 +298,11 @@ public class WerewolfBehaviour : MonoBehaviour
     void UpdateDeadState()
     {
 
+    }
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
     }
 
     /*  Returns if the player is in view via raycast  */

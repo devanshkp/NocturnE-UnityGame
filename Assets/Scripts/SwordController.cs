@@ -1,18 +1,39 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SwordController : MonoBehaviour
 {
-    public int damageAmount = 10;  // Amount of damage dealt to enemies
+    public int damageAmount = 2;  // Amount of damage dealt to enemies
+    public PlayerController playerController; //  Player Controller script
+    private bool isSlashing;
+    private bool isDamaging = false;
+
+    private void Update()
+    {
+        isSlashing = playerController.isSlashing;
+    }
 
     // Detect enemies when they enter the sword's trigger collider
     private void OnTriggerEnter(Collider other)
     {
-        // Check if the object we collided with has the Enemy component (or any other tag you use)
-        if (other.CompareTag("Enemy"))
+        // Object collides with enemy while slashing, checking once per slash
+        if (other.CompareTag("Enemy") && isSlashing && !isDamaging)
         {
-            Debug.Log("Enemy Hit!");
+            isDamaging = true;
+
+            //  Checks enemy uses health interface
+            InterfaceEnemy enemy = other.gameObject.GetComponent<InterfaceEnemy>();
+
+            //  If enemy does use health interface, get its health and take damage
+            if(enemy != null)
+            {
+                float enemyHealth = enemy.Health;
+
+                other.SendMessage("TakeDamage", damageAmount, SendMessageOptions.DontRequireReceiver);
+            }
+
             // Try to get the enemy's health component
             // EnemyHealth enemyHealth = other.GetComponent<EnemyHealth>();
             // if (enemyHealth != null)
@@ -23,6 +44,17 @@ public class SwordController : MonoBehaviour
 
             // // Send the "TakeDamage" message to the object with the amount of damage as a parameter
             // other.SendMessage("TakeDamage", damageAmount, SendMessageOptions.DontRequireReceiver);
+
+        //  Sword idling (no slash)
+        } else if (other.CompareTag("Enemy") && isSlashing == false)
+        {
+            isDamaging = false;
+            Debug.Log("Nope");
+        }
+        //  Update damaging bool
+        else
+        {
+            isDamaging = false;
         }
     }
 }
