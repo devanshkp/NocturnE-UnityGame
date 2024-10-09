@@ -4,58 +4,61 @@ using UnityEngine;
 
 public class MoveAroundObject : MonoBehaviour
 {
+    private Camera enemyUICam; 
+    private Camera mainCam;
     public float mouseSensitivity = 3.0f;
     public Transform target;  // Player to follow
     public Transform lockedTarget;  // Enemy to lock onto when in lock-on mode
 
     [Header("Camera Distance Settings")]
-    public float distanceFromTarget = 4.0f;
     public float minDistanceFromTarget = 1.0f;
     public float maxDistanceFromTarget = 4.0f;
+    public float combatMaxDistance = 5.0f;
     public float collisionOffset = 0.2f;  // Offset to prevent camera clipping through walls
 
     [Header("Rotation Settings")]
     private float _rotationY;
     private float _rotationX;
-    public Vector2 rotationXMinMax = new Vector2(-40, 40);  // Limit camera vertical rotation
     public float smoothTime = 0.2f;
+    private Vector2 rotationXMinMax = new Vector2(-40, 40);  // Limit camera vertical rotation
     private Vector3 currentRotation;
     private Vector3 smoothVelocity = Vector3.zero;
 
     [Header("Collision Settings")]
     public LayerMask collisionLayers;
+    private float currentMaxDistance;
     private float currentDistance;
 
     [Header("Lock-On Settings")]
-    private bool isLockedOn = false;  // Whether the camera is in lock-on mode
-    public float cameraLockSpeed = 3f;  // Speed of the camera when rotating around the locked enemy
-    public float cameraDrag = 1f;  // Drag to slow down camera movement in lock-on mode
-    public float lockOnDistance = 10f; // Distance to maintain when locked on
+    private bool isLockedOn = false; 
+    private float cameraLockSpeed = 5f;  // Speed of the camera when rotating around the locked enemy
+    private Vector2 combatRotationXMinMax = new Vector2(5, 10);
 
     void Start()
     {
-        currentDistance = maxDistanceFromTarget;
-        if (target == null) target = GameObject.FindGameObjectWithTag("Player").transform;
+        mainCam = this.GetComponent<Camera>();
+        enemyUICam = transform.Find("EnemyUICamera").GetComponent<Camera>();
+        if (target == null) target = GameObject.FindGameObjectWithTag("Player").transform.Find("CameraTarget");
+        currentMaxDistance = maxDistanceFromTarget;
+        currentDistance = currentMaxDistance;
     }
 
     void Update()
     {
         if (!isLockedOn)
-        {
             HandleFreeMovement();
-        }
         else
-        {
             HandleLockOnMovement();
-        }
 
         HandleCollision();
         UpdateCameraPosition();
+        enemyUICam.fieldOfView = mainCam.fieldOfView;
     }
 
     // Handles normal free camera movement
     void HandleFreeMovement()
     {
+        currentMaxDistance = maxDistanceFromTarget;
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
 
@@ -74,6 +77,8 @@ public class MoveAroundObject : MonoBehaviour
         if (lockedTarget == null)
             return; 
 
+        currentMaxDistance = combatMaxDistance;
+
         // Calculate direction from player to the locked enemy
         Vector3 directionToTarget = (lockedTarget.position - target.position).normalized;
 
@@ -82,44 +87,42 @@ public class MoveAroundObject : MonoBehaviour
         cameraOffset.y = 0;  // Flatten the vertical movement to keep the camera level
 
         // Determine the current position of the camera based on player movement and locked target
-        Vector3 desiredCameraPosition = target.position - cameraOffset.normalized * lockOnDistance;
+        Vector3 desiredCameraPosition = target.position - cameraOffset.normalized * currentDistance;
 
         // Perform smooth rotation to always look at the locked target
         Quaternion targetRotation = Quaternion.LookRotation(lockedTarget.position - transform.position);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * cameraLockSpeed);
+        Vector3 eulerRotation = targetRotation.eulerAngles;
+    
+        // Clamp the vertical movement of the camera to prevent odd angles
+        eulerRotation.x = Mathf.Clamp(eulerRotation.x, combatRotationXMinMax.x, combatRotationXMinMax.y);
+
+        // Apply the modified rotation back to the transform
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(eulerRotation), Time.deltaTime * cameraLockSpeed);
 
         // Get the current distance between the player and the locked target
         float distanceToTarget = Vector3.Distance(target.position, lockedTarget.position);
 
-        // Clamp the vertical movement of the camera and limit the proximity
-        currentDistance = Mathf.Lerp(currentDistance, lockOnDistance, Time.deltaTime * cameraLockSpeed);
-
-        // Set the camera's new position (orbit around the player, looking at the locked target)
         transform.position = Vector3.Lerp(transform.position, desiredCameraPosition, Time.deltaTime * cameraLockSpeed);
-        
-        // Optional: Clamp the vertical movement of the camera to prevent odd angles
-        _rotationX = Mathf.Clamp(_rotationX, rotationXMinMax.x, rotationXMinMax.y);
     }
 
 
     // Handles camera collision with walls and adjusts the camera's distance from the player accordingly
     void HandleCollision()
     {
-        Vector3 desiredCameraPos = target.position - transform.forward * maxDistanceFromTarget;
+        Vector3 desiredCameraPos = target.position - transform.forward * currentMaxDistance;
         RaycastHit hit;
 
-        if (Physics.Raycast(target.position, (desiredCameraPos - target.position).normalized, out hit, maxDistanceFromTarget, collisionLayers))
+        if (Physics.Raycast(target.position, (desiredCameraPos - target.position).normalized, out hit, currentMaxDistance, collisionLayers))
         {
             float adjustedDistance = hit.distance - collisionOffset;
-            currentDistance = Mathf.Clamp(adjustedDistance, minDistanceFromTarget, maxDistanceFromTarget);
+            currentDistance = Mathf.Clamp(adjustedDistance, minDistanceFromTarget, currentMaxDistance);
         }
         else
         {
-            currentDistance = Mathf.Lerp(currentDistance, maxDistanceFromTarget, Time.deltaTime * 5f);
+            currentDistance = Mathf.Lerp(currentDistance, currentMaxDistance, Time.deltaTime * 5f);
         }
     }
 
-    // Updates the camera position based on the current distance and target
     void UpdateCameraPosition()
     {
         transform.position = target.position - transform.forward * currentDistance;

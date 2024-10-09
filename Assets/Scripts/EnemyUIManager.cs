@@ -44,4 +44,9 @@ public class EnemyUIManager : MonoBehaviour
     {
         healthBar.SetActive(false);
     }
+
+    public Transform GetLockOnIcon()
+    {
+        return lockOnIcon.transform;
+    }
 }

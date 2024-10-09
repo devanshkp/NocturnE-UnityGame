@@ -327,12 +327,10 @@ public class PlayerController : MonoBehaviour
 
             if (closestTarget != null){
                 lockedEnemy = closestTarget;
-                cameraController.SetLockedTarget(lockedEnemy);
-
                 enemyUIManager = lockedEnemy.GetComponentInChildren<EnemyUIManager>();
                 enemyUIManager.EnableLockOnIcon();
                 enemyUIManager.EnableHealthBar();
-
+                cameraController.SetLockedTarget(enemyUIManager.GetLockOnIcon());
                 Debug.Log("Target Locked: " + lockedEnemy.name);
             }
         }
@@ -375,10 +373,9 @@ public class PlayerController : MonoBehaviour
 
     void UnlockTarget() 
     {
-        if (enemyUIManager != null) enemyUIManager.DisableLockOnIcon();
         lockedEnemy = null;
+        if (enemyUIManager != null) enemyUIManager.DisableLockOnIcon();
         cameraController.SetLockedTarget(lockedEnemy);
-        // targetIcon.SetActive(false);
         Debug.Log("Target unlocked.");
     }
 
