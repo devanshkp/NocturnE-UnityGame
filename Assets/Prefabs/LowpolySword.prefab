@@ -142,3 +142,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageAmount: 10
+  playerController: {fileID: 6802273428786590694, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}

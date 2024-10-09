@@ -5,10 +5,10 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class GhostBehaviour : MonoBehaviour
+public class GhostBehaviour : MonoBehaviour, InterfaceEnemy
 {
     //
-    //  Ghosts need a special navmesh that is baked without walls, and a special accompanying navmesh agent 
+    //  Ghosts need a special navmesh that is baked without walls, and a special accompanying navmesh agent ("Ghost" Agent Type)
     //
 
 
@@ -39,7 +39,8 @@ public class GhostBehaviour : MonoBehaviour
     public FSMState curState;
 
     //  Total times the NPC can get hit until destruction
-    public int health = 1;
+    public float health = 10;
+    public float Health => health;
 
     //  Range variables
     [Header("Ranges")]
@@ -184,6 +185,11 @@ public class GhostBehaviour : MonoBehaviour
     void UpdateDeadState()
     {
         _animator.CrossFade(DissolveState, 0.1f, 0, 0);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
     }
 
     /*  Returns if the player is in view via raycast  */

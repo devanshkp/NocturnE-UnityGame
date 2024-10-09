@@ -5,7 +5,7 @@ using UnityEngine.AI;
 using UnityEngine.UI;
 using static UnityEngine.GraphicsBuffer;
 
-public class SkeletonBehaviour : MonoBehaviour
+public class SkeletonBehaviour : MonoBehaviour, InterfaceEnemy
 {
     // NPC states
     public enum FSMState
@@ -38,7 +38,8 @@ public class SkeletonBehaviour : MonoBehaviour
     public FSMState curState;
 
     // Total times the NPC can get hit until destruction
-    public int health = 1;
+    public float health = 10;
+    public float Health => health;
 
     // Range variables
     [Header("Ranges")]
@@ -207,6 +208,11 @@ public class SkeletonBehaviour : MonoBehaviour
     void UpdateDeadState()
     {
 
+    }
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
     }
 
     /*  Returns if the player is in view via raycast  */

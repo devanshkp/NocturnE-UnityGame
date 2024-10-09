@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
 
-public class ImpBehaviour : MonoBehaviour
+public class ImpBehaviour : MonoBehaviour, InterfaceEnemy
 {
     //  NPC States
     public enum FSMState
@@ -21,7 +21,8 @@ public class ImpBehaviour : MonoBehaviour
     public FSMState curState;
 
     //  Total times the NPC can get hit until destruction
-    public int health = 1;
+    public float health = 10;
+    public float Health => health;
 
     //  Line-of-sight variables
     private float playerOutOfSightTime = 0;
@@ -158,6 +159,11 @@ public class ImpBehaviour : MonoBehaviour
     void UpdateDeadState()
     {
 
+    }
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
     }
 
     private void IdleActions()

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class ImpTrapBehaviour : MonoBehaviour
+public class ImpTrapBehaviour : MonoBehaviour, InterfaceEnemy
 {
     //  Total times the NPC can get hit until destruction
-    public int health = 1;
+    public float health = 10;
+    public float Health => health;
 
     //  Destination buffer variables
     private float setDestinationTime = 0;
@@ -81,6 +82,11 @@ public class ImpTrapBehaviour : MonoBehaviour
     void Dead()
     {
         //  Destroy (or deactivate?) here
+    }
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
     }
 
     private void Shooting()
