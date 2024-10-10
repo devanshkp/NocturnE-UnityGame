@@ -221,7 +221,9 @@ public class SkeletonBehaviour : MonoBehaviour, InterfaceEnemy
     {
         Vector3 directionToPlayer = playerTransform.position - transform.position;
 
-        if (Physics.Raycast(transform.position, directionToPlayer, out RaycastHit hit, attackRange))
+        LayerMask visionMask = ~LayerMask.GetMask("Bullets");
+
+        if (Physics.Raycast(transform.position, directionToPlayer, out RaycastHit hit, attackRange, visionMask))
         {
             Debug.DrawLine(transform.position, playerTransform.position, Color.red);
 
