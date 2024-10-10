@@ -38,7 +38,7 @@ public class BulletPoolManager : MonoBehaviour
     /*
      *  Shooting method
      */
-    public void Shooting()
+    public void Shooting(Vector3 spawnpoint)
     {
 
         // Calls a bullet from the queue
@@ -48,7 +48,7 @@ public class BulletPoolManager : MonoBehaviour
         if (bullet != null)
         {
             bullet.SetActive(true);
-            bullet.transform.position = enemy.transform.position;
+            bullet.transform.position = spawnpoint;
             bullet.transform.rotation = enemy.transform.rotation;
 
             // Bullets shoot towards the front of the enemy
