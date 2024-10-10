@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8463663713556853432}
   - component: {fileID: 1415195166419831105}
   - component: {fileID: 3216116932396464337}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CannonG_Plate00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4287374472992465873}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -128,7 +128,7 @@ GameObject:
   - component: {fileID: 1250881285535756191}
   - component: {fileID: 5777557870755254929}
   - component: {fileID: -4428624797526275878}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Trap_asset
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -150,6 +150,7 @@ Transform:
   m_Children:
   - {fileID: 4287374472992465873}
   - {fileID: 8463663713556853432}
+  - {fileID: 3920356320233000731}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1250881285535756191
@@ -186,6 +187,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
+  bulletSpawnpoint: {fileID: 5352535938794757454}
   bulletPoolManager: {fileID: 0}
   shootRate: 0.5
   impController: {fileID: 0}
@@ -221,7 +223,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 798858447121493053}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ShootPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -244,6 +246,37 @@ Transform:
   - {fileID: 4752978939846863854}
   m_Father: {fileID: 6425989331348932127}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5352535938794757454
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3920356320233000731}
+  m_Layer: 7
+  m_Name: bullet_spawnpoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3920356320233000731
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5352535938794757454}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.194, z: 3.23}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5058307106487114282}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5479732001583149524
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,7 +288,7 @@ GameObject:
   - component: {fileID: 4752978939846863854}
   - component: {fileID: 5025252139318700992}
   - component: {fileID: 8074502798577369911}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FireFx
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5102,7 +5135,7 @@ GameObject:
   - component: {fileID: 6425989331348932127}
   - component: {fileID: 1869132625126332583}
   - component: {fileID: 1890554732543153381}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CannonG_Barrel02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5186,7 +5219,7 @@ GameObject:
   - component: {fileID: 1338438545421347866}
   - component: {fileID: 2600498223319582334}
   - component: {fileID: 3265269655460061119}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CannonG_Guard00
   m_TagString: Untagged
   m_Icon: {fileID: 0}

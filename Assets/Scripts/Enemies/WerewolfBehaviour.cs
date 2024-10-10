@@ -60,6 +60,8 @@ public class WerewolfBehaviour : MonoBehaviour, InterfaceEnemy
 
     // Imports the sinewave bullet manager
     [Header("Bullet Related Variables")]
+    public GameObject werewolfBulletSpawnpoint;
+    public GameObject humanBulletSpawnpoint;
     public BulletPoolManager bulletPoolManager;
     public SineBulletPoolManager sinBulletPoolManager;
     public float shootRate = 0.2f;
@@ -332,7 +334,7 @@ public class WerewolfBehaviour : MonoBehaviour, InterfaceEnemy
             elapsedTime = 0;
             //  NPC attacking animation
             werewolf_animator.CrossFade("Base Layer.attack2", 0.1f, 0, 0);
-            sinBulletPoolManager.Shooting();
+            sinBulletPoolManager.Shooting(werewolfBulletSpawnpoint.transform.position);
         }
     }
 
@@ -344,7 +346,7 @@ public class WerewolfBehaviour : MonoBehaviour, InterfaceEnemy
         if (elapsedTime >= shootRate)
         {
             elapsedTime = 0;
-            bulletPoolManager.Shooting();
+            bulletPoolManager.Shooting(humanBulletSpawnpoint.transform.position);
         }
     }
 

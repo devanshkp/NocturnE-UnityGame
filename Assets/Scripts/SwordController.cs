@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class SwordController : MonoBehaviour
 {
-    public int damageAmount = 2;  // Amount of damage dealt to enemies
+    public int damageAmount = 10;  // Amount of damage dealt to enemies
     public PlayerController playerController; //  Player Controller script
     private bool isSlashing;
     private bool isDamaging = false;
@@ -18,6 +18,7 @@ public class SwordController : MonoBehaviour
     // Detect enemies when they enter the sword's trigger collider
     private void OnTriggerEnter(Collider other)
     {
+        print(other);
         // Object collides with enemy while slashing, checking once per slash
         if (other.CompareTag("Enemy") && isSlashing && !isDamaging)
         {
@@ -31,6 +32,7 @@ public class SwordController : MonoBehaviour
             {
                 float enemyHealth = enemy.Health;
 
+                print("Hit!");
                 other.SendMessage("TakeDamage", damageAmount, SendMessageOptions.DontRequireReceiver);
             }
 
@@ -49,7 +51,7 @@ public class SwordController : MonoBehaviour
         } else if (other.CompareTag("Enemy") && isSlashing == false)
         {
             isDamaging = false;
-            Debug.Log("Nope");
+            Debug.Log("Idling");
         }
         //  Update damaging bool
         else

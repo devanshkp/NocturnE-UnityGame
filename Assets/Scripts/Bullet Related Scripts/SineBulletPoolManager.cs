@@ -46,7 +46,7 @@ public class SineBulletPoolManager : MonoBehaviour
     /*
      *  Shooting method
      */
-    public void Shooting()
+    public void Shooting(Vector3 spawnpoint)
     {
 
         // Calls a bullet from the queue
@@ -56,7 +56,7 @@ public class SineBulletPoolManager : MonoBehaviour
         if (bullet != null)
         {
             bullet.SetActive(true);
-            bullet.transform.position = enemy.transform.position;
+            bullet.transform.position = spawnpoint;
             bullet.transform.rotation = enemy.transform.rotation;
 
             // Makes the bullets follow a sine wave form

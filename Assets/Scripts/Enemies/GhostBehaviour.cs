@@ -53,6 +53,7 @@ public class GhostBehaviour : MonoBehaviour, InterfaceEnemy
 
     //  Bullet variables (NOTE: most bullet variables are in their respective bullet script)
     [Header("Bullet Related Variables")]
+    public GameObject bulletSpawnpoint;
     public BulletPoolManager bulletPoolManager;
     public float shootRate = 0.5f;
     private float elapsedTime;
@@ -219,7 +220,7 @@ public class GhostBehaviour : MonoBehaviour, InterfaceEnemy
             elapsedTime = 0;
             //  attacking animation per shot
             _animator.CrossFade(AttackState, shootRate, 0, 0);
-            bulletPoolManager.Shooting();
+            bulletPoolManager.Shooting(bulletSpawnpoint.transform.position);
         }
     }
 

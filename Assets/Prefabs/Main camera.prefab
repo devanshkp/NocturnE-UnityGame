@@ -197,7 +197,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 1000
-  field of view: 60.000004
+  field of view: 60
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -238,10 +238,9 @@ MonoBehaviour:
   mouseSensitivity: 3
   target: {fileID: 0}
   lockedTarget: {fileID: 0}
-  distanceFromTarget: 4
   minDistanceFromTarget: 1
   maxDistanceFromTarget: 4
-  maxDistanceFromTargetinCombat: 5
+  combatMaxDistance: 5
   collisionOffset: 0.2
   smoothTime: 0.1
   collisionLayers:

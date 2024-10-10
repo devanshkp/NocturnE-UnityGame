@@ -1636,6 +1636,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1385270901426270041}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4675001832242408127
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7123221033300825458}
+  m_Layer: 7
+  m_Name: bullet_spawnpoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7123221033300825458
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4675001832242408127}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.427, z: 0.681}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1399920041777453844}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4684735864570173448
 GameObject:
   m_ObjectHideFlags: 0
@@ -1990,6 +2021,7 @@ Transform:
   - {fileID: 1402587079540413351}
   - {fileID: 9019768478462070148}
   - {fileID: 5655447120520092044}
+  - {fileID: 7123221033300825458}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &2278637656606468066
@@ -2057,6 +2089,7 @@ MonoBehaviour:
   dayMoveSpeed: 5
   nightMoveSpeed: 10
   nightTargettingSpeed: 3
+  bulletSpawnpoint: {fileID: 4675001832242408127}
   bulletPoolManager: {fileID: 0}
   sinBulletPoolManager: {fileID: 0}
   shootRate: 0.2
