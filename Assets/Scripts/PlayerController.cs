@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
     public Transform cameraTarget;
     public Camera playerCamera;
 
+    [Header("Health Settings")]
+    public float health = 100;
+
     [Header("Movement Settings")]
     public float walkSpeed = 4f;
     public float runSpeed = 7f;
@@ -377,6 +380,46 @@ public class PlayerController : MonoBehaviour
         if (enemyUIManager != null) enemyUIManager.DisableLockOnIcon();
         cameraController.SetLockedTarget(lockedEnemy);
         Debug.Log("Target unlocked.");
+    }
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    public void TakeFireDamage(int damage, float tickDamage, float tickRate, float lifeTime)
+    {
+        health -= damage;
+
+        //  Do tick damage; have fire bullet vars imported and use them for the logic here
+        //  Player has fire tick damage for some amount of time at some rate. Damage like normal
+
+        //  Use a wrapper class to get all the vars
+
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    public void TakeIceDamage(int damage, float movementModifier, float lifeTime)
+    {
+        health -= damage;
+
+        //  Do ice freezing; have ice bullet vars imported and use them for the logic here
+        //  Player freezes for some amount of time, or slowed. Damage like normal
+
+        //  Use a wrapper class to get all the vars
+
+        if (health <= 0)
+        {
+            Die();
+        }
     }
 
     void Die()

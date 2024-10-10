@@ -25,4 +25,13 @@ public class FireBullet : MonoBehaviour
     {
         
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            //  Use a wrapper class to get all the vars
+            other.SendMessage("TakeFireDamage", damage, fireTickDamage, fireTickRate, fireLifeTime);
+        }
+    }
 }

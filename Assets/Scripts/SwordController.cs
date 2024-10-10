@@ -18,22 +18,33 @@ public class SwordController : MonoBehaviour
     // Detect enemies when they enter the sword's trigger collider
     private void OnTriggerEnter(Collider other)
     {
-        print(other);
         // Object collides with enemy while slashing, checking once per slash
         if (other.CompareTag("Enemy") && isSlashing && !isDamaging)
         {
             isDamaging = true;
 
-            //  Checks enemy uses health interface
-            InterfaceEnemy enemy = other.gameObject.GetComponent<InterfaceEnemy>();
+            //  Checks enemy uses health interface, remembering trigger is a child of the actual enemy
+            InterfaceEnemy enemy = other.gameObject.GetComponentInParent<InterfaceEnemy>();
 
-            //  If enemy does use health interface, get its health and take damage
+            //  Get enemy health from trigger's parent and deal damage on that parent
             if(enemy != null)
             {
                 float enemyHealth = enemy.Health;
 
                 print("Hit!");
-                other.SendMessage("TakeDamage", damageAmount, SendMessageOptions.DontRequireReceiver);
+
+                // Imported Imp asset error handling
+                if (other.name.Contains("Imp"))
+                {
+                    other.SendMessage("TakeDamage", damageAmount, SendMessageOptions.DontRequireReceiver);
+                }
+                else
+                {
+                    other.transform.parent.SendMessage("TakeDamage", damageAmount, SendMessageOptions.DontRequireReceiver);
+                }
+                
+
+
             }
 
             // Try to get the enemy's health component
@@ -51,7 +62,7 @@ public class SwordController : MonoBehaviour
         } else if (other.CompareTag("Enemy") && isSlashing == false)
         {
             isDamaging = false;
-            Debug.Log("Idling");
+            //Debug.Log("Idling");
         }
         //  Update damaging bool
         else

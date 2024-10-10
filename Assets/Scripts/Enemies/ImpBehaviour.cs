@@ -208,7 +208,9 @@ public class ImpBehaviour : MonoBehaviour, InterfaceEnemy
     {
         Vector3 directionToPlayer = playerTransform.position - position;
 
-        if (Physics.Raycast(position, directionToPlayer, out RaycastHit hit))
+        LayerMask visionMask = ~LayerMask.GetMask("Bullets");
+
+        if (Physics.Raycast(position, directionToPlayer, out RaycastHit hit, default, visionMask))
         {
             Debug.DrawLine(position, playerTransform.position, Color.red);
 
