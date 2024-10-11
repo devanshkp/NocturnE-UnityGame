@@ -21,7 +21,6 @@ public class PlayerController : MonoBehaviour
     [Header("Health Settings")]
     private HealthManager healthManager;
     private bool isBurning = false;
-    private bool isFreezing = false;
     private Coroutine fireCoroutine;
 
     [Header("Movement Settings")]
@@ -59,6 +58,12 @@ public class PlayerController : MonoBehaviour
     public bool isSlashing = false;
     public float comboTimer = 0f;  // Timer to track time since last slash
     public bool stationarySlash = false;
+
+    [Header("Auto-Target Settings")]
+    public bool isDashing = false;
+    public float dashRange = 10f; // Range within which the player auto-targets and dashes toward the locked enemy
+    public float dashSpeed = 10f; // Speed of dashing toward the enemy
+    public float autoTargetAngleThreshold = 45f; // Angle threshold to check if the player is facing the enemy
 
     [Header ("Target Settings")]
     public LayerMask targetLayer;
@@ -98,8 +103,6 @@ public class PlayerController : MonoBehaviour
             playerCamera = Camera.main;
         cameraController = playerCamera.GetComponent<MoveAroundObject>();
 
-        // originalHealthBarWidth = healthBar.rectTransform.rect.width;
-
         // Save original collider size
         originalColliderCenter = controller.center;
         originalColliderHeight = controller.height;
@@ -121,7 +124,6 @@ public class PlayerController : MonoBehaviour
         UpdateStamina();
         HandleRotation();
         if (lockedEnemy != null){
-            PanCameraToTarget();
             CheckUnlockConditions();
         }
         isGrounded = controller.isGrounded;
@@ -130,7 +132,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!isRolling && !stationarySlash) HandleMovement();  // Allow movement if not rolling or attacking while stationary
+        if (!isRolling && !stationarySlash && !isDashing) HandleMovement();  // Allow movement if not rolling or attacking while stationary
         HandleVerticalMovement();
         if (isSlashing){
             comboTimer += Time.fixedDeltaTime;
@@ -169,6 +171,7 @@ public class PlayerController : MonoBehaviour
             playerSpeed = Mathf.MoveTowards(playerSpeed, targetSpeed, accelerationRate * Time.deltaTime);
         else 
             playerSpeed = Mathf.MoveTowards(playerSpeed, 0, decelerationRate * Time.deltaTime);
+
 
         if (Input.GetMouseButtonDown(2))
             SetTarget();
@@ -235,7 +238,7 @@ public class PlayerController : MonoBehaviour
     // Handles player rotation based on movement direction
     void HandleRotation()
     {        
-        if (direction.magnitude == 0) return;
+        if (direction.magnitude == 0 || isDashing) return;
         float rotSpeed = movementRotSpeed;
         if (isRolling) rotSpeed *= 0.5f;
         Quaternion desiredRotation = Quaternion.LookRotation(direction, Vector3.up);
@@ -284,48 +287,74 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isRolling", false);
     }
 
-    void DashToTarget()
+    void AutoTargetAndDash()
     {
-        if (lockedEnemy == null)
-            return;
+        if (lockedEnemy == null || isDashing) return;
 
         float distanceToEnemy = Vector3.Distance(transform.position, lockedEnemy.position);
 
-        // Define a threshold for the dash to occur
-        float dashDistanceThreshold = 10f;
-
-        float stopDistance = 1f;
-
-        // If the player is close enough to the locked enemy, dash towards it
-        if (distanceToEnemy < dashDistanceThreshold)
+        // Check if the player is close enough and facing the enemy
+        if (distanceToEnemy <= dashRange)
         {
-            // Move the player quickly toward the enemy
-            Vector3 directionToEnemy = (lockedEnemy.position - transform.position).normalized;
+            // Vector3 directionToEnemy = (lockedEnemy.position - transform.position).normalized;
+            // float angleToEnemy = Vector3.Angle(transform.forward, directionToEnemy);
 
-            // Set how far the player should "dash"
-            float dashSpeed = 10f;
-
-            // Move player towards the enemy
-            Vector3 newPlayerPosition = transform.position + directionToEnemy * dashSpeed * Time.deltaTime;
-
-            // Prevent overshooting by clamping the distance to the enemy
-            if (Vector3.Distance(newPlayerPosition, lockedEnemy.position) < stopDistance)
-            {
-                newPlayerPosition = lockedEnemy.position - directionToEnemy * 1f; // Stop just before the enemy
-            }
-
-            // Set the player's new position
-            controller.Move(newPlayerPosition - transform.position);
-
-            // Rotate the player to face the locked enemy
-            Quaternion targetRotation = Quaternion.LookRotation(directionToEnemy, Vector3.up);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 10 * Time.deltaTime);
+            // // If within angle threshold, dash toward the enemy
+            // if (angleToEnemy <= autoTargetAngleThreshold)
+            // {
+                
+            // }
+            StartCoroutine(DashTowardsEnemy(lockedEnemy));
         }
     }
 
+    IEnumerator DashTowardsEnemy(Transform enemy)
+    {
+        isDashing = true;
+
+        // Get direction toward the enemy, but ignore the Y component to prevent rotation towards the ground
+        Vector3 directionToEnemy = (enemy.position - transform.position).normalized;
+        directionToEnemy.y = 0; // Ignore Y axis for horizontal dash
+
+        // Calculate the distance to the enemy, maintaining a minimum distance (1.5 units) away
+        float distanceToEnemy = Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), 
+                                                new Vector3(enemy.position.x, 0, enemy.position.z)) - 2f;
+
+        while (distanceToEnemy > 2f)
+        {
+            // Recalculate the direction and distance each frame in case the enemy moves
+            directionToEnemy = (enemy.position - transform.position).normalized;
+            directionToEnemy.y = 0; // Keep player level during the dash
+
+            // Calculate the distance between player and enemy in the XZ plane
+            distanceToEnemy = Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), 
+                                            new Vector3(enemy.position.x, 0, enemy.position.z));
+
+            if (distanceToEnemy <= 2f) // Stop when we're close enough
+            {
+                break;
+            }
+
+            // Apply movement using CharacterController.Move to respect collisions
+            Vector3 dashMovement = directionToEnemy * dashSpeed * Time.deltaTime;
+            controller.Move(dashMovement);
+
+            yield return null;
+        }
+
+        // After dashing, make the player face the enemy
+        Vector3 finalDirectionToEnemy = (enemy.position - transform.position).normalized;
+        finalDirectionToEnemy.y = 0; // Keep rotation horizontal
+        Quaternion lookRotation = Quaternion.LookRotation(finalDirectionToEnemy);
+        transform.rotation = lookRotation; // Instantly face the enemy after dash ends
+
+        isDashing = false;
+    }
+
+
     void PerformSlash()
     {
-        // DashToTarget();
+        // AutoTargetAndDash();
         // If already slashing, only allow second slash to be triggered within the animation sequence
         if (isSlashing && comboCounter == 1){
             // Perform second slash
@@ -387,23 +416,6 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("Target Locked: " + lockedEnemy.name);
             }
         }
-    }
-
-    void PanCameraToTarget() 
-    {
-        // Get the position of the enemy and the player
-        Vector3 targetPosition = lockedEnemy.position;
-        Vector3 playerPosition = transform.position;
-        
-        // Calculate the midpoint between the player and the enemy
-        Vector3 midpoint = (playerPosition + targetPosition) / 2f;
-
-        // Adjust the camera to look at the midpoint between the player and the enemy
-        Vector3 directionToMidpoint = midpoint - playerCamera.transform.position;
-
-        // Smoothly rotate the camera to look at the midpoint
-        Quaternion targetRotation = Quaternion.LookRotation(directionToMidpoint);
-        playerCamera.transform.rotation = Quaternion.Slerp(playerCamera.transform.rotation, targetRotation, Time.deltaTime * cameraLockSpeed);
     }
 
     void CheckUnlockConditions() 
@@ -508,7 +520,6 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator iceModifier(IceBulletInfo iceDamageInfo, float slowedWalkSpeed, float slowedRunSpeed)
     {
-        isFreezing = true;
         float elaspedTime = 0f;
 
         float originalWalkSpeed = walkSpeed;
@@ -540,7 +551,6 @@ public class PlayerController : MonoBehaviour
         walkSpeed = originalWalkSpeed;
         runSpeed = originalRunSpeed;
         isSlowed = false;
-        isFreezing = false;
     }
 
     void Die()
@@ -548,23 +558,23 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Player is dead");
     }
 
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, targetRange);
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, unlockDistance);
+    // void OnDrawGizmos()
+    // {
+    //     Gizmos.color = Color.red;
+    //     Gizmos.DrawWireSphere(transform.position, targetRange);
+    //     Gizmos.color = Color.green;
+    //     Gizmos.DrawWireSphere(transform.position, unlockDistance);
 
-        if (lockedEnemy != null)
-        {
-            // Set gizmo color for locked target (yellow)
-            Gizmos.color = Color.yellow;
+    //     if (lockedEnemy != null)
+    //     {
+    //         // Set gizmo color for locked target (yellow)
+    //         Gizmos.color = Color.yellow;
             
-            // Draw a line from the player to the locked enemy
-            Gizmos.DrawLine(transform.position, lockedEnemy.position);
+    //         // Draw a line from the player to the locked enemy
+    //         Gizmos.DrawLine(transform.position, lockedEnemy.position);
 
-            // Draw a wire sphere at the locked enemy's position
-            Gizmos.DrawWireSphere(lockedEnemy.position, 1f);  // The radius can be adjusted as needed
-        }
-    }
+    //         // Draw a wire sphere at the locked enemy's position
+    //         Gizmos.DrawWireSphere(lockedEnemy.position, 1f);  // The radius can be adjusted as needed
+    //     }
+    // }
 }
