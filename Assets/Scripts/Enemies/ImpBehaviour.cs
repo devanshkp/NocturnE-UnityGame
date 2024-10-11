@@ -63,7 +63,7 @@ public class ImpBehaviour : MonoBehaviour, InterfaceEnemy
             GameObject trap = transform.GetChild(i).gameObject;
 
             //  Skip the asset gameobjects (only disable the trap children)
-            if(trap.name.Contains("cap") || trap.name.Contains("RigGob1") || trap.name.Contains("Canvas"))
+            if(trap.name.Contains("cap") || trap.name.Contains("RigGob1") || trap.name.Contains("Canvas") || trap.name.Contains("trigger"))
             {
                 continue;
             }
@@ -207,14 +207,14 @@ public class ImpBehaviour : MonoBehaviour, InterfaceEnemy
         }
     }
     
-    /*  Returns if the player is in view via raycast  */
+    /*  Returns if the player is in view via raycast | Casts ray FROM a defined position TO the player  */
     public bool PlayerInView(Vector3 position)
     {
         Vector3 directionToPlayer = playerTransform.position - position;
 
-        LayerMask visionMask = ~LayerMask.GetMask("Bullets");
+        LayerMask visionMask = ~LayerMask.GetMask("Bullets", "Enemy");
 
-        if (Physics.Raycast(position, directionToPlayer, out RaycastHit hit, default, visionMask))
+        if (Physics.Raycast(position, directionToPlayer, out RaycastHit hit, Mathf.Infinity, visionMask))
         {
             Debug.DrawLine(position, playerTransform.position, Color.red);
 
@@ -225,7 +225,6 @@ public class ImpBehaviour : MonoBehaviour, InterfaceEnemy
         }
         return false;
     }
-
 
     private void ValidTrapPlacing()
     {
