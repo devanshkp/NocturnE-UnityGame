@@ -99,7 +99,7 @@ public class MoveAroundObject : MonoBehaviour
 
         transform.position = Vector3.Lerp(transform.position, desiredCameraPosition, Time.deltaTime * cameraLockSpeed);
     }
-
+    
 
     // Handles camera collision with walls and adjusts the camera's distance from the player accordingly
     void HandleCollision()
@@ -142,5 +142,10 @@ public class MoveAroundObject : MonoBehaviour
             // Set the smooth transition starting rotation to the current one
             currentRotation = currentEulerAngles;
         }
+    }
+
+    public bool LockedOn()
+    {
+        return isLockedOn;
     }
 }

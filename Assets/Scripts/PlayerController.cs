@@ -123,7 +123,7 @@ public class PlayerController : MonoBehaviour
         UpdateFOV();
         UpdateStamina();
         HandleRotation();
-        if (lockedEnemy != null){
+        if (cameraController.LockedOn()){
             CheckUnlockConditions();
         }
         isGrounded = controller.isGrounded;
@@ -359,7 +359,6 @@ public class PlayerController : MonoBehaviour
         if (isSlashing && comboCounter == 1){
             // Perform second slash
             comboCounter = 2;
-            animator.SetInteger("comboIndex", comboCounter);
         }
         else if (!isSlashing){
             if (horizontalVelocity.magnitude < 0.01)
@@ -367,7 +366,6 @@ public class PlayerController : MonoBehaviour
             // Start first slash
             isSlashing = true;
             comboCounter = 1;
-            animator.SetInteger("comboIndex", comboCounter);
             animator.SetTrigger("Slash");
         }
 
@@ -380,7 +378,6 @@ public class PlayerController : MonoBehaviour
         comboCounter = 0;
         stationarySlash = false;
         isSlashing = false;
-        animator.SetInteger("comboIndex", comboCounter);
     }
 
     void SetTarget()
@@ -423,6 +420,7 @@ public class PlayerController : MonoBehaviour
         // Check if the lockedEnemy is still valid (active in hierarchy or not destroyed)
         if (lockedEnemy == null || !lockedEnemy.gameObject.activeInHierarchy)
         {
+            Debug.Log("enemy gone");
             UnlockTarget();
             return;
         }
