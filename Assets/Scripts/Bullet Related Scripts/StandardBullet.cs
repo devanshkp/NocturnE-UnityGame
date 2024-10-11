@@ -25,7 +25,8 @@ public class StandardBullet : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            other.SendMessage("TakeDamage", damage);
+            PlayerController playerController = other.GetComponent<PlayerController>();
+            playerController.TakeDamage(damage);
         }
     }
 }

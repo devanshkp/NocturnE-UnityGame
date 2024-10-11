@@ -48,6 +48,9 @@ public class WerewolfBehaviour : MonoBehaviour, InterfaceEnemy
     private Animator werewolf_animator;
     private Animator human_animator;
 
+    [Header("Health")]
+    private HealthManager healthManager;
+
     // Range variables
     [Header("Ranges")]
     public float attackRange = 20;
@@ -109,6 +112,9 @@ public class WerewolfBehaviour : MonoBehaviour, InterfaceEnemy
             }
         }
 
+        healthManager = GetComponentInChildren<HealthManager>();
+        healthManager.SetMaxHealth(health);
+        healthManager.TurnOffHealthBar();
         nav = GetComponent<NavMeshAgent>();
         nav.speed = dayMoveSpeed;
         nav.isStopped = true;
@@ -140,7 +146,7 @@ public class WerewolfBehaviour : MonoBehaviour, InterfaceEnemy
 
         elapsedTime += Time.deltaTime;
 
-        if (health <= 0)
+        if (healthManager.GetHealth() <= 0)
         {
             curState = FSMState.Dead;
         }
@@ -304,7 +310,7 @@ public class WerewolfBehaviour : MonoBehaviour, InterfaceEnemy
 
     public void TakeDamage(int damage)
     {
-        health -= damage;
+        healthManager.UpdateHealth(-damage);
     }
 
     /*  Returns if the player is in view via raycast  */

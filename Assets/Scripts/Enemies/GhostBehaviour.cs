@@ -42,6 +42,9 @@ public class GhostBehaviour : MonoBehaviour, InterfaceEnemy
     public float health = 10;
     public float Health => health;
 
+    [Header("Health")]
+    private HealthManager healthManager;
+
     //  Range variables
     [Header("Ranges")]
     public float attackRange = 20;
@@ -75,6 +78,9 @@ public class GhostBehaviour : MonoBehaviour, InterfaceEnemy
             gameObject.SetActive(false);
         }
 
+        healthManager = GetComponentInChildren<HealthManager>();
+        healthManager.SetMaxHealth(health);
+        healthManager.TurnOffHealthBar();
         nav = GetComponent<NavMeshAgent>();
         //  Set first destination
         nav.SetDestination(destinationList[0].transform.position);
@@ -108,7 +114,7 @@ public class GhostBehaviour : MonoBehaviour, InterfaceEnemy
 
         elapsedTime += Time.deltaTime;
 
-        if (health <= 0)
+        if (healthManager.GetHealth() <= 0)
         {
             curState = FSMState.Dead;
         }
@@ -202,7 +208,7 @@ public class GhostBehaviour : MonoBehaviour, InterfaceEnemy
 
     public void TakeDamage(int damage)
     {
-        health -= damage;
+        healthManager.UpdateHealth(-damage);
     }
 
     /*  Returns if the player is in view via raycast  */
