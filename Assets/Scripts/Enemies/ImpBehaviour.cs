@@ -33,6 +33,9 @@ public class ImpBehaviour : MonoBehaviour, InterfaceEnemy
     private NavMeshAgent nav;
     private Animator _animator;
 
+    [Header("Health")]
+    private HealthManager healthManager;
+
     // Range variables
     [Header("Ranges")]
     public float trapPlacingRange = 20;
@@ -47,6 +50,9 @@ public class ImpBehaviour : MonoBehaviour, InterfaceEnemy
     // Start is called before the first frame update
     void Start()
     {
+        healthManager = GetComponentInChildren<HealthManager>();
+        healthManager.SetMaxHealth(health);
+        healthManager.TurnOffHealthBar();
         nav = GetComponent<NavMeshAgent>();
         nav.speed = runningSpeed;
 
@@ -93,7 +99,7 @@ public class ImpBehaviour : MonoBehaviour, InterfaceEnemy
             case FSMState.Dead: UpdateDeadState(); break;
         }
 
-        if (health <= 0)
+        if (healthManager.GetHealth() <= 0)
         {
             curState = FSMState.Dead;
         }
@@ -163,7 +169,7 @@ public class ImpBehaviour : MonoBehaviour, InterfaceEnemy
 
     public void TakeDamage(int damage)
     {
-        health -= damage;
+        healthManager.UpdateHealth(-damage);
     }
 
     private void IdleActions()

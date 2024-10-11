@@ -16,7 +16,6 @@ public class EnemyUIManager : MonoBehaviour
         if (healthBar != null)
             healthBar = transform.GetComponentInChildren<Transform>().Find("Health Bar").gameObject; 
         lockOnIcon.SetActive(false);
-        healthBar.SetActive(false);
     }
 
     void LateUpdate()
