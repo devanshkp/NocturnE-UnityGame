@@ -50,9 +50,7 @@ public class ImpBehaviour : MonoBehaviour, InterfaceEnemy
     // Start is called before the first frame update
     void Start()
     {
-        healthManager = GetComponentInChildren<HealthManager>();
-        healthManager.SetMaxHealth(health);
-        healthManager.TurnOffHealthBar();
+        InitializeHealthManager();
         nav = GetComponent<NavMeshAgent>();
         nav.speed = runningSpeed;
 
@@ -65,7 +63,7 @@ public class ImpBehaviour : MonoBehaviour, InterfaceEnemy
             GameObject trap = transform.GetChild(i).gameObject;
 
             //  Skip the asset gameobjects (only disable the trap children)
-            if(trap.name.Contains("cap") || trap.name.Contains("RigGob1"))
+            if(trap.name.Contains("cap") || trap.name.Contains("RigGob1") || trap.name.Contains("Canvas"))
             {
                 continue;
             }
@@ -281,6 +279,19 @@ public class ImpBehaviour : MonoBehaviour, InterfaceEnemy
 
         //  Return if no valid positions
         return Vector3.zero;
+    }
+
+    void InitializeHealthManager()
+    {
+        if (healthManager == null)
+        {
+            healthManager = GetComponentInChildren<HealthManager>();
+            if (healthManager != null)
+            {
+                healthManager.SetMaxHealth(health);
+                healthManager.TurnOffHealthBar();
+            }
+        }
     }
 
     void OnDrawGizmos()
