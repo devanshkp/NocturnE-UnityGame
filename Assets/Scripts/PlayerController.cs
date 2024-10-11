@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Timers;
 
 // ORIGINAL COLLIDER HEIGHT = 1.8
 // ORIGINAL COLLIDER CENTER = (0,0.075,0)
@@ -19,6 +20,9 @@ public class PlayerController : MonoBehaviour
 
     [Header("Health Settings")]
     public float health = 100;
+    private bool isBurning = false;
+    private bool isFreezing = false;
+    private Coroutine fireCoroutine;
 
     [Header("Movement Settings")]
     public float walkSpeed = 4f;
@@ -31,6 +35,8 @@ public class PlayerController : MonoBehaviour
     private bool isRunning = false;
     private Vector3 horizontalVelocity;
     private Vector3 direction = Vector3.zero;
+    private Coroutine speedCoroutine;
+    private bool isSlowed = false;
 
     [Header("FOV Settings")]
     public float normalFOV = 60f;
@@ -392,14 +398,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void TakeFireDamage(int damage, float tickDamage, float tickRate, float lifeTime)
+    public void TakeFireDamage(FireBulletInfo firedamageInfo)
     {
-        health -= damage;
-
-        //  Do tick damage; have fire bullet vars imported and use them for the logic here
-        //  Player has fire tick damage for some amount of time at some rate. Damage like normal
-
-        //  Use a wrapper class to get all the vars
+        if (!isBurning)
+        {
+            fireCoroutine = StartCoroutine(ApplyFireTick(firedamageInfo));
+        }
 
         if (health <= 0)
         {
@@ -407,19 +411,84 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void TakeIceDamage(int damage, float movementModifier, float lifeTime)
+    private IEnumerator ApplyFireTick(FireBulletInfo firedamageInfo)
     {
-        health -= damage;
+        isBurning = true;
+        float elapsedTime = 0f;
 
-        //  Do ice freezing; have ice bullet vars imported and use them for the logic here
-        //  Player freezes for some amount of time, or slowed. Damage like normal
+        while (elapsedTime < firedamageInfo.fireLifeTime)
+        {
+            health -= firedamageInfo.fireTickDamage;
 
-        //  Use a wrapper class to get all the vars
+            //  delay tick damage by some amount of time
+            yield return new WaitForSeconds(firedamageInfo.fireTickRate);
+
+            elapsedTime += firedamageInfo.fireTickRate;
+
+            //  check if the tick damage kills the player
+            if(health <= 0)
+            {
+                Die();
+                break;
+            }
+        }
+        
+        isBurning = false;
+    }
+
+    public void TakeIceDamage(IceBulletInfo iceDamageInfo)
+    {
+        float slowedWalkSpeed = walkSpeed * iceDamageInfo.movementModifier;
+        float slowedRunSpeed = runSpeed * iceDamageInfo.movementModifier;
+
+        //  To prevent stacking, check if player is already slowed before applying speed changes and tick damage
+        if (!isSlowed)
+        {
+            isSlowed = true;
+            speedCoroutine = StartCoroutine(iceModifier(iceDamageInfo, slowedWalkSpeed, slowedRunSpeed));
+        }
 
         if (health <= 0)
         {
             Die();
         }
+    }
+
+    private IEnumerator iceModifier(IceBulletInfo iceDamageInfo, float slowedWalkSpeed, float slowedRunSpeed)
+    {
+        isFreezing = true;
+        float elaspedTime = 0f;
+
+        float originalWalkSpeed = walkSpeed;
+        float originalRunSpeed = runSpeed;
+
+        //  Set running speed to be slowed
+        walkSpeed = slowedWalkSpeed;
+        runSpeed = slowedRunSpeed;
+
+        //  tick damage
+        while (elaspedTime < iceDamageInfo.iceLifeTime)
+        {
+            health -= iceDamageInfo.iceTickDamage;
+
+            // delay tick damage by some amount of time
+            yield return new WaitForSeconds(iceDamageInfo.iceTickRate);
+
+            elaspedTime += iceDamageInfo.iceTickRate;
+
+            // check if the tick damage kills the player
+            if(health <= 0)
+            {
+                Die();
+                break;
+            }
+        }
+
+        //  Revert to original speed and reset
+        walkSpeed = originalWalkSpeed;
+        runSpeed = originalRunSpeed;
+        isSlowed = false;
+        isFreezing = false;
     }
 
     void Die()

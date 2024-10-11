@@ -166,8 +166,8 @@ MonoBehaviour:
   speed: 10
   lifeTime: 5
   damage: 10
-  fireTickDamage: 1
-  fireTickRate: 0.1
+  fireTickDamage: 0.5
+  fireTickRate: 0.25
   fireLifeTime: 3
 --- !u!1 &8544985886459852637
 GameObject:

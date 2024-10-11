@@ -950,7 +950,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8468247620469169291, guid: 156ced0a88561b44682a975df300aec1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8.960232
+      value: -25.960232
       objectReference: {fileID: 0}
     - target: {fileID: 8468247620469169291, guid: 156ced0a88561b44682a975df300aec1, type: 3}
       propertyPath: m_LocalPosition.y
@@ -958,7 +958,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8468247620469169291, guid: 156ced0a88561b44682a975df300aec1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -24.922653
+      value: -36.422653
       objectReference: {fileID: 0}
     - target: {fileID: 8468247620469169291, guid: 156ced0a88561b44682a975df300aec1, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3707,6 +3707,14 @@ PrefabInstance:
       propertyPath: enemy
       value: 
       objectReference: {fileID: 1626007875}
+    - target: {fileID: 268807971854154567, guid: 8c25c6a31a05b8e429046e30fb423a57, type: 3}
+      propertyPath: bulletObject
+      value: 
+      objectReference: {fileID: 3176395000418833619, guid: 81f5f7dccc972f04e9541747c758e795, type: 3}
+    - target: {fileID: 268807971854154567, guid: 8c25c6a31a05b8e429046e30fb423a57, type: 3}
+      propertyPath: StandardBullet
+      value: 
+      objectReference: {fileID: 7481388375771603856, guid: 81f5f7dccc972f04e9541747c758e795, type: 3}
     - target: {fileID: 3574850126797836463, guid: 8c25c6a31a05b8e429046e30fb423a57, type: 3}
       propertyPath: m_Name
       value: BulletPoolManager (2)

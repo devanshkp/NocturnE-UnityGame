@@ -67,7 +67,7 @@ GameObject:
   - component: {fileID: 7419699182399196770}
   - component: {fileID: 1892059813693985535}
   - component: {fileID: 7481388375771603856}
-  - component: {fileID: -3060961058213077845}
+  - component: {fileID: -2436973224411903320}
   m_Layer: 8
   m_Name: IceBullet
   m_TagString: Bullet
@@ -204,7 +204,7 @@ MonoBehaviour:
   speed: 7
   lifeTime: 5
   damage: 10
---- !u!114 &-3060961058213077845
+--- !u!114 &-2436973224411903320
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -219,7 +219,6 @@ MonoBehaviour:
   speed: 10
   lifeTime: 5
   damage: 10
-  iceTickDamage: 1
-  iceTickRate: 0.1
-  movementModifier: 0.75
-  iceLifeTime: 3
+  iceTickDamage: 0.5
+  movementModifier: 0.5
+  iceLifeTime: 2

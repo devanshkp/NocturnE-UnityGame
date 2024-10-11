@@ -2,37 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class IceBulletInfo
+{
+    [Header("Ice Settings")]
+    public float iceTickDamage = 0.2f;           //   Damage taken every 'tick'
+    public float iceTickRate = 0.3f;             //  Delay per tick of damage
+    public float movementModifier = 0.5f;     //   Modifier to multiply the player speed, decreasing movement speed
+    public float iceLifeTime = 2;                //   Total time ice is in effect (damage and movement modifier)
+
+    public IceBulletInfo(float iceTickDamage, float iceTickRate, float movementModifier, float icelifeTime)
+    {
+        this.iceTickDamage = iceTickDamage;
+        this.iceTickRate = iceTickRate;
+        this.movementModifier = movementModifier;
+        this.iceLifeTime = icelifeTime;
+    }
+}
+
 public class IceBullet : MonoBehaviour
 {
-    // BULLET INFORMATION
-    public float speed = 10.0f;
-    public float lifeTime = 5.0f;
-    public int damage = 10;
-
-    // ICE DAMAGE INFORMATION
-    /*public float iceTickDamage = 1f;           //   Damage taken every 'tick'
-    public float iceTickRate = 0.1f;           //   Rate each 'tick' of damage occurs in (each x seconds)*/
-    public float movementModifier = 0.75f;     //   Modifier to multiply the player speed, decreasing movement speed
-    public int iceLifeTime = 3;                //   Total time ice is in effect (damage and movement modifier)
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [Header("Ice Settings")]
+    public float iceTickDamage = 0.2f;           //   Damage taken every 'tick'
+    public float iceTickRate = 0.3f;             //  Delay per tick of damage
+    public float movementModifier = 0.5f;     //   Modifier to multiply the player speed, decreasing movement speed
+    public float iceLifeTime = 2;                //   Total time ice is in effect (damage and movement modifier)
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            //  Use a wrapper class to get all the vars
-            other.SendMessage("TakeIceDamage", damage, movementModifier, iceLifeTime);
+            IceBulletInfo damageInfo = new IceBulletInfo(iceTickDamage, iceTickRate, movementModifier, iceLifeTime);
+            other.SendMessage("TakeIceDamage", damageInfo);
         }
     }
 }
