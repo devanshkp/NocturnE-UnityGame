@@ -13,55 +13,82 @@ public class HealthManager : MonoBehaviour
     public float lerpSpeed = 20f;
     private float diffMultiplier;
     public bool isEnemy;
+    private EnemyUIManager enemyUIManager;
     private GameObject healthBar;
+    private bool isHealthBarVisible;
 
     void Start()
     {
         currentHealth = maxHealth;
     
-        if (isEnemy){
-            Transform enemyCanvas = character.GetComponentInChildren<Canvas>().transform;
-            healthBar = enemyCanvas.Find("Health Bar").gameObject;
-        }
+        if (isEnemy)
+            enemyUIManager = character.GetComponentInChildren<EnemyUIManager>();
     }
 
     void Update()
     {
         if (healthSlider.value != currentHealth)
             healthSlider.value = currentHealth;
-        if (healthSlider.value != easeHealthSlider.value){
-            if (healthSlider.value == 0){
-                healthBar.SetActive(false);
+
+        if (easeHealthSlider.value != currentHealth){
+            if (isEnemy) {
+                Debug.Log("Difference");
+                Debug.Log($"Ease Health Slider Value: {easeHealthSlider.value}, Current Health: {currentHealth}");
             }
-            else{
-                SetLerpSpeed(currentHealth - easeHealthSlider.value);
-                easeHealthSlider.value = Mathf.Lerp(easeHealthSlider.value, currentHealth, lerpSpeed * Time.deltaTime);
-            }
+            SetLerpSpeed(easeHealthSlider.value - currentHealth);
+            easeHealthSlider.value = Mathf.Lerp(easeHealthSlider.value, currentHealth, lerpSpeed * Time.deltaTime);
         }
     }
+
+    // IEnumerator Lerp()
+    // {
+    //     float time = 0;
+    //     while (time < 1){
+    //         easeHealthSlider.value = Mathf.Lerp(easeHealthSlider.value, currentHealth, time);
+    //         time += Time.deltaTime;
+    //         yield return null;
+    //     }   
+    //     easeHealthSlider.value = currentHealth;
+    // }
 
     void SetLerpSpeed(float healthDifference)
     {
         // Calculate the percentage of health difference relative to maxHealth
+        if (isEnemy) Debug.Log(healthDifference);
         float healthPercentage = (healthDifference / maxHealth) * 100f;
-
         if (healthPercentage >= 60)
             lerpSpeed = 3f;
         else if (healthPercentage >= 20 && healthPercentage < 60)
             lerpSpeed = 2.5f;
         else
             lerpSpeed = 2f;
+
+        // if (healthPercentage >= 60)
+        //     lerpSpeed = .075f;
+        // else if (healthPercentage >= 20 && healthPercentage < 60)
+        //     lerpSpeed = .0625f;
+        // else
+        //     lerpSpeed = 0.05f;
     }
 
 
     public void TurnOffHealthBar()
     {
-        healthBar.SetActive(false);
+        if (enemyUIManager != null)
+            enemyUIManager.DisableHealthBar(); 
     }
 
     public void SetMaxHealth(float maxEnemyHealth)
     {
         maxHealth = maxEnemyHealth;
+        currentHealth = maxHealth;
+        // Set slider maximum values
+        healthSlider.maxValue = maxHealth;
+        easeHealthSlider.maxValue = maxHealth;
+
+        // Initialize sliders to max health
+        healthSlider.value = maxHealth;
+        easeHealthSlider.value = maxHealth;
     }
 
     public float GetHealth()
@@ -70,8 +97,12 @@ public class HealthManager : MonoBehaviour
     }
 
     public void UpdateHealth(float healthDelta)
-    {
+    {  
         currentHealth += healthDelta;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        if (isEnemy && currentHealth < maxHealth && !isHealthBarVisible){
+            isHealthBarVisible = true;
+            enemyUIManager.EnableHealthBar();
+        }
     }
 }
