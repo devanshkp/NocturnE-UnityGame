@@ -226,17 +226,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 43.7749
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.3383292
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 9.142574
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalRotation.w
@@ -278,6 +286,18 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 923180711}
+    - target: {fileID: 8074502798577369911, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1067,9 +1087,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 583743715}
     m_Modifications:
+    - target: {fileID: 1429562587883159958, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1429562587883159958, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3897548707097050968, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: m_Name
       value: Imp_asset (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3897548707097050968, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4335540819704639306, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: health
@@ -1117,6 +1149,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4421707222870730210, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4972473623214771645, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4972473623214771645, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1308,6 +1348,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
       value: -15.326134
@@ -1360,6 +1408,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 91055538}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1850,6 +1906,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
       value: -22.826134
@@ -1902,6 +1966,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 465075485}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2515,6 +2587,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
       value: -40.326134
@@ -2567,6 +2647,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 2117939561}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2593,6 +2681,14 @@ PrefabInstance:
     - target: {fileID: 2497591813678739971, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_Name
       value: Trap_asset (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2646,6 +2742,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 126446446}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3133,6 +3237,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
       value: -22.826134
@@ -3185,6 +3297,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 1755642777}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3693,6 +3813,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
       value: -22.826134
@@ -3745,6 +3873,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 896855936}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3963,6 +4099,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
       value: -15.326134
@@ -4015,6 +4159,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 967036992}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4046,6 +4198,14 @@ PrefabInstance:
     - target: {fileID: 2497591813678739971, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_Name
       value: Trap_asset (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4099,6 +4259,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 358269718}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4474,6 +4642,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
       value: -12.326134
@@ -4526,6 +4702,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 17498669}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5294,6 +5478,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.8261337
@@ -5346,6 +5538,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 279932069}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6299,6 +6499,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.6738663
@@ -6351,6 +6559,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 1420196913}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7201,6 +7417,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
       value: -22.826134
@@ -7253,6 +7477,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 1327624303}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7349,9 +7581,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 583743715}
     m_Modifications:
+    - target: {fileID: 1429562587883159958, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1429562587883159958, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3897548707097050968, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: m_Name
       value: Imp_asset (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3897548707097050968, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4335540819704639306, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: health
@@ -7399,6 +7643,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4421707222870730210, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4972473623214771645, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4972473623214771645, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -7454,6 +7706,14 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1429562587883159958, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1429562587883159958, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3897548707097050968, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: m_Name
       value: Imp_asset
@@ -7468,7 +7728,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4421707222870730210, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -42.71524
+      value: -23.96048
       objectReference: {fileID: 0}
     - target: {fileID: 4421707222870730210, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: m_LocalPosition.y
@@ -7476,7 +7736,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4421707222870730210, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -47.01285
+      value: -36.530678
       objectReference: {fileID: 0}
     - target: {fileID: 4421707222870730210, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -7504,6 +7764,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4421707222870730210, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4972473623214771645, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4972473623214771645, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8256282841106931194, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
@@ -7790,6 +8058,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.8261337
@@ -7842,6 +8118,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 1268736801}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7947,6 +8231,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
       value: -15.326134
@@ -7999,6 +8291,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 106531813}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9556,6 +9856,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
       value: -12.326134
@@ -9608,6 +9916,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 1520282894}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9704,9 +10020,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 583743715}
     m_Modifications:
+    - target: {fileID: 1429562587883159958, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1429562587883159958, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3897548707097050968, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: m_Name
       value: Imp_asset (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3897548707097050968, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4335540819704639306, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: health
@@ -9754,6 +10082,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4421707222870730210, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4972473623214771645, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4972473623214771645, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -10280,6 +10616,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
       value: -40.326134
@@ -10332,6 +10676,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 126951890}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10359,17 +10711,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 43.7749
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.3383292
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 9.142574
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalRotation.w
@@ -10411,6 +10771,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 463071385}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10833,6 +11201,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
       value: -12.326134
@@ -10885,6 +11261,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 1789570271}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10911,6 +11295,14 @@ PrefabInstance:
     - target: {fileID: 2497591813678739971, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_Name
       value: Trap_asset (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10964,6 +11356,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 399283310}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11701,6 +12101,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
       value: -12.326134
@@ -11753,6 +12161,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 264094219}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12165,6 +12581,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
       value: -22.826134
@@ -12217,6 +12641,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 1972816699}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12240,9 +12672,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 622194614}
     m_Modifications:
+    - target: {fileID: 1429562587883159958, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1429562587883159958, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3897548707097050968, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: m_Name
       value: Imp_asset (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3897548707097050968, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4335540819704639306, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: health
@@ -12290,6 +12734,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4421707222870730210, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4972473623214771645, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4972473623214771645, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -12420,6 +12872,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
       value: -15.326134
@@ -12472,6 +12932,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 300968039}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12568,9 +13036,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 583743715}
     m_Modifications:
+    - target: {fileID: 1429562587883159958, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1429562587883159958, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3897548707097050968, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: m_Name
       value: Imp_asset (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3897548707097050968, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4335540819704639306, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: health
@@ -12618,6 +13098,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4421707222870730210, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4972473623214771645, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4972473623214771645, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -12673,17 +13161,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 43.7749
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.3383292
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 9.142574
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalRotation.w
@@ -12725,6 +13221,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 1406537747}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12873,6 +13377,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.6738663
@@ -12925,6 +13437,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 865935057}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12951,6 +13471,14 @@ PrefabInstance:
     - target: {fileID: 2497591813678739971, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_Name
       value: Trap_asset (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13004,6 +13532,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 994984792}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13309,6 +13845,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
       value: -40.326134
@@ -13361,6 +13905,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 933265467}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14138,6 +14690,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.6738663
@@ -14190,6 +14750,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 1912524335}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14808,6 +15376,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.8261337
@@ -14860,6 +15436,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 742336841}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15158,9 +15742,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 622194614}
     m_Modifications:
+    - target: {fileID: 1429562587883159958, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1429562587883159958, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3897548707097050968, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: m_Name
       value: Imp_asset (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3897548707097050968, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4335540819704639306, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: health
@@ -15208,6 +15804,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4421707222870730210, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4972473623214771645, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4972473623214771645, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -15641,6 +16245,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap_asset
       objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832482485037131962, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5058307106487114282, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.6738663
@@ -15693,6 +16305,14 @@ PrefabInstance:
       propertyPath: bulletPoolManager
       value: 
       objectReference: {fileID: 388450254}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8185831235468584081, guid: fee821d5db3ce4e44a4587532d8e6e16, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
