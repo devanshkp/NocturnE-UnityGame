@@ -132,9 +132,13 @@ public class MoveAroundObject : MonoBehaviour
         {
             // Get current rotation
             Vector3 currentEulerAngles = transform.eulerAngles;
+            // Z value when locking off can be close to 360 causing the screen to rotate when locking off
+            currentEulerAngles.z = 0;
+
             // When transitioning back to free movement, update _rotationX and _rotationY
             _rotationY = currentEulerAngles.y;
             _rotationX = currentEulerAngles.x;
+
             // Set the smooth transition starting rotation to the current one
             currentRotation = currentEulerAngles;
         }

@@ -9,10 +9,21 @@ public class SwordController : MonoBehaviour
     public PlayerController playerController; //  Player Controller script
     private bool isSlashing;
     private bool isDamaging = false;
+    private float slashCooldown = 0.5f;  // Cooldown time between each slash to apply damage
+    private float cooldownTimer = 0f;
 
     private void Update()
     {
         isSlashing = playerController.isSlashing;
+        // If currently in cooldown, update the cooldown timer
+        if (isDamaging){
+            cooldownTimer -= Time.deltaTime;
+            if (cooldownTimer <= 0){
+                // Reset the damaging flag
+                isDamaging = false;
+                cooldownTimer = 0f;
+            }
+        }
     }
 
     // Detect enemies when they enter the sword's trigger collider
@@ -22,6 +33,7 @@ public class SwordController : MonoBehaviour
         if (other.CompareTag("Enemy") && isSlashing && !isDamaging)
         {
             isDamaging = true;
+            cooldownTimer = slashCooldown;
 
             //  Checks enemy uses health interface, remembering trigger is a child of the actual enemy
             InterfaceEnemy enemy = other.gameObject.GetComponentInParent<InterfaceEnemy>();
