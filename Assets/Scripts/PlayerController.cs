@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     public Camera playerCamera;
 
     [Header("Health Settings")]
-    public float health = 100;
+    private HealthManager healthManager;
     private bool isBurning = false;
     private bool isFreezing = false;
     private Coroutine fireCoroutine;
@@ -93,6 +93,7 @@ public class PlayerController : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         animator = GetComponentInChildren<Animator>();
+        healthManager = GetComponentInChildren<HealthManager>();
         if (playerCamera == null)
             playerCamera = Camera.main;
         cameraController = playerCamera.GetComponent<MoveAroundObject>();
@@ -390,9 +391,9 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        health -= damage;
+        healthManager.UpdateHealth(-damage);
 
-        if (health <= 0)
+        if (healthManager.GetHealth() <= 0)
         {
             Die();
         }
@@ -405,7 +406,7 @@ public class PlayerController : MonoBehaviour
             fireCoroutine = StartCoroutine(ApplyFireTick(firedamageInfo));
         }
 
-        if (health <= 0)
+        if (healthManager.GetHealth() <= 0)
         {
             Die();
         }
@@ -418,7 +419,8 @@ public class PlayerController : MonoBehaviour
 
         while (elapsedTime < firedamageInfo.fireLifeTime)
         {
-            health -= firedamageInfo.fireTickDamage;
+
+            healthManager.UpdateHealth(-firedamageInfo.fireTickDamage);
 
             //  delay tick damage by some amount of time
             yield return new WaitForSeconds(firedamageInfo.fireTickRate);
@@ -426,7 +428,7 @@ public class PlayerController : MonoBehaviour
             elapsedTime += firedamageInfo.fireTickRate;
 
             //  check if the tick damage kills the player
-            if(health <= 0)
+            if(healthManager.GetHealth() <= 0)
             {
                 Die();
                 break;
@@ -448,7 +450,7 @@ public class PlayerController : MonoBehaviour
             speedCoroutine = StartCoroutine(iceModifier(iceDamageInfo, slowedWalkSpeed, slowedRunSpeed));
         }
 
-        if (health <= 0)
+        if (healthManager.GetHealth() <= 0)
         {
             Die();
         }
@@ -469,7 +471,7 @@ public class PlayerController : MonoBehaviour
         //  tick damage
         while (elaspedTime < iceDamageInfo.iceLifeTime)
         {
-            health -= iceDamageInfo.iceTickDamage;
+            healthManager.UpdateHealth(-iceDamageInfo.iceTickDamage);
 
             // delay tick damage by some amount of time
             yield return new WaitForSeconds(iceDamageInfo.iceTickRate);
@@ -477,7 +479,7 @@ public class PlayerController : MonoBehaviour
             elaspedTime += iceDamageInfo.iceTickRate;
 
             // check if the tick damage kills the player
-            if(health <= 0)
+            if(healthManager.GetHealth() <= 0)
             {
                 Die();
                 break;

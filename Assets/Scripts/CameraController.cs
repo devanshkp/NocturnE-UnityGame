@@ -77,10 +77,8 @@ public class MoveAroundObject : MonoBehaviour
         if (lockedTarget == null)
             return; 
 
+        // Max distance of camera from player (for collision function)
         currentMaxDistance = combatMaxDistance;
-
-        // Calculate direction from player to the locked enemy
-        Vector3 directionToTarget = (lockedTarget.position - target.position).normalized;
 
         // Calculate a position directly behind the player and rotate it to always look at the locked enemy
         Vector3 cameraOffset = target.position - lockedTarget.position;
@@ -96,11 +94,8 @@ public class MoveAroundObject : MonoBehaviour
         // Clamp the vertical movement of the camera to prevent odd angles
         eulerRotation.x = Mathf.Clamp(eulerRotation.x, combatRotationXMinMax.x, combatRotationXMinMax.y);
 
-        // Apply the modified rotation back to the transform
+        // Rotate the camera accordingly
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(eulerRotation), Time.deltaTime * cameraLockSpeed);
-
-        // Get the current distance between the player and the locked target
-        float distanceToTarget = Vector3.Distance(target.position, lockedTarget.position);
 
         transform.position = Vector3.Lerp(transform.position, desiredCameraPosition, Time.deltaTime * cameraLockSpeed);
     }

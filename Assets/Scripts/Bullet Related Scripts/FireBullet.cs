@@ -29,7 +29,8 @@ public class FireBullet : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             FireBulletInfo damageInfo = new FireBulletInfo(fireTickDamage, fireTickRate, fireLifeTime);
-            other.SendMessage("TakeFireDamage", damageInfo);
+            PlayerController playerController = other.GetComponent<PlayerController>();
+            playerController.TakeFireDamage(damageInfo);
         }
     }
 }
