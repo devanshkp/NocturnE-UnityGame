@@ -7,33 +7,33 @@ public class SwordController : MonoBehaviour
 {
     public int damageAmount = 10;  // Amount of damage dealt to enemies
     public PlayerController playerController; //  Player Controller script
+    private Collider swordCollider; // Reference to the sword's collider
     private bool isSlashing;
     private bool isDamaging = false;
-    private float slashCooldown = 0.5f;  // Cooldown time between each slash to apply damage
+    private float slashCooldown = 1.5f;  // Cooldown time between each slash to apply damage
+    private float stationarySlashCooldown = 1.875f;
     private float cooldownTimer = 0f;
 
-    private void Update()
+    // Keep track of already hit enemies
+    private HashSet<Collider> hitEnemies = new HashSet<Collider>();
+
+    void Start()
     {
-        isSlashing = playerController.isSlashing;
-        // If currently in cooldown, update the cooldown timer
-        if (isDamaging){
-            cooldownTimer -= Time.deltaTime;
-            if (cooldownTimer <= 0){
-                // Reset the damaging flag
-                isDamaging = false;
-                cooldownTimer = 0f;
-            }
-        }
+        // Get the sword's collider component
+        swordCollider = GetComponent<Collider>();
+        swordCollider.enabled = false;
     }
 
     // Detect enemies when they enter the sword's trigger collider
     private void OnTriggerEnter(Collider other)
     {
         // Object collides with enemy while slashing, checking once per slash
-        if (other.CompareTag("Enemy") && isSlashing && !isDamaging)
+        if (other.CompareTag("Enemy") && !isDamaging && !hitEnemies.Contains(other))
         {
             isDamaging = true;
-            cooldownTimer = slashCooldown;
+            cooldownTimer = playerController.stationarySlash ? stationarySlashCooldown : slashCooldown;
+
+            hitEnemies.Add(other);
 
             //  Checks enemy uses health interface, remembering trigger is a child of the actual enemy
             InterfaceEnemy enemy = other.gameObject.GetComponentInParent<InterfaceEnemy>();
@@ -70,17 +70,32 @@ public class SwordController : MonoBehaviour
             // // Send the "TakeDamage" message to the object with the amount of damage as a parameter
             // other.SendMessage("TakeDamage", damageAmount, SendMessageOptions.DontRequireReceiver);
 
-        //  Sword idling (no slash)
-        } else if (other.CompareTag("Enemy") && isSlashing == false)
-        {
-            isDamaging = false;
-            //Debug.Log("Idling");
         }
         //  Update damaging bool
         else
         {
             isDamaging = false;
         }
+    }
+
+    // Functions to be called as animation events
+    public void ResetCoolDown()
+    {
+        Debug.Log("Reset");
+        isDamaging = false;
+        hitEnemies.Clear(); // Clear registry for next attack
+    }
+
+    public void EnableSwordCollider()
+    {
+        Debug.Log("Enabled");
+        swordCollider.enabled = true;
+    }
+
+    public void DisableSwordCollider()
+    {
+        Debug.Log("Disabled");
+        swordCollider.enabled = false;
     }
 }
 
