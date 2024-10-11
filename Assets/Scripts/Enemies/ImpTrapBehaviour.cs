@@ -42,9 +42,7 @@ public class ImpTrapBehaviour : MonoBehaviour, InterfaceEnemy
             gameObject.SetActive(false);
         }
 
-        healthManager = GetComponentInChildren<HealthManager>();
-        healthManager.SetMaxHealth(health);
-        healthManager.TurnOffHealthBar();
+        InitializeHealthManager();
         nav = GetComponent<NavMeshAgent>();
         nav.isStopped = true;
 
@@ -56,6 +54,7 @@ public class ImpTrapBehaviour : MonoBehaviour, InterfaceEnemy
         // Calls rigidbody before initialisation
         _rigidbody = GetComponent<Rigidbody>();
     }
+
 
     // Update is called once per frame
     void Update()
@@ -104,6 +103,19 @@ public class ImpTrapBehaviour : MonoBehaviour, InterfaceEnemy
         {
             elapsedTime = 0;
             bulletPoolManager.Shooting(bulletSpawnpoint.transform.position);
+        }
+    }
+
+    void InitializeHealthManager()
+    {
+        if (healthManager == null)
+        {
+            healthManager = GetComponentInChildren<HealthManager>();
+            if (healthManager != null)
+            {
+                healthManager.SetMaxHealth(health);
+                healthManager.TurnOffHealthBar();
+            }
         }
     }
 }
