@@ -42,6 +42,11 @@ public class GhostBehaviour : MonoBehaviour, InterfaceEnemy
     public float health = 10;
     public float Health => health;
 
+    private bool isDead = false;
+
+    [Header("Score Settings")]
+    public int points = 200;
+
     [Header("Health")]
     private HealthManager healthManager;
 
@@ -64,6 +69,9 @@ public class GhostBehaviour : MonoBehaviour, InterfaceEnemy
     //  Animation states
     [Header("Imported Animation Objects")]
     public GameObject deathAnimation;
+    public float deathAnimationLifeTime = 3f;
+    public float fadeDuration = 1f;
+    private GameObject deathAnimationInstance;
     private static readonly int MoveState = Animator.StringToHash("Base Layer.move");
     private static readonly int AttackState = Animator.StringToHash("Base Layer.attack_shift");
     private static readonly int DissolveState = Animator.StringToHash("Base Layer.dissolve");
@@ -96,8 +104,6 @@ public class GhostBehaviour : MonoBehaviour, InterfaceEnemy
         _rigidbody = GetComponent<Rigidbody>();
 
         _animator = GetComponent<Animator>();
-
-        deathAnimation.SetActive(false);
     }
 
     // Update is called once per frame
@@ -193,15 +199,56 @@ public class GhostBehaviour : MonoBehaviour, InterfaceEnemy
      */
     void UpdateDeadState()
     {
-        //_animator.Play("Base Layer.dissolve");
+        if (!isDead)
+        {
+            isDead = true;
 
-        //  play some animation
-        //  activate death animation object
-        //  wait some time
-        //  destroy enemy
+            _animator.Play("Base Layer.dissolve");
 
-        gameObject.SetActive(false);
-        deathAnimation.SetActive(true);
+            //  Spawn effect at enemy position
+            deathAnimationInstance = Instantiate(deathAnimation, transform.position, Quaternion.identity);
+
+            //  Play effect and fade out
+            StartCoroutine(DestroyEffect());
+
+            //
+            //  Reward points to player score here
+            //
+        }
+    }
+
+    private IEnumerator DestroyEffect()
+    {
+        //  Let animation play for its life time
+        yield return new WaitForSeconds(deathAnimationLifeTime);
+
+        //  Destroy enemy
+        Destroy(gameObject);
+
+        //
+        //  Fade effect logic if shader and gameobject supports
+        //
+
+        /*float fadeStartTime = Time.time;
+
+        //  Get renderers in the effect to apply transparency to
+        Renderer[] renderers = deathAnimationInstance.GetComponentsInChildren<Renderer>();
+
+        while (Time.time < fadeStartTime + fadeDuration)
+        {
+            float time = (Time.time - fadeStartTime) / fadeDuration;
+
+            foreach (Renderer renderer in renderers)
+            {
+                Color color = renderer.material.color;
+                //  Decrease alpha (become transparent)
+                color.a = Mathf.Lerp(1f, 0f, time);
+                renderer.material.color = color;
+            }
+            yield return null;
+        }*/
+
+        Destroy(deathAnimationInstance);
     }
 
     public void TakeDamage(int damage)
@@ -214,7 +261,7 @@ public class GhostBehaviour : MonoBehaviour, InterfaceEnemy
     {
         Vector3 directionToPlayer = playerTransform.position - transform.position;
 
-        LayerMask visionMask = ~LayerMask.GetMask("Bullets");
+        LayerMask visionMask = ~LayerMask.GetMask("Bullets", "Enemy");
 
         if (Physics.Raycast(transform.position, directionToPlayer, out RaycastHit hit, attackRange, visionMask))
         {

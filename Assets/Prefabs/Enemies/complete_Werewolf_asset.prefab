@@ -95,6 +95,10 @@ MonoBehaviour:
   levelManager: {fileID: 0}
   humanModel: {fileID: 3003640134510762838}
   werewolfModel: {fileID: 5011357434478084819}
+  smallDeathAnimation: {fileID: 2117983859483437389, guid: 5775f9e14e4667441b9787bb6ae938e5, type: 3}
+  largeDeathAnimation: {fileID: 2117983859483437389, guid: 168754260f2659a4386237e3edceff5e, type: 3}
+  deathAnimationLifeTime: 3
+  fadeDuration: 1
 --- !u!195 &6817728047561246239
 NavMeshAgent:
   m_ObjectHideFlags: 0

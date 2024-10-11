@@ -578,6 +578,9 @@ MonoBehaviour:
   health: 10
   trapPlacingRange: 20
   runningSpeed: 5
+  deathAnimation: {fileID: 2117983859483437389, guid: 5775f9e14e4667441b9787bb6ae938e5, type: 3}
+  deathAnimationLifeTime: 3
+  fadeDuration: 1
 --- !u!195 &6222812794473154057
 NavMeshAgent:
   m_ObjectHideFlags: 0

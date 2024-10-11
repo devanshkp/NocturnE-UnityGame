@@ -5,15 +5,6 @@ using UnityEngine.AI;
 
 public class WerewolfBehaviour : MonoBehaviour, InterfaceEnemy
 {
-    //
-    //
-    //  When the NPC shoots at night, the bullets shift his pos. Deactivating the collider helps for now, but when player attacking is implemented, that'd need to be addressed
-    //
-    //
-
-
-
-
     //  NPC States
     public enum FSMState
     {
@@ -28,6 +19,8 @@ public class WerewolfBehaviour : MonoBehaviour, InterfaceEnemy
 
     //  Current NPC state
     public FSMState curState;
+
+    private bool isDead = false;
 
     //  Total times the NPC can get hit until destruction
     public float health = 20;
@@ -47,6 +40,10 @@ public class WerewolfBehaviour : MonoBehaviour, InterfaceEnemy
     private NavMeshAgent nav;
     private Animator werewolf_animator;
     private Animator human_animator;
+
+    [Header("Score Settings")]
+    public int wereworlfPoints = 500;
+    public int humanPoints = 100;
 
     [Header("Health")]
     private HealthManager healthManager;
@@ -74,6 +71,13 @@ public class WerewolfBehaviour : MonoBehaviour, InterfaceEnemy
     public LevelManager levelManager;
     public GameObject humanModel;
     public GameObject werewolfModel;
+
+    [Header("Imported Animation Objects")]
+    public GameObject smallDeathAnimation;
+    public GameObject largeDeathAnimation;
+    public float deathAnimationLifeTime = 3f;
+    public float fadeDuration = 1f;
+    private GameObject deathAnimationInstance;
 
 
     // Start is called before the first frame update
@@ -303,7 +307,72 @@ public class WerewolfBehaviour : MonoBehaviour, InterfaceEnemy
      */
     void UpdateDeadState()
     {
+        if (!isDead && werewolfModel.activeInHierarchy)
+        {
+            isDead = true;
 
+            werewolf_animator.Play("Base Layer.down");
+
+            //  Spawn effect at enemy position
+            deathAnimationInstance = Instantiate(largeDeathAnimation, transform.position, Quaternion.identity);
+
+            //  Play effect and fade out
+            StartCoroutine(DestroyEffect());
+
+            //
+            //  Reward werewolf specific points to player score here
+            //
+        }
+        else if (!isDead && humanModel.activeInHierarchy)
+        {
+            isDead = true;
+
+            human_animator.Play("Base Layer.dies");
+
+            //  Spawn effect at enemy position
+            deathAnimationInstance = Instantiate(smallDeathAnimation, transform.position, Quaternion.identity);
+
+            //  Play effect and fade out
+            StartCoroutine(DestroyEffect());
+
+            //
+            //  Reward human specific points to player score here
+            //
+        }
+    }
+
+    private IEnumerator DestroyEffect()
+    {
+        //  Let animation play for its life time
+        yield return new WaitForSeconds(deathAnimationLifeTime);
+
+        //  Destroy enemy
+        Destroy(gameObject);
+
+        //
+        //  Fade effect logic if shader and gameobject supports
+        //
+
+        /*float fadeStartTime = Time.time;
+
+        //  Get renderers in the effect to apply transparency to
+        Renderer[] renderers = deathAnimationInstance.GetComponentsInChildren<Renderer>();
+
+        while (Time.time < fadeStartTime + fadeDuration)
+        {
+            float time = (Time.time - fadeStartTime) / fadeDuration;
+
+            foreach (Renderer renderer in renderers)
+            {
+                Color color = renderer.material.color;
+                //  Decrease alpha (become transparent)
+                color.a = Mathf.Lerp(1f, 0f, time);
+                renderer.material.color = color;
+            }
+            yield return null;
+        }*/
+
+        Destroy(deathAnimationInstance);
     }
 
     public void TakeDamage(int damage)
@@ -316,9 +385,9 @@ public class WerewolfBehaviour : MonoBehaviour, InterfaceEnemy
     {
         Vector3 directionToPlayer = playerTransform.position - transform.position;
 
-        LayerMask visionMask = ~LayerMask.GetMask("Bullets");
+        LayerMask visionMask = ~LayerMask.GetMask("Bullets", "Enemy");
 
-        if (Physics.Raycast(transform.position, directionToPlayer, out RaycastHit hit, default, visionMask))
+        if (Physics.Raycast(transform.position, directionToPlayer, out RaycastHit hit, Mathf.Infinity, visionMask))
         {
             Debug.DrawLine(transform.position, playerTransform.position, Color.red);
 

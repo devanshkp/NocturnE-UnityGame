@@ -236,6 +236,9 @@ MonoBehaviour:
   bulletSpawnpoint: {fileID: 4706017293995980997}
   bulletPoolManager: {fileID: 0}
   shootRate: 0.2
+  deathAnimation: {fileID: 2117983859483437389, guid: 5775f9e14e4667441b9787bb6ae938e5, type: 3}
+  deathAnimationLifeTime: 3
+  fadeDuration: 1
 --- !u!195 &6211829490706946261
 NavMeshAgent:
   m_ObjectHideFlags: 0
