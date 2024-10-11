@@ -19,10 +19,11 @@ public class HealthManager : MonoBehaviour
 
     void Start()
     {
-        currentHealth = maxHealth;
-    
-        if (isEnemy)
-            enemyUIManager = character.GetComponentInChildren<EnemyUIManager>();
+        // Only initialize currentHealth if it's the player (not an enemy)
+        if (!isEnemy) {
+            currentHealth = maxHealth;
+        }
+        InitializeEnemyUIManager();
     }
 
     void Update()
@@ -31,30 +32,14 @@ public class HealthManager : MonoBehaviour
             healthSlider.value = currentHealth;
 
         if (easeHealthSlider.value != currentHealth){
-            if (isEnemy) {
-                Debug.Log("Difference");
-                Debug.Log($"Ease Health Slider Value: {easeHealthSlider.value}, Current Health: {currentHealth}");
-            }
             SetLerpSpeed(easeHealthSlider.value - currentHealth);
             easeHealthSlider.value = Mathf.Lerp(easeHealthSlider.value, currentHealth, lerpSpeed * Time.deltaTime);
         }
     }
 
-    // IEnumerator Lerp()
-    // {
-    //     float time = 0;
-    //     while (time < 1){
-    //         easeHealthSlider.value = Mathf.Lerp(easeHealthSlider.value, currentHealth, time);
-    //         time += Time.deltaTime;
-    //         yield return null;
-    //     }   
-    //     easeHealthSlider.value = currentHealth;
-    // }
-
     void SetLerpSpeed(float healthDifference)
     {
         // Calculate the percentage of health difference relative to maxHealth
-        if (isEnemy) Debug.Log(healthDifference);
         float healthPercentage = (healthDifference / maxHealth) * 100f;
         if (healthPercentage >= 60)
             lerpSpeed = 3f;
@@ -62,15 +47,15 @@ public class HealthManager : MonoBehaviour
             lerpSpeed = 2.5f;
         else
             lerpSpeed = 2f;
-
-        // if (healthPercentage >= 60)
-        //     lerpSpeed = .075f;
-        // else if (healthPercentage >= 20 && healthPercentage < 60)
-        //     lerpSpeed = .0625f;
-        // else
-        //     lerpSpeed = 0.05f;
     }
 
+    void InitializeEnemyUIManager()
+    {
+        if (isEnemy && enemyUIManager == null && character.activeInHierarchy)
+        {
+            enemyUIManager = character.GetComponentInChildren<EnemyUIManager>();
+        }
+    }
 
     public void TurnOffHealthBar()
     {
@@ -101,6 +86,9 @@ public class HealthManager : MonoBehaviour
         currentHealth += healthDelta;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         if (isEnemy && currentHealth < maxHealth && !isHealthBarVisible){
+            if (enemyUIManager == null){
+                InitializeEnemyUIManager();
+            }
             isHealthBarVisible = true;
             enemyUIManager.EnableHealthBar();
         }

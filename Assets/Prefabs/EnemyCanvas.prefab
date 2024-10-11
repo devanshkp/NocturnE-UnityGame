@@ -249,6 +249,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 853078948018324789, guid: c9e6b6e141acc184c9c8f12839c7c0e3, type: 3}
+      propertyPath: m_WholeNumbers
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1192447098104777514, guid: c9e6b6e141acc184c9c8f12839c7c0e3, type: 3}
       propertyPath: m_Name
       value: Health Bar
@@ -264,6 +268,10 @@ PrefabInstance:
     - target: {fileID: 3811825688730895762, guid: c9e6b6e141acc184c9c8f12839c7c0e3, type: 3}
       propertyPath: m_Layer
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059294997115514237, guid: c9e6b6e141acc184c9c8f12839c7c0e3, type: 3}
+      propertyPath: m_WholeNumbers
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4985005280645037354, guid: c9e6b6e141acc184c9c8f12839c7c0e3, type: 3}
       propertyPath: m_Layer

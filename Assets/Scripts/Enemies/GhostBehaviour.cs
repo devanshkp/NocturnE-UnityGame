@@ -78,9 +78,7 @@ public class GhostBehaviour : MonoBehaviour, InterfaceEnemy
             gameObject.SetActive(false);
         }
 
-        healthManager = GetComponentInChildren<HealthManager>();
-        healthManager.SetMaxHealth(health);
-        healthManager.TurnOffHealthBar();
+        InitializeHealthManager();
         nav = GetComponent<NavMeshAgent>();
         //  Set first destination
         nav.SetDestination(destinationList[0].transform.position);
@@ -241,6 +239,19 @@ public class GhostBehaviour : MonoBehaviour, InterfaceEnemy
             //  attacking animation per shot
             _animator.CrossFade(AttackState, shootRate, 0, 0);
             bulletPoolManager.Shooting(bulletSpawnpoint.transform.position);
+        }
+    }
+
+    void InitializeHealthManager()
+    {
+        if (healthManager == null)
+        {
+            healthManager = GetComponentInChildren<HealthManager>();
+            if (healthManager != null)
+            {
+                healthManager.SetMaxHealth(health);
+                healthManager.TurnOffHealthBar();
+            }
         }
     }
 
