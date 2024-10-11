@@ -176,10 +176,6 @@ public class PlayerController : MonoBehaviour
         if (!isRolling && !isSlashing){
             // Roll mechanic
             if (Input.GetKeyDown(KeyCode.Space) && rollCooldownTimer >= rollCooldown && direction.magnitude != 0){
-                if (lockedEnemy != null){
-                    GhostBehaviour enemyBehavior = lockedEnemy.GetComponentInChildren<GhostBehaviour>();
-                    enemyBehavior.TakeDamage(10);
-                }
                 StartCoroutine(Roll());
             }
             // Jump mechanic

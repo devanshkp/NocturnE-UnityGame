@@ -112,9 +112,7 @@ public class WerewolfBehaviour : MonoBehaviour, InterfaceEnemy
             }
         }
 
-        healthManager = GetComponentInChildren<HealthManager>();
-        healthManager.SetMaxHealth(health);
-        healthManager.TurnOffHealthBar();
+        InitializeHealthManager();
         nav = GetComponent<NavMeshAgent>();
         nav.speed = dayMoveSpeed;
         nav.isStopped = true;
@@ -414,6 +412,19 @@ public class WerewolfBehaviour : MonoBehaviour, InterfaceEnemy
             werewolfModel.SetActive(true);
             humanModel.SetActive(false);
             curState = FSMState.NightAttack;
+        }
+    }
+
+    void InitializeHealthManager()
+    {
+        if (healthManager == null)
+        {
+            healthManager = GetComponentInChildren<HealthManager>();
+            if (healthManager != null)
+            {
+                healthManager.SetMaxHealth(health);
+                healthManager.TurnOffHealthBar();
+            }
         }
     }
 
