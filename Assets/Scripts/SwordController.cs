@@ -59,19 +59,7 @@ public class SwordController : MonoBehaviour
 
             }
 
-            // Try to get the enemy's health component
-            // EnemyHealth enemyHealth = other.GetComponent<EnemyHealth>();
-            // if (enemyHealth != null)
-            // {
-            //     // Deal damage to the enemy
-            //     enemyHealth.TakeDamage(damageAmount);
-            // }
-
-            // // Send the "TakeDamage" message to the object with the amount of damage as a parameter
-            // other.SendMessage("TakeDamage", damageAmount, SendMessageOptions.DontRequireReceiver);
-
         }
-        //  Update damaging bool
         else
         {
             isDamaging = false;
@@ -81,20 +69,17 @@ public class SwordController : MonoBehaviour
     // Functions to be called as animation events
     public void ResetCoolDown()
     {
-        Debug.Log("Reset");
         isDamaging = false;
         hitEnemies.Clear(); // Clear registry for next attack
     }
 
     public void EnableSwordCollider()
     {
-        Debug.Log("Enabled");
         swordCollider.enabled = true;
     }
 
     public void DisableSwordCollider()
     {
-        Debug.Log("Disabled");
         swordCollider.enabled = false;
     }
 }
