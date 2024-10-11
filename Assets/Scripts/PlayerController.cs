@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
     private int comboCounter = 0;
     public bool isSlashing = false;
     public float comboTimer = 0f;  // Timer to track time since last slash
-    private bool stationarySlash = false;
+    public bool stationarySlash = false;
 
     [Header ("Target Settings")]
     public LayerMask targetLayer;
@@ -284,8 +284,48 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isRolling", false);
     }
 
+    void DashToTarget()
+    {
+        if (lockedEnemy == null)
+            return;
+
+        float distanceToEnemy = Vector3.Distance(transform.position, lockedEnemy.position);
+
+        // Define a threshold for the dash to occur
+        float dashDistanceThreshold = 10f;
+
+        float stopDistance = 1f;
+
+        // If the player is close enough to the locked enemy, dash towards it
+        if (distanceToEnemy < dashDistanceThreshold)
+        {
+            // Move the player quickly toward the enemy
+            Vector3 directionToEnemy = (lockedEnemy.position - transform.position).normalized;
+
+            // Set how far the player should "dash"
+            float dashSpeed = 10f;
+
+            // Move player towards the enemy
+            Vector3 newPlayerPosition = transform.position + directionToEnemy * dashSpeed * Time.deltaTime;
+
+            // Prevent overshooting by clamping the distance to the enemy
+            if (Vector3.Distance(newPlayerPosition, lockedEnemy.position) < stopDistance)
+            {
+                newPlayerPosition = lockedEnemy.position - directionToEnemy * 1f; // Stop just before the enemy
+            }
+
+            // Set the player's new position
+            controller.Move(newPlayerPosition - transform.position);
+
+            // Rotate the player to face the locked enemy
+            Quaternion targetRotation = Quaternion.LookRotation(directionToEnemy, Vector3.up);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 10 * Time.deltaTime);
+        }
+    }
+
     void PerformSlash()
     {
+        // DashToTarget();
         // If already slashing, only allow second slash to be triggered within the animation sequence
         if (isSlashing && comboCounter == 1){
             // Perform second slash
@@ -329,10 +369,12 @@ public class PlayerController : MonoBehaviour
 
             // Loop through all colliders and find the closest enemy
             foreach (Collider hitCollider in hitColliders){
-                float distanceToTarget = Vector3.Distance(transform.position, hitCollider.transform.position);
-                if (distanceToTarget < closestDistance && !TargetObstructed(hitCollider.transform)){
-                    closestDistance = distanceToTarget;
-                    closestTarget = hitCollider.transform;
+                if (hitCollider.CompareTag("Enemy")){
+                    float distanceToTarget = Vector3.Distance(transform.position, hitCollider.transform.position);
+                    if (distanceToTarget < closestDistance && !TargetObstructed(hitCollider.transform)){
+                        closestDistance = distanceToTarget;
+                        closestTarget = hitCollider.transform;
+                    }
                 }
             }
 
@@ -366,6 +408,13 @@ public class PlayerController : MonoBehaviour
 
     void CheckUnlockConditions() 
     {
+        // Check if the lockedEnemy is still valid (active in hierarchy or not destroyed)
+        if (lockedEnemy == null || !lockedEnemy.gameObject.activeInHierarchy)
+        {
+            UnlockTarget();
+            return;
+        }
+
         // Check distance
         float distanceToEnemy = Vector3.Distance(transform.position, lockedEnemy.position);
         if (distanceToEnemy > unlockDistance || TargetObstructed(lockedEnemy))
