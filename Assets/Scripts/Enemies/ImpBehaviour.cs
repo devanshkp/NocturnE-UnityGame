@@ -20,7 +20,13 @@ public class ImpBehaviour : MonoBehaviour, InterfaceEnemy
     //  Current NPC state
     public FSMState curState;
 
+    private bool isDead = false;
+
+    [Header("Score Settings")]
+    public int points = 50;
+
     //  Total times the NPC can get hit until destruction
+    [Header("Health Settings")]
     public float health = 10;
     public float Health => health;
 
@@ -44,8 +50,16 @@ public class ImpBehaviour : MonoBehaviour, InterfaceEnemy
     [Header("Movement")]
     public float runningSpeed = 20f;
 
+    [Header("Imported Animation Objects")]
+    public GameObject deathAnimation;
+    public float deathAnimationLifeTime = 3f;
+    public float fadeDuration = 1f;
+    private GameObject deathAnimationInstance;
+
+    [Header("Trap Pool")]
     public Queue<GameObject> trapPool;
     private int totalTraps;
+
 
     // Start is called before the first frame update
     void Start()
@@ -162,7 +176,56 @@ public class ImpBehaviour : MonoBehaviour, InterfaceEnemy
      */
     void UpdateDeadState()
     {
+        if (!isDead)
+        {
+            isDead = true;
 
+            _animator.Play("Base Layer.idle");
+
+            //  Spawn effect at enemy position
+            deathAnimationInstance = Instantiate(deathAnimation, transform.position, Quaternion.identity);
+
+            //  Play effect and fade out
+            StartCoroutine(DestroyEffect());
+
+            //
+            //  Reward points to player score here
+            //
+        }
+    }
+
+    private IEnumerator DestroyEffect()
+    {
+        //  Let animation play for its life time
+        yield return new WaitForSeconds(deathAnimationLifeTime);
+
+        //  Destroy enemy
+        Destroy(gameObject);
+
+        //
+        //  Fade effect logic if shader and gameobject supports
+        //
+
+        /*float fadeStartTime = Time.time;
+
+        //  Get renderers in the effect to apply transparency to
+        Renderer[] renderers = deathAnimationInstance.GetComponentsInChildren<Renderer>();
+
+        while (Time.time < fadeStartTime + fadeDuration)
+        {
+            float time = (Time.time - fadeStartTime) / fadeDuration;
+
+            foreach (Renderer renderer in renderers)
+            {
+                Color color = renderer.material.color;
+                //  Decrease alpha (become transparent)
+                color.a = Mathf.Lerp(1f, 0f, time);
+                renderer.material.color = color;
+            }
+            yield return null;
+        }*/
+
+        Destroy(deathAnimationInstance);
     }
 
     public void TakeDamage(int damage)
