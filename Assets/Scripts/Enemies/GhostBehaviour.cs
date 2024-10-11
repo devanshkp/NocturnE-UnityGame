@@ -59,6 +59,8 @@ public class GhostBehaviour : MonoBehaviour, InterfaceEnemy
     private float elapsedTime;
 
     //  Animation states
+    [Header("Imported Animation Objects")]
+    public GameObject deathAnimation;
     private static readonly int MoveState = Animator.StringToHash("Base Layer.move");
     private static readonly int AttackState = Animator.StringToHash("Base Layer.attack_shift");
     private static readonly int DissolveState = Animator.StringToHash("Base Layer.dissolve");
@@ -90,6 +92,8 @@ public class GhostBehaviour : MonoBehaviour, InterfaceEnemy
         _rigidbody = GetComponent<Rigidbody>();
 
         _animator = GetComponent<Animator>();
+
+        deathAnimation.SetActive(false);
     }
 
     // Update is called once per frame
@@ -185,7 +189,15 @@ public class GhostBehaviour : MonoBehaviour, InterfaceEnemy
      */
     void UpdateDeadState()
     {
-        _animator.CrossFade(DissolveState, 0.1f, 0, 0);
+        //_animator.Play("Base Layer.dissolve");
+
+        //  play some animation
+        //  activate death animation object
+        //  wait some time
+        //  destroy enemy
+
+        gameObject.SetActive(false);
+        deathAnimation.SetActive(true);
     }
 
     public void TakeDamage(int damage)
