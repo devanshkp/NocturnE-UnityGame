@@ -32,7 +32,8 @@ public class IceBullet : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             IceBulletInfo damageInfo = new IceBulletInfo(iceTickDamage, iceTickRate, movementModifier, iceLifeTime);
-            other.SendMessage("TakeIceDamage", damageInfo);
+            PlayerController playerController = other.GetComponent<PlayerController>();
+            playerController.TakeIceDamage(damageInfo);
         }
     }
 }

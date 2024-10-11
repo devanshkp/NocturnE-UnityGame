@@ -18,6 +18,9 @@ public class ImpTrapBehaviour : MonoBehaviour, InterfaceEnemy
     private Rigidbody _rigidbody;
     private NavMeshAgent nav;
 
+    [Header("Health")]
+    private HealthManager healthManager;
+
     // Imports the bullet manager
     [Header("Bullet Related Variables")]
     public GameObject bulletSpawnpoint;
@@ -39,6 +42,9 @@ public class ImpTrapBehaviour : MonoBehaviour, InterfaceEnemy
             gameObject.SetActive(false);
         }
 
+        healthManager = GetComponentInChildren<HealthManager>();
+        healthManager.SetMaxHealth(health);
+        healthManager.TurnOffHealthBar();
         nav = GetComponent<NavMeshAgent>();
         nav.isStopped = true;
 
@@ -74,7 +80,7 @@ public class ImpTrapBehaviour : MonoBehaviour, InterfaceEnemy
 
         }
 
-        if (health <= 0)
+        if (healthManager.GetHealth() <= 0)
         {
             Dead();
         }
@@ -87,7 +93,7 @@ public class ImpTrapBehaviour : MonoBehaviour, InterfaceEnemy
 
     public void TakeDamage(int damage)
     {
-        health -= damage;
+        healthManager.UpdateHealth(-damage);
     }
 
     private void Shooting()

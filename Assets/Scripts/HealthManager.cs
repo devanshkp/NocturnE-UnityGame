@@ -13,8 +13,6 @@ public class HealthManager : MonoBehaviour
     public float lerpSpeed = 20f;
     private float diffMultiplier;
     public bool isEnemy;
-
-    private bool healthBarVisible = false;
     private GameObject healthBar;
 
     void Start()
@@ -32,29 +30,48 @@ public class HealthManager : MonoBehaviour
         if (healthSlider.value != currentHealth)
             healthSlider.value = currentHealth;
         if (healthSlider.value != easeHealthSlider.value){
-            setLerpSpeed(currentHealth - easeHealthSlider.value);
-            easeHealthSlider.value = Mathf.Lerp(easeHealthSlider.value, currentHealth, lerpSpeed * Time.deltaTime);
+            if (healthSlider.value == 0){
+                healthBar.SetActive(false);
+            }
+            else{
+                SetLerpSpeed(currentHealth - easeHealthSlider.value);
+                easeHealthSlider.value = Mathf.Lerp(easeHealthSlider.value, currentHealth, lerpSpeed * Time.deltaTime);
+            }
         }
     }
 
-    void setLerpSpeed(float healthDifference)
+    void SetLerpSpeed(float healthDifference)
     {
-        if (healthDifference >= 60 && healthDifference <= 100)
+        // Calculate the percentage of health difference relative to maxHealth
+        float healthPercentage = (healthDifference / maxHealth) * 100f;
+
+        if (healthPercentage >= 60)
             lerpSpeed = 3f;
-        else if (healthDifference >= 20 && healthDifference < 60)
+        else if (healthPercentage >= 20 && healthPercentage < 60)
             lerpSpeed = 2.5f;
         else
             lerpSpeed = 2f;
     }
 
-    public void applyDamage(float damage)
+
+    public void TurnOffHealthBar()
     {
-        currentHealth -= damage;
-        if (currentHealth <= 0){
-            currentHealth = 0;
-            character.SendMessage("Die");
-        }
-        if (isEnemy && currentHealth < maxHealth && !healthBarVisible)
-            healthBar.SetActive(true);
+        healthBar.SetActive(false);
+    }
+
+    public void SetMaxHealth(float maxEnemyHealth)
+    {
+        maxHealth = maxEnemyHealth;
+    }
+
+    public float GetHealth()
+    {
+        return currentHealth;
+    }
+
+    public void UpdateHealth(float healthDelta)
+    {
+        currentHealth += healthDelta;
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
     }
 }
