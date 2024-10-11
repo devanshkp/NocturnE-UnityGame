@@ -127,5 +127,16 @@ public class MoveAroundObject : MonoBehaviour
     {
         lockedTarget = newLockedTarget;
         isLockedOn = (newLockedTarget != null);
+
+        if (!isLockedOn)
+        {
+            // Get current rotation
+            Vector3 currentEulerAngles = transform.eulerAngles;
+            // When transitioning back to free movement, update _rotationX and _rotationY
+            _rotationY = currentEulerAngles.y;
+            _rotationX = currentEulerAngles.x;
+            // Set the smooth transition starting rotation to the current one
+            currentRotation = currentEulerAngles;
+        }
     }
 }
