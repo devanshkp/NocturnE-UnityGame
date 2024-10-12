@@ -36,4 +36,9 @@ public class AnimationEvents : MonoBehaviour
     {
         playerController.EndLevel();
     }
+
+    public void EndAutoTargetState()
+    {
+        playerController.StopAutoTargeting();
+    }
 }
