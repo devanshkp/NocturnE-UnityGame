@@ -159,10 +159,9 @@ MonoBehaviour:
   isSlashing: 0
   comboTimer: 0
   stationarySlash: 0
-  isDashing: 0
-  dashRange: 10
-  dashSpeed: 10
-  autoTargetAngleThreshold: 45
+  autoTargeting: 0
+  autoTargetRange: 3
+  autoTargetAngleThreshold: 120
   targetLayer:
     serializedVersion: 2
     m_Bits: 128
