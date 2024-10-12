@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     private HealthManager healthManager;
     private bool isBurning = false;
     private Coroutine fireCoroutine;
+    private bool isDead = false;
 
     [Header("Movement Settings")]
     public float walkSpeed = 4f;
@@ -60,10 +61,9 @@ public class PlayerController : MonoBehaviour
     public bool stationarySlash = false;
 
     [Header("Auto-Target Settings")]
-    public bool isDashing = false;
-    public float dashRange = 10f; // Range within which the player auto-targets and dashes toward the locked enemy
-    public float dashSpeed = 10f; // Speed of dashing toward the enemy
-    public float autoTargetAngleThreshold = 45f; // Angle threshold to check if the player is facing the enemy
+    public bool autoTargeting = false;
+    public float autoTargetRange = 3f;
+    public float autoTargetAngleThreshold = 120f; // Angle threshold to check if the player is facing the enemy
 
     [Header ("Target Settings")]
     public LayerMask targetLayer;
@@ -118,6 +118,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (isDead) return;
         RecordInputs();
         UpdateVelocity();
         UpdateFOV();
@@ -132,7 +133,8 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!isRolling && !stationarySlash && !isDashing) HandleMovement();  // Allow movement if not rolling or attacking while stationary
+        if (isDead) return;
+        if (!isRolling && !stationarySlash && !autoTargeting) HandleMovement();  // Allow movement if not rolling or attacking while stationary
         HandleVerticalMovement();
         if (isSlashing){
             comboTimer += Time.fixedDeltaTime;
@@ -238,7 +240,7 @@ public class PlayerController : MonoBehaviour
     // Handles player rotation based on movement direction
     void HandleRotation()
     {        
-        if (direction.magnitude == 0 || isDashing) return;
+        if (direction.magnitude == 0 || autoTargeting || stationarySlash) return;
         float rotSpeed = movementRotSpeed;
         if (isRolling) rotSpeed *= 0.5f;
         Quaternion desiredRotation = Quaternion.LookRotation(direction, Vector3.up);
@@ -274,7 +276,7 @@ public class PlayerController : MonoBehaviour
         controller.center = new Vector3(0, -0.375f, 0); // Lower collider
         float rollSpeedMultiplier = (playerSpeed == walkSpeed) ? 0.7f : 1.0f;
         float timer = 0;
-        while (timer < rollTimer){
+        while (timer < rollTimer && !isDead){
             float speed = rollCurve.Evaluate(timer) * rollSpeedMultiplier;
             Vector3 dir = (transform.forward * speed + (Vector3.up * verticalVelocity));
             controller.Move(dir * Time.deltaTime);
@@ -287,74 +289,40 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isRolling", false);
     }
 
-    void AutoTargetAndDash()
+    void AutoTargetAndRotate()
     {
-        if (lockedEnemy == null || isDashing) return;
+        if (lockedEnemy == null || autoTargeting) return;
 
+        // Get the direction to the enemy
+        Vector3 directionToEnemy = (lockedEnemy.position - transform.position).normalized;
+
+        // Ignore the Y component to focus on horizontal rotation
+        directionToEnemy.y = 0;
+
+        // Calculate the angle between the player's forward direction and the direction to the enemy
+        float angleToEnemy = Vector3.Angle(transform.forward, directionToEnemy);
+
+        // Calculate the distance to the enemy
         float distanceToEnemy = Vector3.Distance(transform.position, lockedEnemy.position);
 
-        // Check if the player is close enough and facing the enemy
-        if (distanceToEnemy <= dashRange)
+        // If the enemy is within the player's field of view and close enough, rotate towards enemy
+        if (angleToEnemy <= autoTargetAngleThreshold && distanceToEnemy <= autoTargetRange)
         {
-            // Vector3 directionToEnemy = (lockedEnemy.position - transform.position).normalized;
-            // float angleToEnemy = Vector3.Angle(transform.forward, directionToEnemy);
-
-            // // If within angle threshold, dash toward the enemy
-            // if (angleToEnemy <= autoTargetAngleThreshold)
-            // {
-                
-            // }
-            StartCoroutine(DashTowardsEnemy(lockedEnemy));
+            RotateTowardsEnemy(directionToEnemy);
         }
     }
 
-    IEnumerator DashTowardsEnemy(Transform enemy)
+    void RotateTowardsEnemy(Vector3 directionToEnemy)
     {
-        isDashing = true;
-
-        // Get direction toward the enemy, but ignore the Y component to prevent rotation towards the ground
-        Vector3 directionToEnemy = (enemy.position - transform.position).normalized;
-        directionToEnemy.y = 0; // Ignore Y axis for horizontal dash
-
-        // Calculate the distance to the enemy, maintaining a minimum distance (1.5 units) away
-        float distanceToEnemy = Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), 
-                                                new Vector3(enemy.position.x, 0, enemy.position.z)) - 2f;
-
-        while (distanceToEnemy > 2f)
-        {
-            // Recalculate the direction and distance each frame in case the enemy moves
-            directionToEnemy = (enemy.position - transform.position).normalized;
-            directionToEnemy.y = 0; // Keep player level during the dash
-
-            // Calculate the distance between player and enemy in the XZ plane
-            distanceToEnemy = Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), 
-                                            new Vector3(enemy.position.x, 0, enemy.position.z));
-
-            if (distanceToEnemy <= 2f) // Stop when we're close enough
-            {
-                break;
-            }
-
-            // Apply movement using CharacterController.Move to respect collisions
-            Vector3 dashMovement = directionToEnemy * dashSpeed * Time.deltaTime;
-            controller.Move(dashMovement);
-
-            yield return null;
-        }
-
-        // After dashing, make the player face the enemy
-        Vector3 finalDirectionToEnemy = (enemy.position - transform.position).normalized;
-        finalDirectionToEnemy.y = 0; // Keep rotation horizontal
-        Quaternion lookRotation = Quaternion.LookRotation(finalDirectionToEnemy);
-        transform.rotation = lookRotation; // Instantly face the enemy after dash ends
-
-        isDashing = false;
+        // Ensure the player faces the locked enemy (smooth rotation)
+        Quaternion targetRotation = Quaternion.LookRotation(directionToEnemy, Vector3.up);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * cameraBasedRotSpeed);
     }
 
 
     void PerformSlash()
     {
-        // AutoTargetAndDash();
+        AutoTargetAndRotate();
         // If already slashing, only allow second slash to be triggered within the animation sequence
         if (isSlashing && comboCounter == 1){
             // Perform second slash
@@ -477,7 +445,7 @@ public class PlayerController : MonoBehaviour
         isBurning = true;
         float elapsedTime = 0f;
 
-        while (elapsedTime < firedamageInfo.fireLifeTime)
+        while (elapsedTime < firedamageInfo.fireLifeTime && !isDead)
         {
 
             healthManager.UpdateHealth(-firedamageInfo.fireTickDamage);
@@ -553,26 +521,107 @@ public class PlayerController : MonoBehaviour
 
     void Die()
     {
+        if (isDead) return;
         Debug.Log("Player is dead");
+        isDead = true;
+        animator.SetTrigger("Death");
+        ResetPlayerControls();
     }
 
-    // void OnDrawGizmos()
-    // {
-    //     Gizmos.color = Color.red;
-    //     Gizmos.DrawWireSphere(transform.position, targetRange);
-    //     Gizmos.color = Color.green;
-    //     Gizmos.DrawWireSphere(transform.position, unlockDistance);
+    // Disables player movement and input
+    private void ResetPlayerControls()
+    {
+        // Disable movement, attacking, etc.
+        isSlashing = false;
+        isRolling = false;
+        direction = Vector3.zero;
+        playerSpeed = 0;
+    }
 
-    //     if (lockedEnemy != null)
-    //     {
-    //         // Set gizmo color for locked target (yellow)
-    //         Gizmos.color = Color.yellow;
+    public void EndLevel()
+    {
+        // End the game level (load another scene, show a "Game Over" screen, etc.)
+        Debug.Log("End Level Called");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);  // Restart the level
+    }
+
+    void OnDrawGizmos()
+    {
+        // Gizmos.color = Color.red;
+        // Gizmos.DrawWireSphere(transform.position, targetRange);
+        // Gizmos.color = Color.green;
+        // Gizmos.DrawWireSphere(transform.position, unlockDistance);
+
+        DrawAutoTargetGizmo();
+
+        // if (lockedEnemy != null)
+        // {
+        //     // Set gizmo color for locked target (yellow)
+        //     Gizmos.color = Color.yellow;
             
-    //         // Draw a line from the player to the locked enemy
-    //         Gizmos.DrawLine(transform.position, lockedEnemy.position);
+        //     // Draw a line from the player to the locked enemy
+        //     Gizmos.DrawLine(transform.position, lockedEnemy.position);
 
-    //         // Draw a wire sphere at the locked enemy's position
-    //         Gizmos.DrawWireSphere(lockedEnemy.position, 1f);  // The radius can be adjusted as needed
-    //     }
-    // }
+        //     // Draw a wire sphere at the locked enemy's position
+        //     Gizmos.DrawWireSphere(lockedEnemy.position, 1f);  // The radius can be adjusted as needed
+        // }
+    }
+
+    private void DrawAutoTargetGizmo()
+    {
+        // Set the gizmo color (optional)
+        Gizmos.color = new Color(0f, 1f, 0f, 0.4f); // A transparent green color
+
+        // Draw a wire sphere to represent the auto-target range
+        Gizmos.DrawWireSphere(transform.position, autoTargetRange);
+
+        // Draw the field of view (FOV) as two lines from the player to the edge of the angle threshold
+        Vector3 forward = transform.forward;
+        Vector3 leftBoundary = Quaternion.Euler(0, -autoTargetAngleThreshold, 0) * forward;
+        Vector3 rightBoundary = Quaternion.Euler(0, autoTargetAngleThreshold, 0) * forward;
+
+        // Draw lines representing the edges of the FOV
+        Gizmos.DrawLine(transform.position, transform.position + leftBoundary * autoTargetRange);
+        Gizmos.DrawLine(transform.position, transform.position + rightBoundary * autoTargetRange);
+
+        // Optionally, draw a cone to represent the FOV area
+        Gizmos.color = new Color(0f, 1f, 0f, 0.2f); // Lighter green for the cone
+        Gizmos.DrawMesh(CreateConeMesh(autoTargetAngleThreshold, autoTargetRange), transform.position, transform.rotation);
+    }
+
+    // Create a cone mesh to visually represent the FOV
+    private Mesh CreateConeMesh(float angle, float range)
+    {
+        Mesh mesh = new Mesh();
+
+        int numSegments = 20; // Number of segments to approximate the cone
+        float angleStep = (angle * 2) / numSegments;
+
+        // Vertices array (1 center vertex + numSegments + 1 for the ring)
+        Vector3[] vertices = new Vector3[numSegments + 2];
+        vertices[0] = Vector3.zero; // The cone's origin (at the player's position)
+
+        // Calculate vertices for the ring (edges of the FOV)
+        for (int i = 0; i <= numSegments; i++)
+        {
+            float currentAngle = -angle + i * angleStep;
+            Vector3 vertex = Quaternion.Euler(0, currentAngle, 0) * Vector3.forward * range;
+            vertices[i + 1] = vertex;
+        }
+
+        // Triangles array (1 triangle per segment)
+        int[] triangles = new int[numSegments * 3];
+        for (int i = 0; i < numSegments; i++)
+        {
+            triangles[i * 3] = 0; // Center vertex
+            triangles[i * 3 + 1] = i + 1;
+            triangles[i * 3 + 2] = i + 2;
+        }
+
+        mesh.vertices = vertices;
+        mesh.triangles = triangles;
+        mesh.RecalculateNormals();
+
+        return mesh;
+    }
 }

@@ -5,11 +5,15 @@ using UnityEngine;
 public class AnimationEvents : MonoBehaviour
 {
     public SwordController swordController;
+    public PlayerController playerController;
 
     void Start()
     {
         if (swordController == null){
             swordController = GetComponentInChildren<SwordController>();
+        }
+        if (playerController == null){
+            playerController = GetComponentInParent<PlayerController>();
         }
     }
 
@@ -26,5 +30,10 @@ public class AnimationEvents : MonoBehaviour
     public void ResetCoolDown()
     {
         swordController.ResetCoolDown();
+    }
+
+    public void RestartLevel()
+    {
+        playerController.EndLevel();
     }
 }
