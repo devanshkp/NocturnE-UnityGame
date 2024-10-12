@@ -94,6 +94,11 @@ public class PlayerController : MonoBehaviour
     private Vector3 originalColliderCenter;
     private float originalColliderHeight;
 
+    void Awake()
+    {
+        DontDestroyOnLoad(this.gameObject);
+    }
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -578,6 +583,42 @@ public class PlayerController : MonoBehaviour
         //     // Draw a wire sphere at the locked enemy's position
         //     Gizmos.DrawWireSphere(lockedEnemy.position, 1f);  // The radius can be adjusted as needed
         // }
+    }
+
+    // Scene Load Logic
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (playerCamera == null){
+            playerCamera = Camera.main;
+            cameraController = playerCamera.GetComponent<MoveAroundObject>();
+        }
+        
+        // Find the spawn point in the new scene
+        GameObject spawnPoint = GameObject.FindGameObjectWithTag("PlayerSpawn");
+
+        if (spawnPoint != null)
+        {
+            // Move the player to the spawn point's position and rotation
+            controller.GetComponent<Collider>().enabled = false;
+            this.transform.position = spawnPoint.transform.position;
+            this.transform.rotation = spawnPoint.transform.rotation;
+            controller.GetComponent<Collider>().enabled = true;
+        }
+        else
+        {
+            Debug.LogWarning("No spawn point found in the new scene!");
+        }
     }
 
     private void DrawAutoTargetGizmo()
