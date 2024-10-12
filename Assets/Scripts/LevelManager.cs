@@ -9,11 +9,19 @@ public class LevelManager : MonoBehaviour
 {
     [Header("Gate Variables")]
     public GameObject level1Gate;
-    public LevelEndTrigger levelEndTrigger;
+    public LevelEndTrigger level1EndTrigger;
     public bool level1GateOpen = false;
+    public GameObject level2Gate;
+    public LevelEndTrigger level2EndTrigger;
+    public bool level2GateOpen = false;
+    public GameObject level3Gate;
+    public LevelEndTrigger level3EndTrigger;
+    public bool level3GateOpen = false;
 
     [Header("Level Enemies")]
-    public GameObject[] enemiesList;
+    public GameObject[] level1EnemiesList;
+    public GameObject[] level2EnemiesList;
+    public GameObject[] level3EnemiesList;
 
     /*public bool level2GateOpen = false;
     public bool level3GateOpen = false;*/
@@ -59,13 +67,36 @@ public class LevelManager : MonoBehaviour
             //  Let player through the gate
             level1Gate.SetActive(false);
 
-        //  Deactivate ALL level enemies on exitting level, but no score rewarded
-        if(levelEndTrigger.isCompleted)
-            for (int i = 0; i < enemiesList.Length; i++)
-            {
-                enemiesList[i].SetActive(false);
-            }
+            //  Deactivate ALL level enemies on exitting level, but no score rewarded
+            if(level1EndTrigger.isCompleted)
+                for (int i = 0; i < level1EnemiesList.Length; i++)
+                {
+                    level1EnemiesList[i].SetActive(false);
+                }
+        } else if (level2GateOpen == true)
+        {
+            //  Let player through the gate
+            level2Gate.SetActive(false);
+
+            //  Deactivate ALL level enemies on exitting level, but no score rewarded
+            if (level2EndTrigger.isCompleted)
+                for (int i = 0; i < level2EnemiesList.Length; i++)
+                {
+                    level2EnemiesList[i].SetActive(false);
+                }
+        } else if (level3GateOpen == true)
+        {
+            //  Let player through the gate
+            level3Gate.SetActive(false);
+
+            //  Deactivate ALL level enemies on exitting level, but no score rewarded
+            if (level3EndTrigger.isCompleted)
+                for (int i = 0; i < level3EnemiesList.Length; i++)
+                {
+                    level3EnemiesList[i].SetActive(false);
+                }
         }
+
 
         currentTime += Time.deltaTime;
 
