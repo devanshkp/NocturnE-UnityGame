@@ -134,7 +134,7 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         if (isDead) return;
-        if (!isRolling && !stationarySlash && !autoTargeting) HandleMovement();  // Allow movement if not rolling or attacking while stationary
+        if (!isRolling && !stationarySlash) HandleMovement();  // Allow movement if not rolling or attacking while stationary
         HandleVerticalMovement();
         if (isSlashing){
             comboTimer += Time.fixedDeltaTime;
@@ -240,11 +240,18 @@ public class PlayerController : MonoBehaviour
     // Handles player rotation based on movement direction
     void HandleRotation()
     {        
-        if (direction.magnitude == 0 || autoTargeting || stationarySlash) return;
-        float rotSpeed = movementRotSpeed;
-        if (isRolling) rotSpeed *= 0.5f;
-        Quaternion desiredRotation = Quaternion.LookRotation(direction, Vector3.up);
-        transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, rotSpeed * Time.deltaTime);
+        if (direction.magnitude == 0 || stationarySlash) return;
+        if (autoTargeting && lockedEnemy != null){
+            Vector3 directionToEnemy = (lockedEnemy.position - transform.position).normalized;
+            directionToEnemy.y = 0; // Ignore vertical rotation
+            RotateTowardsEnemy(directionToEnemy);
+        }
+        else{
+            float rotSpeed = movementRotSpeed;
+            if (isRolling) rotSpeed *= 0.5f;
+            Quaternion desiredRotation = Quaternion.LookRotation(direction, Vector3.up);
+            transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, rotSpeed * Time.deltaTime);
+        }
     }
 
     // Apply gravity to the player
@@ -293,28 +300,22 @@ public class PlayerController : MonoBehaviour
     {
         if (lockedEnemy == null || autoTargeting) return;
 
-        // Get the direction to the enemy
         Vector3 directionToEnemy = (lockedEnemy.position - transform.position).normalized;
-
-        // Ignore the Y component to focus on horizontal rotation
         directionToEnemy.y = 0;
 
-        // Calculate the angle between the player's forward direction and the direction to the enemy
         float angleToEnemy = Vector3.Angle(transform.forward, directionToEnemy);
-
-        // Calculate the distance to the enemy
         float distanceToEnemy = Vector3.Distance(transform.position, lockedEnemy.position);
 
         // If the enemy is within the player's field of view and close enough, rotate towards enemy
         if (angleToEnemy <= autoTargetAngleThreshold && distanceToEnemy <= autoTargetRange)
         {
+            autoTargeting = true;
             RotateTowardsEnemy(directionToEnemy);
         }
     }
 
     void RotateTowardsEnemy(Vector3 directionToEnemy)
     {
-        // Ensure the player faces the locked enemy (smooth rotation)
         Quaternion targetRotation = Quaternion.LookRotation(directionToEnemy, Vector3.up);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * cameraBasedRotSpeed);
     }
@@ -323,6 +324,7 @@ public class PlayerController : MonoBehaviour
     void PerformSlash()
     {
         AutoTargetAndRotate();
+        
         // If already slashing, only allow second slash to be triggered within the animation sequence
         if (isSlashing && comboCounter == 1){
             // Perform second slash
@@ -339,6 +341,13 @@ public class PlayerController : MonoBehaviour
 
         // Reset the combo timer so it doesn't time out too early
         comboTimer = 0f;
+    }
+
+    public void StopAutoTargeting()
+    {
+        autoTargeting = false; 
+        // isSlashing = false; 
+        // comboCounter = 0;
     }
 
     void ResetCombo()
