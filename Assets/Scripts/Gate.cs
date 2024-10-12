@@ -8,9 +8,6 @@ public class Gate : MonoBehaviour
     public float gateTimeMax;
     public float gateTime = 0;
     public float gateActivationRange = 30f;
-    public bool isLevel1Gate;
-    public bool isLevel2Gate;
-    public bool isLevel3Gate;
 
     /*public bool level2GateOpen = false;
     public bool level3GateOpen = false;*/
@@ -37,12 +34,6 @@ public class Gate : MonoBehaviour
             gateEnemyList[i].gameObject.SetActive(false);
         }
 
-        if (!isLevel1Gate && !isLevel2Gate && !isLevel3Gate)
-        {
-            Debug.Log("Please select which level this gate is for. Deactivating gate");
-            gameObject.SetActive(false);
-        }
-
         // Locates the player before initialisation
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
     }
@@ -65,16 +56,7 @@ public class Gate : MonoBehaviour
             if (gateTime >= gateTimeMax)
             {
                 print("timer done");
-                if (isLevel1Gate)
-                {
-                    levelManager.level1GateOpen = true;
-                } else if (isLevel2Gate)
-                {
-                    levelManager.level2GateOpen = true;
-                } else if (isLevel3Gate)
-                {
-                    levelManager.level3GateOpen = true;
-                }
+                levelManager.gateOpen = true;
             }
         }
     }

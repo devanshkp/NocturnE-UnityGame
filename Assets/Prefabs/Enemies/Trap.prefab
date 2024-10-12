@@ -269,10 +269,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76b3dd676aeff8b42941c91f620fa984, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 1
+  health: 10
+  points: 50
   bulletSpawnpoint: {fileID: 5352535938794757454}
   bulletPoolManager: {fileID: 0}
-  shootRate: 10
+  shootRate: 0.75
   impController: {fileID: 0}
   impBehaviour: {fileID: 0}
   deathAnimation: {fileID: 2117983859483437389, guid: 5775f9e14e4667441b9787bb6ae938e5, type: 3}

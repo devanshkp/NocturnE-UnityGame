@@ -4,27 +4,17 @@ using System.Globalization;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
     [Header("Gate Variables")]
-    public GameObject level1Gate;
-    public LevelEndTrigger level1EndTrigger;
-    public bool level1GateOpen = false;
-    public GameObject level2Gate;
-    public LevelEndTrigger level2EndTrigger;
-    public bool level2GateOpen = false;
-    public GameObject level3Gate;
-    public LevelEndTrigger level3EndTrigger;
-    public bool level3GateOpen = false;
+    public GameObject gate;
+    public LevelEndTrigger levelEndTrigger;
+    public bool gateOpen = false;
 
     [Header("Level Enemies")]
-    public GameObject[] level1EnemiesList;
-    public GameObject[] level2EnemiesList;
-    public GameObject[] level3EnemiesList;
-
-    /*public bool level2GateOpen = false;
-    public bool level3GateOpen = false;*/
+    public GameObject[] enemiesList;
 
     [Header("In-Game Time Settings")]
     public bool isNightTime = false;
@@ -45,11 +35,11 @@ public class LevelManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        /*if (enemiesList.Length == 0)
+        if (enemiesList.Length == 0)
         {
             Debug.Log("No enemies assigned to the level manager - please add all the enemies to the level manager. Deactivating the level manager");
             gameObject.SetActive(false);
-        }*/
+        }
 
         currentTime = 0f;
         currentPhase = CyclePhase.DayHold;
@@ -62,39 +52,21 @@ public class LevelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(level1GateOpen == true)
+        //  Level win condition check
+        if(gateOpen == true)
         {
             //  Let player through the gate
-            level1Gate.SetActive(false);
+            gate.SetActive(false);
 
             //  Deactivate ALL level enemies on exitting level, but no score rewarded
-            if(level1EndTrigger.isCompleted)
-                for (int i = 0; i < level1EnemiesList.Length; i++)
+            if(levelEndTrigger.isCompleted)
+                
+                PlayerClearsLevel();
+                /*for (int i = 0; i < enemiesList.Length; i++)
                 {
-                    Destroy(level1EnemiesList[i]);
-                }
-        } else if (level2GateOpen == true)
-        {
-            //  Let player through the gate
-            level2Gate.SetActive(false);
-
-            //  Deactivate ALL level enemies on exitting level, but no score rewarded
-            if (level2EndTrigger.isCompleted)
-                for (int i = 0; i < level2EnemiesList.Length; i++)
-                {
-                    level2EnemiesList[i].SetActive(false);
-                }
-        } else if (level3GateOpen == true)
-        {
-            //  Let player through the gate
-            level3Gate.SetActive(false);
-
-            //  Deactivate ALL level enemies on exitting level, but no score rewarded
-            if (level3EndTrigger.isCompleted)
-                for (int i = 0; i < level3EnemiesList.Length; i++)
-                {
-                    level3EnemiesList[i].SetActive(false);
-                }
+                    //  Transition to next scene -> Rest Area or something else
+                    //Destroy(enemiesList[i]);
+                }*/
         }
 
 
@@ -161,5 +133,10 @@ public class LevelManager : MonoBehaviour
         // Set the light intensity
         if (dayLight != null)
             dayLight.intensity = lightIntensity;
+    }
+
+    public void PlayerClearsLevel()
+    {
+        SceneManager.LoadScene("Rest Zone");
     }
 }

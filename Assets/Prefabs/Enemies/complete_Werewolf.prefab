@@ -82,7 +82,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   curState: 0
-  health: 2
+  health: 30
+  wereworlfPoints: 500
+  humanPoints: 100
   attackRange: 20
   dayMoveSpeed: 5
   nightMoveSpeed: 10

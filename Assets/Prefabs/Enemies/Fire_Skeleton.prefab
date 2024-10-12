@@ -229,13 +229,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   destinationList: []
   curState: 0
+  points: 100
   health: 10
-  attackRange: 20
-  moveSpeed: 20
-  targettingSpeed: 10
+  attackRange: 30
+  moveSpeed: 3
+  targettingSpeed: 1
   bulletSpawnpoint: {fileID: 4706017293995980997}
   bulletPoolManager: {fileID: 0}
-  shootRate: 0.2
+  shootRate: 0.25
   deathAnimation: {fileID: 2117983859483437389, guid: 5775f9e14e4667441b9787bb6ae938e5, type: 3}
   deathAnimationLifeTime: 3
   fadeDuration: 1

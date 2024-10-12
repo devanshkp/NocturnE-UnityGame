@@ -236,7 +236,7 @@ MonoBehaviour:
   targettingSpeed: 2
   bulletSpawnpoint: {fileID: 4706017293995980997}
   bulletPoolManager: {fileID: 0}
-  shootRate: 0.2
+  shootRate: 0.5
   deathAnimation: {fileID: 2117983859483437389, guid: 5775f9e14e4667441b9787bb6ae938e5, type: 3}
   deathAnimationLifeTime: 3
   fadeDuration: 1
