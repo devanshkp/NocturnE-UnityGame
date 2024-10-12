@@ -1317,7 +1317,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
+  m_VoxelSize: 0.25
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 1b84e87667a557f46b2679a7adca2213, type: 2}
   m_BuildHeightMesh: 0
@@ -7646,10 +7646,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 622194614}
     m_Modifications:
-    - target: {fileID: 1083256270647164104, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1429562587883159958, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -7661,14 +7657,6 @@ PrefabInstance:
     - target: {fileID: 3897548707097050968, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: m_Name
       value: Imp_asset
-      objectReference: {fileID: 0}
-    - target: {fileID: 4335540819704639306, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
-      propertyPath: health
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 4335540819704639306, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
-      propertyPath: runningSpeed
-      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4421707222870730210, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7717,14 +7705,6 @@ PrefabInstance:
     - target: {fileID: 4972473623214771645, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8256282841106931194, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8852277451320257944, guid: 14ecc545aad54764d868e1903e699ee8, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
