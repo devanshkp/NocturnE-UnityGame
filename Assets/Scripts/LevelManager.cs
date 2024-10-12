@@ -71,7 +71,7 @@ public class LevelManager : MonoBehaviour
             if(level1EndTrigger.isCompleted)
                 for (int i = 0; i < level1EnemiesList.Length; i++)
                 {
-                    level1EnemiesList[i].SetActive(false);
+                    Destroy(level1EnemiesList[i]);
                 }
         } else if (level2GateOpen == true)
         {
