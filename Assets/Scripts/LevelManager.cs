@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class LevelManager : MonoBehaviour
 {
@@ -15,8 +18,18 @@ public class LevelManager : MonoBehaviour
     /*public bool level2GateOpen = false;
     public bool level3GateOpen = false;*/
 
-    [Header("In-Game Time Check")]
+    [Header("In-Game Time Settings")]
     public bool isNightTime = false;
+    public Light dayLight;
+    public Material daySkybox;
+    public Material nightSkybox;
+    public float currentTime = 0f;
+    public float lightTransitionDuration = 20f;
+    public float dayHoldTime = 60f;     //  time to stay fully day in seconds
+    public float nightHoldTime = 60f;   //  time to stay fully night in seconds
+    private float lightIntensity = 1f;
+    private enum CyclePhase { DayHold, DayToNight, NightHold, NightToDay }
+    private CyclePhase currentPhase;
 
     private Transform playerTransform;
 
@@ -24,11 +37,18 @@ public class LevelManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (enemiesList.Length == 0)
+        /*if (enemiesList.Length == 0)
         {
             Debug.Log("No enemies assigned to the level manager - please add all the enemies to the level manager. Deactivating the level manager");
             gameObject.SetActive(false);
-        }
+        }*/
+
+        currentTime = 0f;
+        currentPhase = CyclePhase.DayHold;
+
+        isNightTime = false;
+
+        UpdateTimeCycle();
     }
 
     // Update is called once per frame
@@ -46,5 +66,68 @@ public class LevelManager : MonoBehaviour
                 enemiesList[i].SetActive(false);
             }
         }
+
+        currentTime += Time.deltaTime;
+
+        // Check for phase progression
+        if (currentPhase == CyclePhase.DayHold && currentTime >= dayHoldTime)
+        {
+            currentPhase = CyclePhase.DayToNight;
+            currentTime = 0f; // Reset timer for the next phase
+        }
+        else if (currentPhase == CyclePhase.DayToNight && currentTime >= lightTransitionDuration)
+        {
+            currentPhase = CyclePhase.NightHold;
+            currentTime = 0f; // Reset timer for the next phase
+            lightIntensity = 0f; // Ensure the intensity is set to 0 after transition
+            isNightTime = true; // Set isNightTime to true
+        }
+        else if (currentPhase == CyclePhase.NightHold && currentTime >= nightHoldTime)
+        {
+            currentPhase = CyclePhase.NightToDay;
+            currentTime = 0f; // Reset timer for the next phase
+        }
+        else if (currentPhase == CyclePhase.NightToDay && currentTime >= lightTransitionDuration)
+        {
+            currentPhase = CyclePhase.DayHold;
+            currentTime = 0f; // Reset timer for the next phase
+            lightIntensity = 1f; // Ensure the intensity is set to 1 after transition
+            isNightTime = false; // Set isNightTime to false
+        }
+
+        UpdateTimeCycle();
+    }
+
+    public void UpdateTimeCycle()
+    {
+        switch (currentPhase)
+        {
+            case CyclePhase.DayHold:
+                lightIntensity = 1f;
+                RenderSettings.skybox = daySkybox;
+                break;
+
+            case CyclePhase.DayToNight:
+                // Transitioning from Day to Night
+                float dayToNightProgress = currentTime / lightTransitionDuration;
+                lightIntensity = Mathf.Lerp(1f, 0f, dayToNightProgress);
+                RenderSettings.skybox.Lerp(daySkybox, nightSkybox, dayToNightProgress);
+                break;
+
+            case CyclePhase.NightHold:
+                lightIntensity = 0f;
+                RenderSettings.skybox = nightSkybox;
+                break;
+
+            case CyclePhase.NightToDay:
+                // Transitioning from Night to Day
+                float nightToDayProgress = currentTime / lightTransitionDuration;
+                lightIntensity = Mathf.Lerp(0f, 1f, nightToDayProgress);
+                RenderSettings.skybox.Lerp(nightSkybox, daySkybox, nightToDayProgress);
+                break;
+        }
+
+        // Set the light intensity
+        dayLight.intensity = lightIntensity;
     }
 }
