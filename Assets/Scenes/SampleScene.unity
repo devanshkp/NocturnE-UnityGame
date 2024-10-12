@@ -324,7 +324,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1333092482206610957, guid: b5a7c5eb579cfa141b590285ae71cf06, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1858799311859182775, guid: b5a7c5eb579cfa141b590285ae71cf06, type: 3}
       propertyPath: m_LocalPosition.x
@@ -368,19 +368,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2858096680926747414, guid: b5a7c5eb579cfa141b590285ae71cf06, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2858096680926747414, guid: b5a7c5eb579cfa141b590285ae71cf06, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8178231510799554365, guid: b5a7c5eb579cfa141b590285ae71cf06, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8178231510799554365, guid: b5a7c5eb579cfa141b590285ae71cf06, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -723,11 +723,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   level1Gate: {fileID: 0}
-  levelEndTrigger: {fileID: 0}
+  level1EndTrigger: {fileID: 0}
   level1GateOpen: 0
-  enemiesList:
-  - {fileID: 0}
+  level2Gate: {fileID: 0}
+  level2EndTrigger: {fileID: 0}
+  level2GateOpen: 0
+  level3Gate: {fileID: 0}
+  level3EndTrigger: {fileID: 0}
+  level3GateOpen: 0
+  level1EnemiesList: []
+  level2EnemiesList: []
+  level3EnemiesList: []
   isNightTime: 0
+  dayLight: {fileID: 0}
+  daySkybox: {fileID: 0}
+  nightSkybox: {fileID: 0}
+  currentTime: 0
+  lightTransitionDuration: 20
+  dayHoldTime: 60
+  nightHoldTime: 60
 --- !u!4 &682813481
 Transform:
   m_ObjectHideFlags: 0
