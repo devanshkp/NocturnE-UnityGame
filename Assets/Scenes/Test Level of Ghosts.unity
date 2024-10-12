@@ -10696,6 +10696,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ghost_asset
       objectReference: {fileID: 0}
+    - target: {fileID: 1333092482206610957, guid: b5a7c5eb579cfa141b590285ae71cf06, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1858799311859182775, guid: b5a7c5eb579cfa141b590285ae71cf06, type: 3}
       propertyPath: m_LocalPosition.x
       value: -39.960445
@@ -11513,6 +11517,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4191044921850138724, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
+      propertyPath: playerController
+      value: 
+      objectReference: {fileID: 2007756714}
     - target: {fileID: 4984713228335918973, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -11533,6 +11541,10 @@ PrefabInstance:
       propertyPath: playerCamera
       value: 
       objectReference: {fileID: 1308181846}
+    - target: {fileID: 6802273428786590694, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
+      propertyPath: autoTargetAngleThreshold
+      value: 105
+      objectReference: {fileID: 0}
     - target: {fileID: 6999110119677877512, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
       propertyPath: m_Name
       value: Player
