@@ -174,7 +174,6 @@ public class PlayerController : MonoBehaviour
         else 
             playerSpeed = Mathf.MoveTowards(playerSpeed, 0, decelerationRate * Time.deltaTime);
 
-
         if (Input.GetMouseButtonDown(2))
             SetTarget();
 
@@ -552,6 +551,11 @@ public class PlayerController : MonoBehaviour
         // End the game level (load another scene, show a "Game Over" screen, etc.)
         Debug.Log("End Level Called");
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);  // Restart the level
+    }
+
+    public float GetVelocity()
+    {
+        return horizontalVelocity.magnitude;
     }
 
     void OnDrawGizmos()

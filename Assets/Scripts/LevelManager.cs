@@ -159,6 +159,7 @@ public class LevelManager : MonoBehaviour
         }
 
         // Set the light intensity
-        dayLight.intensity = lightIntensity;
+        if (dayLight != null)
+            dayLight.intensity = lightIntensity;
     }
 }
