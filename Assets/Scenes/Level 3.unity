@@ -11732,6 +11732,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3337756556329474864, guid: c63f987a2a2536a428a27ca46fcfe05e, type: 3}
+      propertyPath: levelManager
+      value: 
+      objectReference: {fileID: 982393959}
+    - target: {fileID: 3337756556329474864, guid: c63f987a2a2536a428a27ca46fcfe05e, type: 3}
       propertyPath: gateActivationRange
       value: 65
       objectReference: {fileID: 0}
@@ -30648,6 +30652,10 @@ PrefabInstance:
       propertyPath: dayLight
       value: 
       objectReference: {fileID: 1788259197}
+    - target: {fileID: 3279045613305213237, guid: 4f414a55486c1d7428c9d7b7777a1b9b, type: 3}
+      propertyPath: gateOpen
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3279045613305213237, guid: 4f414a55486c1d7428c9d7b7777a1b9b, type: 3}
       propertyPath: level1Gate
       value: 

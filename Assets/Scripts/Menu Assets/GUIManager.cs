@@ -8,6 +8,9 @@ public class GUIManager : MonoBehaviour
     private void Start()
     {
         Cursor.lockState = CursorLockMode.None;
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.Save();
+        print("Playerprefs gone");
     }
 
     public void LoadMenu(string menu)
