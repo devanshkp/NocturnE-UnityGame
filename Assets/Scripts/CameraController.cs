@@ -7,6 +7,7 @@ public class MoveAroundObject : MonoBehaviour
     private Camera enemyUICam; 
     private Camera mainCam;
     public float mouseSensitivity = 3.0f;
+    public GameObject playerObj;
     public Transform target;  // Player to follow
     public Transform lockedTarget;  // Enemy to lock onto when in lock-on mode
     public PlayerController player;
@@ -40,10 +41,12 @@ public class MoveAroundObject : MonoBehaviour
         mainCam = this.GetComponent<Camera>();
         enemyUICam = transform.Find("EnemyUICamera").GetComponent<Camera>();
         if (target == null){
-            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            playerObj = GameObject.FindGameObjectWithTag("Player");
             target = playerObj.transform.Find("CameraTarget");
-            player = playerObj.GetComponent<PlayerController>();
         } 
+        if (player == null){
+            player = playerObj.GetComponent<PlayerController>();
+        }
         currentMaxDistance = maxDistanceFromTarget;
         currentDistance = currentMaxDistance;
     }

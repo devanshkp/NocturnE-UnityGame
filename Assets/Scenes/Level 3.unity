@@ -19444,11 +19444,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 71c9ee3bf8252b147b76aad1475353ec, type: 3}
---- !u!20 &1308181846 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 1951995266222432561, guid: 71c9ee3bf8252b147b76aad1475353ec, type: 3}
-  m_PrefabInstance: {fileID: 1308181845}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1310637323
 GameObject:
   m_ObjectHideFlags: 0
@@ -20144,17 +20139,6 @@ Transform:
   - {fileID: 467667993}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1389961595 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6802273428786590694, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
-  m_PrefabInstance: {fileID: 1728752747}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e63a2671b056cc9459fdf93d9f01f5c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1390362784
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25185,10 +25169,6 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4191044921850138724, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
-      propertyPath: playerController
-      value: 
-      objectReference: {fileID: 1389961595}
     - target: {fileID: 4984713228335918973, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1
@@ -25205,14 +25185,6 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 6802273428786590694, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
-      propertyPath: walkSpeed
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 6802273428786590694, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
-      propertyPath: playerCamera
-      value: 
-      objectReference: {fileID: 1308181846}
     - target: {fileID: 6999110119677877512, guid: 813b0cb393b06424694cc605d14d4f21, type: 3}
       propertyPath: m_Name
       value: Player

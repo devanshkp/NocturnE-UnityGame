@@ -144,6 +144,16 @@ public class LevelManager : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "Level 3")
         {
+            GameObject playerObj =  GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null){
+                PlayerController playerController = playerObj.GetComponent<PlayerController>();
+                Debug.Log("Player Score before saving: " + playerController.score);
+                PlayerPrefs.SetFloat("PlayerScore", playerController.score);
+                PlayerPrefs.Save();
+                playerObj.SetActive(false);
+            }
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
             SceneManager.LoadScene("Win Screen");
         }
         else
