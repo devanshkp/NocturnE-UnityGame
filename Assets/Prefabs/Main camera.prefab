@@ -197,7 +197,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 1000
-  field of view: 60
+  field of view: 60.000004
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -236,6 +236,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseSensitivity: 3
+  playerObj: {fileID: 0}
   target: {fileID: 0}
   lockedTarget: {fileID: 0}
   player: {fileID: 0}
