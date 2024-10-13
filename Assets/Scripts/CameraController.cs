@@ -9,6 +9,7 @@ public class MoveAroundObject : MonoBehaviour
     public float mouseSensitivity = 3.0f;
     public Transform target;  // Player to follow
     public Transform lockedTarget;  // Enemy to lock onto when in lock-on mode
+    public PlayerController player;
 
     [Header("Camera Distance Settings")]
     public float minDistanceFromTarget = 1.0f;
@@ -38,13 +39,18 @@ public class MoveAroundObject : MonoBehaviour
     {
         mainCam = this.GetComponent<Camera>();
         enemyUICam = transform.Find("EnemyUICamera").GetComponent<Camera>();
-        if (target == null) target = GameObject.FindGameObjectWithTag("Player").transform.Find("CameraTarget");
+        if (target == null){
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            target = playerObj.transform.Find("CameraTarget");
+            player = playerObj.GetComponent<PlayerController>();
+        } 
         currentMaxDistance = maxDistanceFromTarget;
         currentDistance = currentMaxDistance;
     }
 
     void Update()
     {
+        if (player.isShopOpen) return;
         if (!isLockedOn)
             HandleFreeMovement();
         else

@@ -59,7 +59,7 @@ public class AnimationEvents : MonoBehaviour
 
     public void PlayWalkSound()
     {
-        if (walkSounds.Count == 0) return;
+        if (walkSounds.Count == 0 || playerController.isShopOpen) return;
         float playerVelocity = playerController.GetVelocity();
         int movementState = GetMovementState(playerVelocity);
         if (movementState == 1){
@@ -77,7 +77,7 @@ public class AnimationEvents : MonoBehaviour
 
     public void PlayRunSound()
     {
-        if (runSounds.Count == 0) return;
+        if (runSounds.Count == 0 || playerController.isShopOpen) return;
         float playerVelocity = playerController.GetVelocity();
         int movementState = GetMovementState(playerVelocity);
         if (movementState == 2){

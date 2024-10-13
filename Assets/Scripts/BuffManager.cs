@@ -55,11 +55,12 @@ public class BuffManager : MonoBehaviour
     // This function updates the position of all active buff icons based on how many are active
     private void UpdateBuffIconPositions()
     {
-        float xOffset = 50f; // Distance between each icon
+        float staticOffset = activeBuffs[0].transform.position.x;
+        float xOffset = 90f;
         for (int i = 0; i < activeBuffs.Count; i++)
         {
             // Move each active buff to its correct position
-            Vector3 newPosition = new Vector3(i * xOffset, activeBuffs[i].transform.position.y, activeBuffs[i].transform.position.z);
+            Vector3 newPosition = new Vector3(staticOffset + i * xOffset, activeBuffs[i].transform.position.y, activeBuffs[i].transform.position.z);
             activeBuffs[i].transform.position = newPosition;
         }
     }
