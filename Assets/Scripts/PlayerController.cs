@@ -94,6 +94,14 @@ public class PlayerController : MonoBehaviour
     private Vector3 originalColliderCenter;
     private float originalColliderHeight;
 
+    [Header("Shop Settings")]
+    public BuffManager buffManager;
+    public int money = 0;
+    public bool isShopOpen = false;
+    public bool doubleJump = false;
+    public bool speedBuff = false;
+    public bool damageBuff = false;
+
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
@@ -104,8 +112,12 @@ public class PlayerController : MonoBehaviour
         controller = GetComponent<CharacterController>();
         animator = GetComponentInChildren<Animator>();
         healthManager = GetComponentInChildren<HealthManager>();
-        if (playerCamera == null)
+        if (buffManager == null){
+            buffManager = GetComponentInChildren<BuffManager>();
+        }
+        if (playerCamera == null){
             playerCamera = Camera.main;
+        }
         cameraController = playerCamera.GetComponent<MoveAroundObject>();
 
         // Save original collider size
@@ -123,7 +135,12 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (isDead) return;
+        if (isDead || isShopOpen){
+            if (isShopOpen){
+                animator.SetFloat("velocity", 0f, 0.1f, Time.deltaTime);
+            }
+            return;
+        } 
         RecordInputs();
         UpdateVelocity();
         UpdateFOV();
@@ -138,7 +155,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (isDead) return;
+        if (isDead || isShopOpen) return;
         if (!isRolling && !stationarySlash) HandleMovement();  // Allow movement if not rolling or attacking while stationary
         HandleVerticalMovement();
         if (isSlashing){
@@ -155,7 +172,11 @@ public class PlayerController : MonoBehaviour
         float verticalInput = Input.GetAxisRaw("Vertical");     // W/S or Up/Down Arrow keys
 
         isRunning = Input.GetKey(KeyCode.LeftShift) && currentStamina > 0; // Can only run if stamina is available
-        float targetSpeed = isRunning ? runSpeed : walkSpeed;
+
+        // Speed buff multiplier
+        float speedMultiplier = speedBuff ? 1.25f : 1f; // 1.5x speed when speed buff is active
+
+        float targetSpeed = (isRunning ? runSpeed : walkSpeed) * speedMultiplier;
 
         // Deplete stamina while running
         if (isRunning) DepleteStamina();
@@ -188,9 +209,9 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(Roll());
             }
             // Jump mechanic
-            if (Input.GetKeyDown(KeyCode.F) && isGrounded && currentStamina >= jumpStaminaCost){
+            if (Input.GetKeyDown(KeyCode.F) && (isGrounded || (doubleJump && !jumpRequested)) && currentStamina >= jumpStaminaCost){
                 jumpRequested = true;
-                animator.SetBool("isJumping", true);
+                animator.SetTrigger("JumpTrigger");
                 currentStamina -= jumpStaminaCost;
                 staminaSlider.value = currentStamina;
                 staminaCooldownTimer = 0f;
@@ -267,14 +288,33 @@ public class PlayerController : MonoBehaviour
         // Apply gravity
         verticalVelocity += gravity * Time.fixedDeltaTime;        
 
-        // Jump logic
-        if (jumpRequested && isGrounded){
-            verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
-            jumpRequested = false; // Reset jump request
+        if (jumpRequested)
+        {
+            // Handle double jump if not grounded
+            if (!isGrounded && doubleJump)
+            {
+                PerformDoubleJump();
+                jumpRequested = false;  // Reset jump request after double jump
+            }
+            else if (isGrounded)
+            {
+                // Normal jump
+                verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                jumpRequested = false;
+                animator.SetTrigger("JumpTrigger");  // Use trigger to force the jump animation
+            }
         }
 
-        if (isGrounded && verticalVelocity <= 0.1f)
-            animator.SetBool("isJumping", false);  // Stop jump animation
+        // Reset the jump animation when grounded
+        if (isGrounded && verticalVelocity <= 0.1f){
+            animator.ResetTrigger("JumpTrigger");
+        }
+    }
+
+    void PerformDoubleJump()
+    {
+        verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);  // Reset vertical velocity for a new jump
+        animator.SetTrigger("JumpTrigger");  // Trigger jump animation again for double jump
     }
 
 
