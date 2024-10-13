@@ -1399,6 +1399,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdac4161aed778c468bc407c22332542, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scoreText: {fileID: 1568101537}
 --- !u!4 &495958366
 Transform:
   m_ObjectHideFlags: 0
@@ -4635,7 +4636,7 @@ GameObject:
   - component: {fileID: 1568101538}
   - component: {fileID: 1568101537}
   m_Layer: 5
-  m_Name: 'Score Text '
+  m_Name: 'ScoreText '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
