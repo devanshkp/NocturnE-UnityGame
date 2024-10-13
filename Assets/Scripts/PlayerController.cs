@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     private bool isDead = false;
 
     [Header("Movement Settings")]
+    private float speedMultiplier = 1f;
     public float walkSpeed = 4f;
     public float runSpeed = 7f;
     public float accelerationRate = 8f;
@@ -177,7 +178,7 @@ public class PlayerController : MonoBehaviour
         isRunning = Input.GetKey(KeyCode.LeftShift) && currentStamina > 0; // Can only run if stamina is available
 
         // Speed buff multiplier
-        float speedMultiplier = speedBuff ? 1.25f : 1f; // 1.5x speed when speed buff is active
+        speedMultiplier = speedBuff ? 1.25f : 1f; // 1.5x speed when speed buff is active
 
         float targetSpeed = (isRunning ? runSpeed : walkSpeed) * speedMultiplier;
 
@@ -237,7 +238,7 @@ public class PlayerController : MonoBehaviour
     void UpdateStamina()
     {
         staminaCooldownTimer += Time.deltaTime;
-        if (staminaCooldownTimer >= staminaRegenCooldown && currentStamina < maxStamina && playerSpeed <= walkSpeed && isGrounded)
+        if (staminaCooldownTimer >= staminaRegenCooldown && currentStamina < maxStamina && (playerSpeed/speedMultiplier <= walkSpeed) && isGrounded)
         {
             currentStamina += staminaRegenRate * Time.deltaTime;
             currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina); // Ensure it doesn't exceed max stamina
