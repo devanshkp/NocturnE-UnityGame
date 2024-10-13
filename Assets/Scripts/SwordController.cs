@@ -82,5 +82,10 @@ public class SwordController : MonoBehaviour
     {
         swordCollider.enabled = false;
     }
+
+    public void UpdateDamage(int damage)
+    {
+        damageAmount = damage;
+    }
 }
 
