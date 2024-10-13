@@ -56,10 +56,10 @@ public class LevelManager : MonoBehaviour
         if(gateOpen == true)
         {
             //  Let player through the gate
-            /*gate.SetActive(false);*/
+            gate.SetActive(false);
 
             //  Deactivate ALL level enemies on exitting level, but no score rewarded
-            if(levelEndTrigger.isCompleted)
+            if (levelEndTrigger.isCompleted)
                 
                 PlayerClearsLevel();
                 /*for (int i = 0; i < enemiesList.Length; i++)
