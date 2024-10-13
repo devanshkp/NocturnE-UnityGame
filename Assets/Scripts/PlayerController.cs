@@ -453,7 +453,7 @@ public class PlayerController : MonoBehaviour
     public void AddMoneyAndScore(int moneyDelta, int scoreDelta)
     {
         money += moneyDelta;
-        score == scoreDelta;
+        score = scoreDelta;
     }
 
     public void TakeDamage(int damage)

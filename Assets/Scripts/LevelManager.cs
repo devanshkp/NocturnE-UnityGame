@@ -12,6 +12,7 @@ public class LevelManager : MonoBehaviour
     public GameObject gate;
     public LevelEndTrigger levelEndTrigger;
     public bool gateOpen = false;
+    public int levelNumber;
 
     [Header("Level Enemies")]
     public GameObject[] enemiesList;
@@ -41,6 +42,12 @@ public class LevelManager : MonoBehaviour
             gameObject.SetActive(false);
         }
 
+        if (levelNumber == 0)
+        {
+            Debug.Log("No level number assigned - please assign a level number. Deactivating the level manager");
+            gameObject.SetActive(false);
+        }
+
         currentTime = 0f;
         currentPhase = CyclePhase.DayHold;
 
@@ -56,7 +63,7 @@ public class LevelManager : MonoBehaviour
         if(gateOpen == true)
         {
             //  Let player through the gate
-            gate.SetActive(false);
+            /*gate.SetActive(false);*/
 
             //  Deactivate ALL level enemies on exitting level, but no score rewarded
             if(levelEndTrigger.isCompleted)
@@ -137,6 +144,13 @@ public class LevelManager : MonoBehaviour
 
     public void PlayerClearsLevel()
     {
-        SceneManager.LoadScene("Rest Zone");
+        if (SceneManager.GetActiveScene().name == "Level 3")
+        {
+            SceneManager.LoadScene("Win Screen");
+        }
+        else
+        {
+            SceneManager.LoadScene("Rest Zone");
+        }
     }
 }

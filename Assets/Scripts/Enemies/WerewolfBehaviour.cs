@@ -313,6 +313,7 @@ public class WerewolfBehaviour : MonoBehaviour, InterfaceEnemy
         if (!isDead && werewolfModel.activeInHierarchy)
         {
             isDead = true;
+            playerController.AddMoneyAndScore(200, 300);
 
             werewolf_animator.Play("Base Layer.down");
 
@@ -329,6 +330,7 @@ public class WerewolfBehaviour : MonoBehaviour, InterfaceEnemy
         else if (!isDead && humanModel.activeInHierarchy)
         {
             isDead = true;
+            playerController.AddMoneyAndScore(50, 100);
 
             human_animator.Play("Base Layer.dies");
 

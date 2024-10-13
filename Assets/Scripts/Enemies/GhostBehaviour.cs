@@ -205,6 +205,7 @@ public class GhostBehaviour : MonoBehaviour, InterfaceEnemy
         if (!isDead)
         {
             isDead = true;
+            playerController.AddMoneyAndScore(100, 200);
 
             _animator.Play("Base Layer.dissolve");
 
