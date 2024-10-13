@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
     private MoveAroundObject cameraController;
     private Animator animator;
 
+    public float score = 0;
+
     [Header("References")]
     public CharacterController controller;
     public Transform cameraTarget;
@@ -288,33 +290,11 @@ public class PlayerController : MonoBehaviour
         // Apply gravity
         verticalVelocity += gravity * Time.fixedDeltaTime;        
 
-        if (jumpRequested)
-        {
-            // Handle double jump if not grounded
-            if (!isGrounded && doubleJump)
-            {
-                PerformDoubleJump();
-                jumpRequested = false;  // Reset jump request after double jump
-            }
-            else if (isGrounded)
-            {
-                // Normal jump
-                verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
-                jumpRequested = false;
-                animator.SetTrigger("JumpTrigger");  // Use trigger to force the jump animation
-            }
+        // Jump logic
+        if (jumpRequested && (isGrounded || (doubleJump && !isGrounded))){
+            verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            jumpRequested = false; // Reset jump request
         }
-
-        // Reset the jump animation when grounded
-        if (isGrounded && verticalVelocity <= 0.1f){
-            animator.ResetTrigger("JumpTrigger");
-        }
-    }
-
-    void PerformDoubleJump()
-    {
-        verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);  // Reset vertical velocity for a new jump
-        animator.SetTrigger("JumpTrigger");  // Trigger jump animation again for double jump
     }
 
 
@@ -468,6 +448,12 @@ public class PlayerController : MonoBehaviour
         if (enemyUIManager != null) enemyUIManager.DisableLockOnIcon();
         cameraController.SetLockedTarget(lockedEnemy);
         Debug.Log("Target unlocked.");
+    }
+
+    public void AddMoneyAndScore(int moneyDelta, int scoreDelta)
+    {
+        money += moneyDelta;
+        score == scoreDelta;
     }
 
     public void TakeDamage(int damage)
