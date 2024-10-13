@@ -42,19 +42,15 @@ public class AnimationEvents : MonoBehaviour
         swordController.DisableSwordCollider();
     }
 
-    public void ResetCoolDown()
+    public void ResetSlash()
     {
         swordController.ResetCoolDown();
+        playerController.ResetSlash();
     }
 
     public void RestartLevel()
     {
         playerController.EndLevel();
-    }
-
-    public void EndAutoTargetState()
-    {
-        playerController.StopAutoTargeting();
     }
 
     public void PlayWalkSound()
