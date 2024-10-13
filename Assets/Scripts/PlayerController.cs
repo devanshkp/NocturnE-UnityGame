@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Timers;
+using TMPro;
 
 // ORIGINAL COLLIDER HEIGHT = 1.8
 // ORIGINAL COLLIDER CENTER = (0,0.075,0)
@@ -19,6 +20,8 @@ public class PlayerController : MonoBehaviour
     public CharacterController controller;
     public Transform cameraTarget;
     public Camera playerCamera;
+    public TMP_Text scoreText;
+    public TMP_Text moneyText;
 
     [Header("Health Settings")]
     private HealthManager healthManager;
@@ -99,7 +102,6 @@ public class PlayerController : MonoBehaviour
     private float originalColliderHeight;
 
     [Header("Shop Settings")]
-    public BuffManager buffManager;
     public int money = 0;
     public bool isShopOpen = false;
     public bool doubleJump = false;
@@ -116,9 +118,6 @@ public class PlayerController : MonoBehaviour
         controller = GetComponent<CharacterController>();
         animator = GetComponentInChildren<Animator>();
         healthManager = GetComponentInChildren<HealthManager>();
-        if (buffManager == null){
-            buffManager = GetComponentInChildren<BuffManager>();
-        }
         if (playerCamera == null){
             playerCamera = Camera.main;
         }
@@ -476,6 +475,13 @@ public class PlayerController : MonoBehaviour
     {
         money += moneyDelta;
         score += scoreDelta;
+        UpdateUI();
+    }
+
+    void UpdateUI()
+    {
+        moneyText.text = money.ToString("N0");
+        scoreText.text = "Score: " + score.ToString("N0");
     }
 
     public void TakeDamage(int damage)
