@@ -99,12 +99,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gateTimeMax: 5
   gateTime: 0
-  gateEnemyList:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  levelManager: {fileID: 0}
+  gateActivationRange: 30
+  gateEnemyList: []
+  levelManager: {fileID: 3279045613305213237, guid: 4f414a55486c1d7428c9d7b7777a1b9b, type: 3}
 --- !u!65 &7857127000698410162
 BoxCollider:
   m_ObjectHideFlags: 0

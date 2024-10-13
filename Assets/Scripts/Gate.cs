@@ -56,7 +56,7 @@ public class Gate : MonoBehaviour
             if (gateTime >= gateTimeMax)
             {
                 print("timer done");
-                levelManager.level1GateOpen = true;
+                levelManager.gateOpen = true;
             }
         }
     }

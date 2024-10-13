@@ -99,7 +99,7 @@ public class MoveAroundObject : MonoBehaviour
 
         transform.position = Vector3.Lerp(transform.position, desiredCameraPosition, Time.deltaTime * cameraLockSpeed);
     }
-
+    
 
     // Handles camera collision with walls and adjusts the camera's distance from the player accordingly
     void HandleCollision()
@@ -127,5 +127,25 @@ public class MoveAroundObject : MonoBehaviour
     {
         lockedTarget = newLockedTarget;
         isLockedOn = (newLockedTarget != null);
+
+        if (!isLockedOn)
+        {
+            // Get current rotation
+            Vector3 currentEulerAngles = transform.eulerAngles;
+            // Z value when locking off can be close to 360 causing the screen to rotate when locking off
+            currentEulerAngles.z = 0;
+
+            // When transitioning back to free movement, update _rotationX and _rotationY
+            _rotationY = currentEulerAngles.y;
+            _rotationX = currentEulerAngles.x;
+
+            // Set the smooth transition starting rotation to the current one
+            currentRotation = currentEulerAngles;
+        }
+    }
+
+    public bool LockedOn()
+    {
+        return isLockedOn;
     }
 }
