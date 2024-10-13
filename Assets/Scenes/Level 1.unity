@@ -20975,7 +20975,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3337756556329474864, guid: c63f987a2a2536a428a27ca46fcfe05e, type: 3}
       propertyPath: gateTimeMax
-      value: 25
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3337756556329474864, guid: c63f987a2a2536a428a27ca46fcfe05e, type: 3}
       propertyPath: isLevel1Gate
