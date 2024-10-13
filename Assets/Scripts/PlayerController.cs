@@ -594,6 +594,8 @@ public class PlayerController : MonoBehaviour
         animator.SetTrigger("Death");
         PlayerPrefs.DeleteAll();
         PlayerPrefs.Save();
+        gameObject.SetActive(false);
+        SceneManager.LoadScene("Menu");
     }
 
     // Disables player movement and input
