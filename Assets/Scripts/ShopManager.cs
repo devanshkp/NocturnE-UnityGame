@@ -45,10 +45,14 @@ public class ShopManager : MonoBehaviour
         shopUI.SetActive(!shopUI.activeSelf);
         if (shopUI.activeSelf)
         {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
             playerController.isShopOpen = true;
         }
         else
         {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
             playerController.isShopOpen = false;
         }
     }
@@ -66,6 +70,7 @@ public class ShopManager : MonoBehaviour
         }
         playerController.doubleJump = true;
         playerController.money -= 500;
+        playerController.UpdateUI();
         buffManager.EnableBuff(BuffType.JumpBuff);
     }
 
@@ -82,6 +87,7 @@ public class ShopManager : MonoBehaviour
         }
         playerController.speedBuff = true;
         playerController.money -= 1000;
+        playerController.UpdateUI();
         buffManager.EnableBuff(BuffType.SpeedBuff);
     }
 
@@ -98,6 +104,7 @@ public class ShopManager : MonoBehaviour
         }
         playerController.damageBuff = true;
         playerController.money -= 2000;
+        playerController.UpdateUI();
         buffManager.EnableBuff(BuffType.DamageBuff);
     }
 
