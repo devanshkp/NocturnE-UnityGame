@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     public CharacterController controller;
     public Transform cameraTarget;
     public Camera playerCamera;
+    public GameObject playerCanvas;
     public TMP_Text scoreText;
     public TMP_Text moneyText;
 
@@ -60,10 +61,7 @@ public class PlayerController : MonoBehaviour
     private float staminaCooldownTimer = 0f;  // Timer to track cooldown before stamina starts regenerating
 
     [Header("Combat Settings")]
-    public float comboResetTime = 1.5f;
-    private int comboCounter = 0;
     public bool isSlashing = false;
-    public float comboTimer = 0f;  // Timer to track time since last slash
     public bool stationarySlash = false;
 
     [Header("Auto-Target Settings")]
@@ -121,6 +119,9 @@ public class PlayerController : MonoBehaviour
         if (playerCamera == null){
             playerCamera = Camera.main;
         }
+        if (playerCanvas == null){
+            playerCanvas = GetComponentInChildren<Canvas>().gameObject;
+        }
         cameraController = playerCamera.GetComponent<MoveAroundObject>();
 
         // Save original collider size
@@ -161,11 +162,6 @@ public class PlayerController : MonoBehaviour
         if (isDead || isShopOpen) return;
         if (!isRolling && !stationarySlash) HandleMovement();  // Allow movement if not rolling or attacking while stationary
         HandleVerticalMovement();
-        if (isSlashing){
-            comboTimer += Time.fixedDeltaTime;
-            if (comboTimer > comboResetTime)
-                ResetCombo();
-        }
     }
 
     // Handles player movement based on user input
@@ -368,38 +364,22 @@ public class PlayerController : MonoBehaviour
 
     void PerformSlash()
     {
+        if (isSlashing) return;
         AutoTargetAndRotate();
         
-        // If already slashing, only allow second slash to be triggered within the animation sequence
-        if (isSlashing && comboCounter == 1){
-            // Perform second slash
-            comboCounter = 2;
-        }
-        else if (!isSlashing){
-            if (horizontalVelocity.magnitude < 0.01)
-                stationarySlash = true;
-            // Start first slash
-            isSlashing = true;
-            comboCounter = 1;
-            animator.SetTrigger("Slash");
+        if (horizontalVelocity.magnitude < 0.01){
+            stationarySlash = true;
         }
 
-        // Reset the combo timer so it doesn't time out too early
-        comboTimer = 0f;
+        isSlashing = true;
+        animator.SetTrigger("Slash");
     }
 
-    public void StopAutoTargeting()
+    public void ResetSlash()
     {
         autoTargeting = false; 
-        // isSlashing = false; 
-        // comboCounter = 0;
-    }
-
-    void ResetCombo()
-    {
-        comboCounter = 0;
+        isSlashing = false; 
         stationarySlash = false;
-        isSlashing = false;
     }
 
     void SetTarget()
@@ -446,6 +426,8 @@ public class PlayerController : MonoBehaviour
             UnlockTarget();
             return;
         }
+
+        if (isRolling) return;
 
         // Check distance
         float distanceToEnemy = Vector3.Distance(transform.position, lockedEnemy.position);
@@ -589,9 +571,9 @@ public class PlayerController : MonoBehaviour
     void Die()
     {
         if (isDead) return;
-        Debug.Log("Player is dead");
         isDead = true;
         animator.SetTrigger("Death");
+        playerCanvas.SetActive(false);
         PlayerPrefs.DeleteAll();
         PlayerPrefs.Save();
         ResetPlayerControls();
@@ -609,9 +591,8 @@ public class PlayerController : MonoBehaviour
 
     public void EndLevel()
     {
-        // End the game level (load another scene, show a "Game Over" screen, etc.)
-        Debug.Log("End Level Called");
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);  // Restart the level
+        SceneManager.LoadScene("Menu");  // Go back to menu
+        Destroy(this.gameObject);
     }
 
     public float GetVelocity()
