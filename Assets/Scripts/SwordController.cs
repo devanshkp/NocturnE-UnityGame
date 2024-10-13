@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class SwordController : MonoBehaviour
 {
-    public int damageAmount = 10;  // Amount of damage dealt to enemies
+    public int damage = 10;  // Amount of damage dealt to enemies
     public PlayerController playerController; //  Player Controller script
     private Collider swordCollider; // Reference to the sword's collider
     private bool isSlashing;
@@ -41,6 +41,7 @@ public class SwordController : MonoBehaviour
             //  Get enemy health from trigger's parent and deal damage on that parent
             if(enemy != null)
             {
+                int damageAmount = playerController.damageBuff ? damage * 5 : damage;
                 float enemyHealth = enemy.Health;
 
                 print("Hit!");
@@ -81,11 +82,6 @@ public class SwordController : MonoBehaviour
     public void DisableSwordCollider()
     {
         swordCollider.enabled = false;
-    }
-
-    public void UpdateDamage(int damage)
-    {
-        damageAmount = damage;
     }
 }
 
