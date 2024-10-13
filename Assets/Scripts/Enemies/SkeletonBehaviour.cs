@@ -227,6 +227,7 @@ public class SkeletonBehaviour : MonoBehaviour, InterfaceEnemy
         if (!isDead)
         {
             isDead = true;
+            playerController.AddMoneyAndScore(50, 100);
 
             _animator.Play("Base Layer.dies");
 

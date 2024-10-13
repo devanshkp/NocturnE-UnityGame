@@ -57,6 +57,7 @@ public class Gate : MonoBehaviour
             {
                 print("timer done");
                 levelManager.gateOpen = true;
+                gameObject.SetActive(false);
             }
         }
     }

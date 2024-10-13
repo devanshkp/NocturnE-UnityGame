@@ -182,6 +182,7 @@ public class ImpBehaviour : MonoBehaviour, InterfaceEnemy
         if (!isDead)
         {
             isDead = true;
+            playerController.AddMoneyAndScore(25, 100);
 
             _animator.Play("Base Layer.idle");
 

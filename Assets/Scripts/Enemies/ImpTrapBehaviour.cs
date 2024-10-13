@@ -104,6 +104,7 @@ public class ImpTrapBehaviour : MonoBehaviour, InterfaceEnemy
         if (!isDead)
         {
             isDead = true;
+            playerController.AddMoneyAndScore(10, 50);
 
             //  Spawn effect at enemy position
             deathAnimationInstance = Instantiate(deathAnimation, transform.position, Quaternion.identity);
