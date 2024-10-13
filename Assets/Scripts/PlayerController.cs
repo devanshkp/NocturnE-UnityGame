@@ -588,7 +588,6 @@ public class PlayerController : MonoBehaviour
         animator.SetTrigger("Death");
         PlayerPrefs.DeleteAll();
         PlayerPrefs.Save();
-        ResetPlayerControls();
     }
 
     // Disables player movement and input
