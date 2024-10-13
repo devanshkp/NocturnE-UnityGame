@@ -130,7 +130,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 46f311046d2104da8b56be3d0a49a119, type: 3}
       propertyPath: m_Name
-      value: Ghost_menu
+      value: Ghost_win_screen
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 46f311046d2104da8b56be3d0a49a119, type: 3}
       propertyPath: m_Layer
@@ -179,7 +179,7 @@ PrefabInstance:
       addedObject: {fileID: 5595217539818225620}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 46f311046d2104da8b56be3d0a49a119, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2980457566793884640}
+      addedObject: {fileID: 5015547911529928497}
   m_SourcePrefab: {fileID: 100100000, guid: 46f311046d2104da8b56be3d0a49a119, type: 3}
 --- !u!1 &7706377704242530399 stripped
 GameObject:
@@ -252,7 +252,7 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &2980457566793884640
+--- !u!114 &5015547911529928497
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -261,8 +261,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 7706377704242530399}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 695496aa8c5c2324a8853ec9728e4caa, type: 3}
+  m_Script: {fileID: 11500000, guid: 1e5b957a8b0fe2943aa9c3b1f010f54f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destinationList: []
-  moveSpeed: 4
