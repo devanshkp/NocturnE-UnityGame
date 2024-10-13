@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class HealthManager : MonoBehaviour
 {
     public GameObject character;
-    public float maxHealth = 100f;
+    public float maxHealth = 200f;
     private float currentHealth;
     public Slider healthSlider;
     public Slider easeHealthSlider;
