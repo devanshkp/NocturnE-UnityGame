@@ -467,6 +467,7 @@ MonoBehaviour:
   playerCanvas: {fileID: 7934354655738571378}
   scoreText: {fileID: 3045356503613434913}
   moneyText: {fileID: 159265468390065004}
+  isSlowed: 0
   walkSpeed: 4
   runSpeed: 7
   accelerationRate: 8
@@ -478,7 +479,7 @@ MonoBehaviour:
   fovTransitionSpeed: 12.5
   staminaSlider: {fileID: 2000067486475720502}
   maxStamina: 100
-  staminaRegenRate: 5
+  staminaRegenRate: 9
   staminaDepletionRate: 10
   jumpStaminaCost: 15
   staminaRegenCooldown: 2

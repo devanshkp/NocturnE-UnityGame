@@ -11,6 +11,10 @@ using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
+    private static PlayerController instance;
+
+    private bool GodMode = false;
+
     private MoveAroundObject cameraController;
     private Animator animator;
 
@@ -28,11 +32,11 @@ public class PlayerController : MonoBehaviour
     private HealthManager healthManager;
     private bool isBurning = false;
     private Coroutine fireCoroutine;
-    private bool isDead = false;
+    public bool isDead = false;
 
     [Header("Movement Settings")]
+    public bool isSlowed = false;
     private float speedMultiplier = 1f;
-    private float slowMultiplier = 1f;
     public float walkSpeed = 4f;
     public float runSpeed = 7f;
     public float accelerationRate = 8f;
@@ -54,7 +58,7 @@ public class PlayerController : MonoBehaviour
     public Slider staminaSlider;
     public float maxStamina = 100f;
     private float currentStamina;
-    public float staminaRegenRate = 5f;
+    public float staminaRegenRate = 9f;
     public float staminaDepletionRate = 10f; // Depletion rate when running
     public float jumpStaminaCost = 15f;
     public float staminaRegenCooldown = 2f; 
@@ -108,7 +112,18 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
-        DontDestroyOnLoad(this.gameObject);
+        // Check if another instance of the player already exists
+        if (instance != null && instance != this){
+            // If another player exists, destroy this one
+            Destroy(gameObject);
+            return;
+        }
+
+        // Otherwise, this is the instance to persist across scenes
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+        AssignCameraToCurrentPlayer();
+
     }
 
     void Start()
@@ -166,6 +181,24 @@ public class PlayerController : MonoBehaviour
         HandleVerticalMovement();
     }
 
+    void AssignCameraToCurrentPlayer()
+    {
+        // Get the current main camera
+        if (playerCamera == null){
+            playerCamera = Camera.main;
+        }
+
+        // If the camera controller exists, assign it to follow this player
+        if (playerCamera != null){
+            cameraController = playerCamera.GetComponent<MoveAroundObject>();
+            if (cameraController != null){
+                cameraController.playerObj = this.gameObject;
+                cameraController.target = cameraTarget;
+                cameraController.player = this;
+            }
+        }
+    }
+
     // Handles player movement based on user input
     void RecordInputs()
     {
@@ -204,6 +237,19 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonDown(2))
             SetTarget();
 
+        // Active GodMode for presentation/testing purposes
+        if (Input.GetKeyDown(KeyCode.P) && healthManager.GetHealth() <= 200){
+            if (!GodMode){
+                GodMode = true;
+                healthManager.SetMaxHealth(10000);
+            }
+            else{
+                GodMode = false;
+                healthManager.SetMaxHealth(200);
+            }
+            
+        }
+
         if (!isRolling && !isSlashing){
             // Roll mechanic
             if (Input.GetKeyDown(KeyCode.Space) && rollCooldownTimer >= rollCooldown && direction.magnitude != 0){
@@ -212,7 +258,7 @@ public class PlayerController : MonoBehaviour
             // Jump mechanic
             if (Input.GetKeyDown(KeyCode.F) && (isGrounded || (doubleJump && !jumpRequested)) && currentStamina >= jumpStaminaCost){
                 jumpRequested = true;
-                if (isGrounded){
+                if (isGrounded && !GodMode){
                     // First jump, reduce stamina
                     currentStamina -= jumpStaminaCost;
                     staminaSlider.value = currentStamina;
@@ -226,6 +272,7 @@ public class PlayerController : MonoBehaviour
 
     void DepleteStamina()
     {
+        if (GodMode) return;
         currentStamina -= staminaDepletionRate * Time.deltaTime;
         currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
         staminaSlider.value = currentStamina;
@@ -324,7 +371,7 @@ public class PlayerController : MonoBehaviour
         rollCooldownTimer = 0f;  // Reset cooldown timer
         controller.height = originalColliderHeight * 0.5f;  // Halve the collider height
         controller.center = new Vector3(0, -0.375f, 0); // Lower collider
-        float rollSpeedMultiplier = (playerSpeed == walkSpeed) ? 0.7f : 1.0f;
+        float rollSpeedMultiplier = (playerSpeed <= walkSpeed) ? 0.7f : 1.0f;
         float timer = 0;
         while (timer < rollTimer && !isDead){
             float speed = rollCurve.Evaluate(timer) * rollSpeedMultiplier;
@@ -411,10 +458,15 @@ public class PlayerController : MonoBehaviour
             if (closestTarget != null){
                 lockedEnemy = closestTarget;
                 enemyUIManager = lockedEnemy.GetComponentInChildren<EnemyUIManager>();
-                enemyUIManager.EnableLockOnIcon();
-                enemyUIManager.EnableHealthBar();
-                cameraController.SetLockedTarget(enemyUIManager.GetLockOnIcon());
-                Debug.Log("Target Locked: " + lockedEnemy.name);
+                if (enemyUIManager != null){
+                    enemyUIManager.EnableLockOnIcon();
+                    enemyUIManager.EnableHealthBar();
+                    cameraController.SetLockedTarget(enemyUIManager.GetLockOnIcon());
+                    Debug.Log("Target Locked: " + lockedEnemy.name);
+                }
+                else{
+                    lockedEnemy = null;
+                }
             }
         }
     }
@@ -462,7 +514,7 @@ public class PlayerController : MonoBehaviour
         UpdateUI();
     }
 
-    void UpdateUI()
+    public void UpdateUI()
     {
         moneyText.text = money.ToString("N0");
         scoreText.text = "Score: " + score.ToString("N0");
@@ -509,7 +561,7 @@ public class PlayerController : MonoBehaviour
     public void TakeIceDamage(IceBulletInfo iceDamageInfo)
     {
         //  To prevent stacking, check if player is already slowed before applying speed changes and tick damage
-        if (slowMultiplier != 1f){
+        if (!isSlowed){
             speedCoroutine = StartCoroutine(iceModifier(iceDamageInfo));
         }
 
@@ -520,8 +572,10 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator iceModifier(IceBulletInfo iceDamageInfo)
     {
+        isSlowed = true;
         float elaspedTime = 0f;
-        slowMultiplier = iceDamageInfo.movementModifier;
+        float originalMultiplier = speedMultiplier;
+        speedMultiplier *= iceDamageInfo.movementModifier;
 
         //  tick damage
         while (elaspedTime < iceDamageInfo.iceLifeTime){
@@ -535,7 +589,7 @@ public class PlayerController : MonoBehaviour
                 break;
             }
         }
-        slowMultiplier = 1f;
+        speedMultiplier = originalMultiplier;
     }
 
     void Die()
@@ -546,8 +600,6 @@ public class PlayerController : MonoBehaviour
         playerCanvas.SetActive(false);
         PlayerPrefs.DeleteAll();
         PlayerPrefs.Save();
-        gameObject.SetActive(false);
-        SceneManager.LoadScene("Menu");
     }
 
     // Disables player movement and input
