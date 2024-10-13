@@ -63,7 +63,6 @@ public class AnimationEvents : MonoBehaviour
         float playerVelocity = playerController.GetVelocity();
         int movementState = GetMovementState(playerVelocity);
         if (movementState == 1){
-            Debug.Log("Walk Sound played");
             audioSource.PlayOneShot(walkSounds[walkSoundIndex], movementVolume);
 
             // Cycle through the sounds
@@ -71,7 +70,7 @@ public class AnimationEvents : MonoBehaviour
         }
 
         if (movementState == 0 && audioSource.isPlaying){
-            audioSource.Stop();  // Stop playing any sounds
+            audioSource.Stop(); 
         }
     }
 
@@ -81,7 +80,6 @@ public class AnimationEvents : MonoBehaviour
         float playerVelocity = playerController.GetVelocity();
         int movementState = GetMovementState(playerVelocity);
         if (movementState == 2){
-            Debug.Log("Run Sound played");
             audioSource.PlayOneShot(runSounds[runSoundIndex], movementVolume);
 
             // Cycle through the sounds
@@ -89,7 +87,7 @@ public class AnimationEvents : MonoBehaviour
         }
 
         if (movementState == 0 && audioSource.isPlaying){
-            audioSource.Stop();  // Stop playing any sounds
+            audioSource.Stop();
         }
     }
 

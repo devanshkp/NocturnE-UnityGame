@@ -84,6 +84,7 @@ public class PlayerController : MonoBehaviour
     private float rollTimer;
 
     [Header("Jump")]
+    private int jumpsPerformed = 0;
     private bool isGrounded;  // Check if the player is on the ground
     private bool jumpRequested = false;  // Track if the jump is requested
 
@@ -213,10 +214,12 @@ public class PlayerController : MonoBehaviour
             // Jump mechanic
             if (Input.GetKeyDown(KeyCode.F) && (isGrounded || (doubleJump && !jumpRequested)) && currentStamina >= jumpStaminaCost){
                 jumpRequested = true;
-                animator.SetTrigger("JumpTrigger");
-                currentStamina -= jumpStaminaCost;
-                staminaSlider.value = currentStamina;
-                staminaCooldownTimer = 0f;
+                if (isGrounded){
+                    // First jump, reduce stamina
+                    currentStamina -= jumpStaminaCost;
+                    staminaSlider.value = currentStamina;
+                    staminaCooldownTimer = 0f;
+                }
             }
             if (Input.GetKeyDown(KeyCode.Mouse0))
                 PerformSlash();
@@ -285,15 +288,33 @@ public class PlayerController : MonoBehaviour
     void HandleVerticalMovement()
     {
         if (isGrounded && verticalVelocity < 0)
+        {
             verticalVelocity = -2f;  // Small downward velocity to keep the player grounded
+            jumpsPerformed = 0;  // Reset jumps when grounded
+        }
 
         // Apply gravity
-        verticalVelocity += gravity * Time.fixedDeltaTime;        
+        verticalVelocity += gravity * Time.fixedDeltaTime;
 
         // Jump logic
-        if (jumpRequested && (isGrounded || (doubleJump && !isGrounded))){
-            verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
-            jumpRequested = false; // Reset jump request
+        if (jumpRequested)
+        {
+            if (isGrounded)
+            {
+                // First jump
+                verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                animator.SetTrigger("JumpTrigger");  // Trigger jump animation
+                jumpsPerformed = 1;  // First jump performed
+            }
+            else if (jumpsPerformed == 1 && doubleJump)
+            {
+                // Double jump
+                verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                animator.SetTrigger("DoubleJumpTrigger");  // Trigger double jump animation
+                jumpsPerformed = 2;  // Double jump performed
+            }
+
+            jumpRequested = false;  // Reset jump request after performing the jump
         }
     }
 
@@ -453,7 +474,7 @@ public class PlayerController : MonoBehaviour
     public void AddMoneyAndScore(int moneyDelta, int scoreDelta)
     {
         money += moneyDelta;
-        score == scoreDelta;
+        score += scoreDelta;
     }
 
     public void TakeDamage(int damage)
