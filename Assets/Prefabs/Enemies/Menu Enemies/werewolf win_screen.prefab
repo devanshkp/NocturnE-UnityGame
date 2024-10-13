@@ -1965,9 +1965,9 @@ GameObject:
   - component: {fileID: 4780413664302814019}
   - component: {fileID: 7490334349634118675}
   - component: {fileID: -8981628479884839159}
-  - component: {fileID: 2102032210483210288}
+  - component: {fileID: 2093262510733011045}
   m_Layer: 7
-  m_Name: werewolf menu
+  m_Name: werewolf win_screen
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2054,7 +2054,7 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &2102032210483210288
+--- !u!114 &2093262510733011045
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2063,7 +2063,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6477393441154601531}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 068c2521fe3d7d940a26e1b222c12ffe, type: 3}
+  m_Script: {fileID: 11500000, guid: f3aa372b7989dd34abc3b3934d999f6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6706274490028858356
