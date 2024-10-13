@@ -36,6 +36,7 @@ public class WerewolfBehaviour : MonoBehaviour, InterfaceEnemy
     private float maxOutOfSightTime = 2f;
 
     private Transform playerTransform;
+    private PlayerController playerController;
     private Rigidbody _rigidbody;
     private NavMeshAgent nav;
     private Animator werewolf_animator;
@@ -124,7 +125,9 @@ public class WerewolfBehaviour : MonoBehaviour, InterfaceEnemy
         elapsedTime = shootRate;
 
         // Locates the player before initialisation
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        playerTransform = playerObj.transform;
+        playerController = playerObj.GetComponent<PlayerController>();
 
         // Calls rigidbody before initialisation
         _rigidbody = GetComponent<Rigidbody>();
