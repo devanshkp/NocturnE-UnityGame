@@ -464,6 +464,7 @@ MonoBehaviour:
   controller: {fileID: 6420089957452934779}
   cameraTarget: {fileID: 13557675731197689}
   playerCamera: {fileID: 1951995266222432561, guid: 71c9ee3bf8252b147b76aad1475353ec, type: 3}
+  playerCanvas: {fileID: 7934354655738571378}
   scoreText: {fileID: 3045356503613434913}
   moneyText: {fileID: 159265468390065004}
   walkSpeed: 4
@@ -481,9 +482,7 @@ MonoBehaviour:
   staminaDepletionRate: 10
   jumpStaminaCost: 15
   staminaRegenCooldown: 2
-  comboResetTime: 1.5
   isSlashing: 0
-  comboTimer: 0
   stationarySlash: 0
   autoTargeting: 0
   autoTargetRange: 3
@@ -685,6 +684,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MoneyText
       objectReference: {fileID: 0}
+    - target: {fileID: 1833793696211964563, guid: f411530f6ca2876438a86c199d524e13, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3425711373403211095, guid: f411530f6ca2876438a86c199d524e13, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -697,9 +700,21 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5109144121178652437, guid: f411530f6ca2876438a86c199d524e13, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5371305987597013457, guid: f411530f6ca2876438a86c199d524e13, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5700014723687627635, guid: f411530f6ca2876438a86c199d524e13, type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 6319507702697622781, guid: f411530f6ca2876438a86c199d524e13, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6862064175750008644, guid: f411530f6ca2876438a86c199d524e13, type: 3}
       propertyPath: m_LocalPosition.z
@@ -805,6 +820,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8006197763204581663, guid: f411530f6ca2876438a86c199d524e13, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8745295221257357692, guid: f411530f6ca2876438a86c199d524e13, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -846,6 +865,11 @@ MonoBehaviour:
 --- !u!224 &5425096115127207962 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7660386132334762267, guid: f411530f6ca2876438a86c199d524e13, type: 3}
+  m_PrefabInstance: {fileID: 2379862911710793985}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7934354655738571378 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5700014723687627635, guid: f411530f6ca2876438a86c199d524e13, type: 3}
   m_PrefabInstance: {fileID: 2379862911710793985}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3183810643450291118

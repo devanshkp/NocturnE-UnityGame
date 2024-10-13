@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class HealthManager : MonoBehaviour
 {
     public GameObject character;
-    public float maxHealth = 200f;
+    public float maxHealth = 100f;
     private float currentHealth;
     public Slider healthSlider;
     public Slider easeHealthSlider;
@@ -21,7 +21,7 @@ public class HealthManager : MonoBehaviour
     {
         // Only initialize currentHealth if it's the player (not an enemy)
         if (!isEnemy) {
-            currentHealth = maxHealth;
+            SetMaxHealth(200f);
         }
         InitializeEnemyUIManager();
     }
@@ -63,9 +63,9 @@ public class HealthManager : MonoBehaviour
             enemyUIManager.DisableHealthBar(); 
     }
 
-    public void SetMaxHealth(float maxEnemyHealth)
+    public void SetMaxHealth(float newMaxHealth)
     {
-        maxHealth = maxEnemyHealth;
+        maxHealth = newMaxHealth;
         currentHealth = maxHealth;
         // Set slider maximum values
         healthSlider.maxValue = maxHealth;
