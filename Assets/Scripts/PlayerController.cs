@@ -576,7 +576,8 @@ public class PlayerController : MonoBehaviour
         playerCanvas.SetActive(false);
         PlayerPrefs.DeleteAll();
         PlayerPrefs.Save();
-        ResetPlayerControls();
+        gameObject.SetActive(false);
+        SceneManager.LoadScene("Menu");
     }
 
     // Disables player movement and input
