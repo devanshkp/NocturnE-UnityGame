@@ -59,8 +59,12 @@ public class HealthManager : MonoBehaviour
 
     public void TurnOffHealthBar()
     {
-        if (enemyUIManager != null)
+        if (enemyUIManager == null){
+            InitializeEnemyUIManager();
+        }
+        if (enemyUIManager != null){
             enemyUIManager.DisableHealthBar(); 
+        }
     }
 
     public void SetMaxHealth(float newMaxHealth)

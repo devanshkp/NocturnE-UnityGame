@@ -18,6 +18,7 @@ public class Gate : MonoBehaviour
     public LevelManager levelManager;
 
     private Transform playerTransform;
+    private bool playerSeen = false;
 
     // Start is called before the first frame update
     void Start()
@@ -42,22 +43,23 @@ public class Gate : MonoBehaviour
     void Update()
     {
         //  Activate defenses when player sees and is within gate activation range
-        if (PlayerInView() && Vector3.Distance(transform.position, playerTransform.position) <= gateActivationRange)
-        {
-            //  Spawn gate enemy units when gate is under attack
-            for (int i = 0; i < gateEnemyList.Length; i++)
-            {
+        if (!playerSeen && PlayerInView() && Vector3.Distance(transform.position, playerTransform.position) <= gateActivationRange){
+            playerSeen = true;
+
+            // Spawn gate enemy units when the gate is under attack
+            for (int i = 0; i < gateEnemyList.Length; i++){
                 gateEnemyList[i].gameObject.SetActive(true);
             }
+        }
 
-            //  Start incrementing the gate timer
+        // Once the player has been seen once, start the countdown regardless of their visibility
+        if (playerSeen){
+            // Start incrementing the gate timer
             gateTime += Time.deltaTime;
 
-            if (gateTime >= gateTimeMax)
-            {
+            if (gateTime >= gateTimeMax){
                 print("timer done");
                 levelManager.gateOpen = true;
-                //gameObject.SetActive(false);
             }
         }
     }
