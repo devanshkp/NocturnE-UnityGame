@@ -592,6 +592,8 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Player is dead");
         isDead = true;
         animator.SetTrigger("Death");
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.Save();
         ResetPlayerControls();
     }
 
