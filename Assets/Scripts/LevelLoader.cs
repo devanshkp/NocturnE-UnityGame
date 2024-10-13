@@ -9,31 +9,20 @@ using UnityEngine.SceneManagement;
 
 public class LevelLoader : MonoBehaviour
 {
-    public LevelManager levelManager;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        if (levelManager == null)
-        {
-            Debug.Log("No level manager assigned - please assign a level manager. Deactivating the level loader");
-            gameObject.SetActive(false);
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
         //  Add new else if for future levels
-        if (levelManager.levelNumber == 0)
+        if (PlayerPrefs.GetInt("LevelsCompleted", 0) == 0)
         {
             SceneManager.LoadScene("Level 1");
-        }else if (levelManager.levelNumber == 1)
+        }
+        else if (PlayerPrefs.GetInt("LevelsCompleted", 0) == 1)
         {
-            SceneManager.LoadScene($"Level {levelManager.levelNumber}");
-        }else if (levelManager.levelNumber == 2)
+            SceneManager.LoadScene("Level 2");
+        }
+        else if (PlayerPrefs.GetInt("LevelsCompleted", 0) == 2)
         {
-            SceneManager.LoadScene($"Level {levelManager.levelNumber}");
+            SceneManager.LoadScene($"Level 3");
         }
     }
 }

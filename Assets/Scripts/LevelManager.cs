@@ -12,7 +12,6 @@ public class LevelManager : MonoBehaviour
     public GameObject gate;
     public LevelEndTrigger levelEndTrigger;
     public bool gateOpen = false;
-    public int levelNumber;
 
     [Header("Level Enemies")]
     public GameObject[] enemiesList;
@@ -39,12 +38,6 @@ public class LevelManager : MonoBehaviour
         if (enemiesList.Length == 0)
         {
             Debug.Log("No enemies assigned to the level manager - please add all the enemies to the level manager. Deactivating the level manager");
-            gameObject.SetActive(false);
-        }
-
-        if (levelNumber == 0)
-        {
-            Debug.Log("No level number assigned - please assign a level number. Deactivating the level manager");
             gameObject.SetActive(false);
         }
 
@@ -144,6 +137,11 @@ public class LevelManager : MonoBehaviour
 
     public void PlayerClearsLevel()
     {
+        //  Increase saved level completion by 1
+        int completedLevels = PlayerPrefs.GetInt("LevelsCompleted", 0);
+        PlayerPrefs.SetInt("LevelsCompleted", completedLevels + 1);
+        PlayerPrefs.Save();
+
         if (SceneManager.GetActiveScene().name == "Level 3")
         {
             SceneManager.LoadScene("Win Screen");
