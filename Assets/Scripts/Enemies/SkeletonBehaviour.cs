@@ -37,11 +37,15 @@ public class SkeletonBehaviour : MonoBehaviour, InterfaceEnemy
     // Current NPC state
     public FSMState curState;
 
+    private bool isDead = false;
+
+    [Header("Score Settings")]
+    public int points = 100;
+
+    [Header("Health")]
     // Total times the NPC can get hit until destruction
     public float health = 10;
     public float Health => health;
-
-    [Header("Health")]
     private HealthManager healthManager;
 
     // Range variables
@@ -60,6 +64,11 @@ public class SkeletonBehaviour : MonoBehaviour, InterfaceEnemy
     public float shootRate = 0.5f;
     private float elapsedTime;
 
+    [Header("Imported Animation Objects")]
+    public GameObject deathAnimation;
+    public float deathAnimationLifeTime = 3f;
+    public float fadeDuration = 1f;
+    private GameObject deathAnimationInstance;
 
 
     // Start is called before the first frame update
@@ -72,9 +81,7 @@ public class SkeletonBehaviour : MonoBehaviour, InterfaceEnemy
             gameObject.SetActive(false);
         }
         
-        healthManager = GetComponentInChildren<HealthManager>();
-        healthManager.SetMaxHealth(health);
-        healthManager.TurnOffHealthBar();
+        InitializeHealthManager();
         nav = GetComponent<NavMeshAgent>();
         // Set first destination
         nav.SetDestination(destinationList[0].transform.position);
@@ -214,7 +221,56 @@ public class SkeletonBehaviour : MonoBehaviour, InterfaceEnemy
      */
     void UpdateDeadState()
     {
+        if (!isDead)
+        {
+            isDead = true;
 
+            _animator.Play("Base Layer.dies");
+
+            //  Spawn effect at enemy position
+            deathAnimationInstance = Instantiate(deathAnimation, transform.position, Quaternion.identity);
+
+            //  Play effect and fade out
+            StartCoroutine(DestroyEffect());
+
+            //
+            //  Reward points to player score here
+            //
+        }
+    }
+
+    private IEnumerator DestroyEffect()
+    {
+        //  Let animation play for its life time
+        yield return new WaitForSeconds(deathAnimationLifeTime);
+
+        //  Destroy enemy
+        Destroy(gameObject);
+
+        //
+        //  Fade effect logic if shader and gameobject supports
+        //
+
+        /*float fadeStartTime = Time.time;
+
+        //  Get renderers in the effect to apply transparency to
+        Renderer[] renderers = deathAnimationInstance.GetComponentsInChildren<Renderer>();
+
+        while (Time.time < fadeStartTime + fadeDuration)
+        {
+            float time = (Time.time - fadeStartTime) / fadeDuration;
+
+            foreach (Renderer renderer in renderers)
+            {
+                Color color = renderer.material.color;
+                //  Decrease alpha (become transparent)
+                color.a = Mathf.Lerp(1f, 0f, time);
+                renderer.material.color = color;
+            }
+            yield return null;
+        }*/
+
+        Destroy(deathAnimationInstance);
     }
 
     public void TakeDamage(int damage)
@@ -227,7 +283,7 @@ public class SkeletonBehaviour : MonoBehaviour, InterfaceEnemy
     {
         Vector3 directionToPlayer = playerTransform.position - transform.position;
 
-        LayerMask visionMask = ~LayerMask.GetMask("Bullets");
+        LayerMask visionMask = ~LayerMask.GetMask("Bullets", "Enemy");
 
         if (Physics.Raycast(transform.position, directionToPlayer, out RaycastHit hit, attackRange, visionMask))
         {
@@ -250,6 +306,19 @@ public class SkeletonBehaviour : MonoBehaviour, InterfaceEnemy
         {
             elapsedTime = 0;
             bulletPoolManager.Shooting(bulletSpawnpoint.transform.position);
+        }
+    }
+
+    void InitializeHealthManager()
+    {
+        if (healthManager == null)
+        {
+            healthManager = GetComponentInChildren<HealthManager>();
+            if (healthManager != null)
+            {
+                healthManager.SetMaxHealth(health);
+                healthManager.TurnOffHealthBar();
+            }
         }
     }
 

@@ -21,8 +21,8 @@ public class PlayerController : MonoBehaviour
     [Header("Health Settings")]
     private HealthManager healthManager;
     private bool isBurning = false;
-    private bool isFreezing = false;
     private Coroutine fireCoroutine;
+    private bool isDead = false;
 
     [Header("Movement Settings")]
     public float walkSpeed = 4f;
@@ -58,7 +58,12 @@ public class PlayerController : MonoBehaviour
     private int comboCounter = 0;
     public bool isSlashing = false;
     public float comboTimer = 0f;  // Timer to track time since last slash
-    private bool stationarySlash = false;
+    public bool stationarySlash = false;
+
+    [Header("Auto-Target Settings")]
+    public bool autoTargeting = false;
+    public float autoTargetRange = 3f;
+    public float autoTargetAngleThreshold = 120f; // Angle threshold to check if the player is facing the enemy
 
     [Header ("Target Settings")]
     public LayerMask targetLayer;
@@ -89,6 +94,11 @@ public class PlayerController : MonoBehaviour
     private Vector3 originalColliderCenter;
     private float originalColliderHeight;
 
+    void Awake()
+    {
+        DontDestroyOnLoad(this.gameObject);
+    }
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -97,8 +107,6 @@ public class PlayerController : MonoBehaviour
         if (playerCamera == null)
             playerCamera = Camera.main;
         cameraController = playerCamera.GetComponent<MoveAroundObject>();
-
-        // originalHealthBarWidth = healthBar.rectTransform.rect.width;
 
         // Save original collider size
         originalColliderCenter = controller.center;
@@ -115,13 +123,13 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (isDead) return;
         RecordInputs();
         UpdateVelocity();
         UpdateFOV();
         UpdateStamina();
         HandleRotation();
-        if (lockedEnemy != null){
-            PanCameraToTarget();
+        if (cameraController.LockedOn()){
             CheckUnlockConditions();
         }
         isGrounded = controller.isGrounded;
@@ -130,6 +138,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (isDead) return;
         if (!isRolling && !stationarySlash) HandleMovement();  // Allow movement if not rolling or attacking while stationary
         HandleVerticalMovement();
         if (isSlashing){
@@ -176,10 +185,6 @@ public class PlayerController : MonoBehaviour
         if (!isRolling && !isSlashing){
             // Roll mechanic
             if (Input.GetKeyDown(KeyCode.Space) && rollCooldownTimer >= rollCooldown && direction.magnitude != 0){
-                if (lockedEnemy != null){
-                    GhostBehaviour enemyBehavior = lockedEnemy.GetComponentInChildren<GhostBehaviour>();
-                    enemyBehavior.TakeDamage(10);
-                }
                 StartCoroutine(Roll());
             }
             // Jump mechanic
@@ -239,11 +244,18 @@ public class PlayerController : MonoBehaviour
     // Handles player rotation based on movement direction
     void HandleRotation()
     {        
-        if (direction.magnitude == 0) return;
-        float rotSpeed = movementRotSpeed;
-        if (isRolling) rotSpeed *= 0.5f;
-        Quaternion desiredRotation = Quaternion.LookRotation(direction, Vector3.up);
-        transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, rotSpeed * Time.deltaTime);
+        if (direction.magnitude == 0 || stationarySlash) return;
+        if (autoTargeting && lockedEnemy != null){
+            Vector3 directionToEnemy = (lockedEnemy.position - transform.position).normalized;
+            directionToEnemy.y = 0; // Ignore vertical rotation
+            RotateTowardsEnemy(directionToEnemy);
+        }
+        else{
+            float rotSpeed = movementRotSpeed;
+            if (isRolling) rotSpeed *= 0.5f;
+            Quaternion desiredRotation = Quaternion.LookRotation(direction, Vector3.up);
+            transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, rotSpeed * Time.deltaTime);
+        }
     }
 
     // Apply gravity to the player
@@ -275,7 +287,7 @@ public class PlayerController : MonoBehaviour
         controller.center = new Vector3(0, -0.375f, 0); // Lower collider
         float rollSpeedMultiplier = (playerSpeed == walkSpeed) ? 0.7f : 1.0f;
         float timer = 0;
-        while (timer < rollTimer){
+        while (timer < rollTimer && !isDead){
             float speed = rollCurve.Evaluate(timer) * rollSpeedMultiplier;
             Vector3 dir = (transform.forward * speed + (Vector3.up * verticalVelocity));
             controller.Move(dir * Time.deltaTime);
@@ -288,13 +300,39 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isRolling", false);
     }
 
+    void AutoTargetAndRotate()
+    {
+        if (lockedEnemy == null || autoTargeting) return;
+
+        Vector3 directionToEnemy = (lockedEnemy.position - transform.position).normalized;
+        directionToEnemy.y = 0;
+
+        float angleToEnemy = Vector3.Angle(transform.forward, directionToEnemy);
+        float distanceToEnemy = Vector3.Distance(transform.position, lockedEnemy.position);
+
+        // If the enemy is within the player's field of view and close enough, rotate towards enemy
+        if (angleToEnemy <= autoTargetAngleThreshold && distanceToEnemy <= autoTargetRange)
+        {
+            autoTargeting = true;
+            RotateTowardsEnemy(directionToEnemy);
+        }
+    }
+
+    void RotateTowardsEnemy(Vector3 directionToEnemy)
+    {
+        Quaternion targetRotation = Quaternion.LookRotation(directionToEnemy, Vector3.up);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * cameraBasedRotSpeed);
+    }
+
+
     void PerformSlash()
     {
+        AutoTargetAndRotate();
+        
         // If already slashing, only allow second slash to be triggered within the animation sequence
         if (isSlashing && comboCounter == 1){
             // Perform second slash
             comboCounter = 2;
-            animator.SetInteger("comboIndex", comboCounter);
         }
         else if (!isSlashing){
             if (horizontalVelocity.magnitude < 0.01)
@@ -302,7 +340,6 @@ public class PlayerController : MonoBehaviour
             // Start first slash
             isSlashing = true;
             comboCounter = 1;
-            animator.SetInteger("comboIndex", comboCounter);
             animator.SetTrigger("Slash");
         }
 
@@ -310,12 +347,18 @@ public class PlayerController : MonoBehaviour
         comboTimer = 0f;
     }
 
+    public void StopAutoTargeting()
+    {
+        autoTargeting = false; 
+        // isSlashing = false; 
+        // comboCounter = 0;
+    }
+
     void ResetCombo()
     {
         comboCounter = 0;
         stationarySlash = false;
         isSlashing = false;
-        animator.SetInteger("comboIndex", comboCounter);
     }
 
     void SetTarget()
@@ -333,10 +376,12 @@ public class PlayerController : MonoBehaviour
 
             // Loop through all colliders and find the closest enemy
             foreach (Collider hitCollider in hitColliders){
-                float distanceToTarget = Vector3.Distance(transform.position, hitCollider.transform.position);
-                if (distanceToTarget < closestDistance && !TargetObstructed(hitCollider.transform)){
-                    closestDistance = distanceToTarget;
-                    closestTarget = hitCollider.transform;
+                if (hitCollider.CompareTag("Enemy")){
+                    float distanceToTarget = Vector3.Distance(transform.position, hitCollider.transform.position);
+                    if (distanceToTarget < closestDistance && !TargetObstructed(hitCollider.transform)){
+                        closestDistance = distanceToTarget;
+                        closestTarget = hitCollider.transform;
+                    }
                 }
             }
 
@@ -351,25 +396,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void PanCameraToTarget() 
-    {
-        // Get the position of the enemy and the player
-        Vector3 targetPosition = lockedEnemy.position;
-        Vector3 playerPosition = transform.position;
-        
-        // Calculate the midpoint between the player and the enemy
-        Vector3 midpoint = (playerPosition + targetPosition) / 2f;
-
-        // Adjust the camera to look at the midpoint between the player and the enemy
-        Vector3 directionToMidpoint = midpoint - playerCamera.transform.position;
-
-        // Smoothly rotate the camera to look at the midpoint
-        Quaternion targetRotation = Quaternion.LookRotation(directionToMidpoint);
-        playerCamera.transform.rotation = Quaternion.Slerp(playerCamera.transform.rotation, targetRotation, Time.deltaTime * cameraLockSpeed);
-    }
-
     void CheckUnlockConditions() 
     {
+        // Check if the lockedEnemy is still valid (active in hierarchy or not destroyed)
+        if (lockedEnemy == null || !lockedEnemy.gameObject.activeInHierarchy)
+        {
+            Debug.Log("enemy gone");
+            UnlockTarget();
+            return;
+        }
+
         // Check distance
         float distanceToEnemy = Vector3.Distance(transform.position, lockedEnemy.position);
         if (distanceToEnemy > unlockDistance || TargetObstructed(lockedEnemy))
@@ -422,7 +458,7 @@ public class PlayerController : MonoBehaviour
         isBurning = true;
         float elapsedTime = 0f;
 
-        while (elapsedTime < firedamageInfo.fireLifeTime)
+        while (elapsedTime < firedamageInfo.fireLifeTime && !isDead)
         {
 
             healthManager.UpdateHealth(-firedamageInfo.fireTickDamage);
@@ -463,7 +499,6 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator iceModifier(IceBulletInfo iceDamageInfo, float slowedWalkSpeed, float slowedRunSpeed)
     {
-        isFreezing = true;
         float elaspedTime = 0f;
 
         float originalWalkSpeed = walkSpeed;
@@ -495,31 +530,152 @@ public class PlayerController : MonoBehaviour
         walkSpeed = originalWalkSpeed;
         runSpeed = originalRunSpeed;
         isSlowed = false;
-        isFreezing = false;
     }
 
     void Die()
     {
+        if (isDead) return;
         Debug.Log("Player is dead");
+        isDead = true;
+        animator.SetTrigger("Death");
+        ResetPlayerControls();
+    }
+
+    // Disables player movement and input
+    private void ResetPlayerControls()
+    {
+        // Disable movement, attacking, etc.
+        isSlashing = false;
+        isRolling = false;
+        direction = Vector3.zero;
+        playerSpeed = 0;
+    }
+
+    public void EndLevel()
+    {
+        // End the game level (load another scene, show a "Game Over" screen, etc.)
+        Debug.Log("End Level Called");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);  // Restart the level
+    }
+
+    public float GetVelocity()
+    {
+        return horizontalVelocity.magnitude;
     }
 
     void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, targetRange);
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, unlockDistance);
+        // Gizmos.color = Color.red;
+        // Gizmos.DrawWireSphere(transform.position, targetRange);
+        // Gizmos.color = Color.green;
+        // Gizmos.DrawWireSphere(transform.position, unlockDistance);
 
-        if (lockedEnemy != null)
-        {
-            // Set gizmo color for locked target (yellow)
-            Gizmos.color = Color.yellow;
+        DrawAutoTargetGizmo();
+
+        // if (lockedEnemy != null)
+        // {
+        //     // Set gizmo color for locked target (yellow)
+        //     Gizmos.color = Color.yellow;
             
-            // Draw a line from the player to the locked enemy
-            Gizmos.DrawLine(transform.position, lockedEnemy.position);
+        //     // Draw a line from the player to the locked enemy
+        //     Gizmos.DrawLine(transform.position, lockedEnemy.position);
 
-            // Draw a wire sphere at the locked enemy's position
-            Gizmos.DrawWireSphere(lockedEnemy.position, 1f);  // The radius can be adjusted as needed
+        //     // Draw a wire sphere at the locked enemy's position
+        //     Gizmos.DrawWireSphere(lockedEnemy.position, 1f);  // The radius can be adjusted as needed
+        // }
+    }
+
+    // Scene Load Logic
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (playerCamera == null){
+            playerCamera = Camera.main;
+            cameraController = playerCamera.GetComponent<MoveAroundObject>();
         }
+        
+        // Find the spawn point in the new scene
+        GameObject spawnPoint = GameObject.FindGameObjectWithTag("PlayerSpawn");
+
+        if (spawnPoint != null)
+        {
+            // Move the player to the spawn point's position and rotation
+            controller.GetComponent<Collider>().enabled = false;
+            this.transform.position = spawnPoint.transform.position;
+            this.transform.rotation = spawnPoint.transform.rotation;
+            controller.GetComponent<Collider>().enabled = true;
+        }
+        else
+        {
+            Debug.LogWarning("No spawn point found in the new scene!");
+        }
+    }
+
+    private void DrawAutoTargetGizmo()
+    {
+        // Set the gizmo color (optional)
+        Gizmos.color = new Color(0f, 1f, 0f, 0.4f); // A transparent green color
+
+        // Draw a wire sphere to represent the auto-target range
+        Gizmos.DrawWireSphere(transform.position, autoTargetRange);
+
+        // Draw the field of view (FOV) as two lines from the player to the edge of the angle threshold
+        Vector3 forward = transform.forward;
+        Vector3 leftBoundary = Quaternion.Euler(0, -autoTargetAngleThreshold, 0) * forward;
+        Vector3 rightBoundary = Quaternion.Euler(0, autoTargetAngleThreshold, 0) * forward;
+
+        // Draw lines representing the edges of the FOV
+        Gizmos.DrawLine(transform.position, transform.position + leftBoundary * autoTargetRange);
+        Gizmos.DrawLine(transform.position, transform.position + rightBoundary * autoTargetRange);
+
+        // Optionally, draw a cone to represent the FOV area
+        Gizmos.color = new Color(0f, 1f, 0f, 0.2f); // Lighter green for the cone
+        Gizmos.DrawMesh(CreateConeMesh(autoTargetAngleThreshold, autoTargetRange), transform.position, transform.rotation);
+    }
+
+    // Create a cone mesh to visually represent the FOV
+    private Mesh CreateConeMesh(float angle, float range)
+    {
+        Mesh mesh = new Mesh();
+
+        int numSegments = 20; // Number of segments to approximate the cone
+        float angleStep = (angle * 2) / numSegments;
+
+        // Vertices array (1 center vertex + numSegments + 1 for the ring)
+        Vector3[] vertices = new Vector3[numSegments + 2];
+        vertices[0] = Vector3.zero; // The cone's origin (at the player's position)
+
+        // Calculate vertices for the ring (edges of the FOV)
+        for (int i = 0; i <= numSegments; i++)
+        {
+            float currentAngle = -angle + i * angleStep;
+            Vector3 vertex = Quaternion.Euler(0, currentAngle, 0) * Vector3.forward * range;
+            vertices[i + 1] = vertex;
+        }
+
+        // Triangles array (1 triangle per segment)
+        int[] triangles = new int[numSegments * 3];
+        for (int i = 0; i < numSegments; i++)
+        {
+            triangles[i * 3] = 0; // Center vertex
+            triangles[i * 3 + 1] = i + 1;
+            triangles[i * 3 + 2] = i + 2;
+        }
+
+        mesh.vertices = vertices;
+        mesh.triangles = triangles;
+        mesh.RecalculateNormals();
+
+        return mesh;
     }
 }
