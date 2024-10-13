@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Movement Settings")]
     private float speedMultiplier = 1f;
+    private float slowMultiplier = 1f;
     public float walkSpeed = 4f;
     public float runSpeed = 7f;
     public float accelerationRate = 8f;
@@ -43,7 +44,6 @@ public class PlayerController : MonoBehaviour
     private Vector3 horizontalVelocity;
     private Vector3 direction = Vector3.zero;
     private Coroutine speedCoroutine;
-    private bool isSlowed = false;
 
     [Header("FOV Settings")]
     public float normalFOV = 60f;
@@ -469,22 +469,17 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(int damage)
     {
         healthManager.UpdateHealth(-damage);
-
-        if (healthManager.GetHealth() <= 0)
-        {
+        if (healthManager.GetHealth() <= 0){
             Die();
         }
     }
 
     public void TakeFireDamage(FireBulletInfo firedamageInfo)
     {
-        if (!isBurning)
-        {
+        if (!isBurning){
             fireCoroutine = StartCoroutine(ApplyFireTick(firedamageInfo));
         }
-
-        if (healthManager.GetHealth() <= 0)
-        {
+        if (healthManager.GetHealth() <= 0){
             Die();
         }
     }
@@ -494,19 +489,13 @@ public class PlayerController : MonoBehaviour
         isBurning = true;
         float elapsedTime = 0f;
 
-        while (elapsedTime < firedamageInfo.fireLifeTime && !isDead)
-        {
-
+        while (elapsedTime < firedamageInfo.fireLifeTime && !isDead){
             healthManager.UpdateHealth(-firedamageInfo.fireTickDamage);
-
             //  delay tick damage by some amount of time
             yield return new WaitForSeconds(firedamageInfo.fireTickRate);
-
             elapsedTime += firedamageInfo.fireTickRate;
-
             //  check if the tick damage kills the player
-            if(healthManager.GetHealth() <= 0)
-            {
+            if(healthManager.GetHealth() <= 0){
                 Die();
                 break;
             }
@@ -517,55 +506,34 @@ public class PlayerController : MonoBehaviour
 
     public void TakeIceDamage(IceBulletInfo iceDamageInfo)
     {
-        float slowedWalkSpeed = walkSpeed * iceDamageInfo.movementModifier;
-        float slowedRunSpeed = runSpeed * iceDamageInfo.movementModifier;
-
         //  To prevent stacking, check if player is already slowed before applying speed changes and tick damage
-        if (!isSlowed)
-        {
-            isSlowed = true;
-            speedCoroutine = StartCoroutine(iceModifier(iceDamageInfo, slowedWalkSpeed, slowedRunSpeed));
+        if (slowMultiplier != 1f){
+            speedCoroutine = StartCoroutine(iceModifier(iceDamageInfo));
         }
 
-        if (healthManager.GetHealth() <= 0)
-        {
+        if (healthManager.GetHealth() <= 0){
             Die();
         }
     }
 
-    private IEnumerator iceModifier(IceBulletInfo iceDamageInfo, float slowedWalkSpeed, float slowedRunSpeed)
+    private IEnumerator iceModifier(IceBulletInfo iceDamageInfo)
     {
         float elaspedTime = 0f;
-
-        float originalWalkSpeed = walkSpeed;
-        float originalRunSpeed = runSpeed;
-
-        //  Set running speed to be slowed
-        walkSpeed = slowedWalkSpeed;
-        runSpeed = slowedRunSpeed;
+        slowMultiplier = iceDamageInfo.movementModifier;
 
         //  tick damage
-        while (elaspedTime < iceDamageInfo.iceLifeTime)
-        {
+        while (elaspedTime < iceDamageInfo.iceLifeTime){
             healthManager.UpdateHealth(-iceDamageInfo.iceTickDamage);
-
             // delay tick damage by some amount of time
             yield return new WaitForSeconds(iceDamageInfo.iceTickRate);
-
             elaspedTime += iceDamageInfo.iceTickRate;
-
             // check if the tick damage kills the player
-            if(healthManager.GetHealth() <= 0)
-            {
+            if(healthManager.GetHealth() <= 0){
                 Die();
                 break;
             }
         }
-
-        //  Revert to original speed and reset
-        walkSpeed = originalWalkSpeed;
-        runSpeed = originalRunSpeed;
-        isSlowed = false;
+        slowMultiplier = 1f;
     }
 
     void Die()
@@ -600,6 +568,8 @@ public class PlayerController : MonoBehaviour
     {
         return horizontalVelocity.magnitude;
     }
+
+    // GIZMOS
 
     void OnDrawGizmos()
     {
@@ -645,16 +615,14 @@ public class PlayerController : MonoBehaviour
         // Find the spawn point in the new scene
         GameObject spawnPoint = GameObject.FindGameObjectWithTag("PlayerSpawn");
 
-        if (spawnPoint != null)
-        {
+        if (spawnPoint != null){
             // Move the player to the spawn point's position and rotation
             controller.GetComponent<Collider>().enabled = false;
             this.transform.position = spawnPoint.transform.position;
             this.transform.rotation = spawnPoint.transform.rotation;
             controller.GetComponent<Collider>().enabled = true;
         }
-        else
-        {
+        else{
             Debug.LogWarning("No spawn point found in the new scene!");
         }
     }
