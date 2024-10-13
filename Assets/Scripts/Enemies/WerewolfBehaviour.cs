@@ -47,6 +47,8 @@ public class WerewolfBehaviour : MonoBehaviour, InterfaceEnemy
     public int humanPoints = 100;
 
     [Header("Health")]
+    private HealthManager humanHealthManager;
+    private HealthManager werewolfHealthManager;
     private HealthManager healthManager;
 
     // Range variables
@@ -172,17 +174,15 @@ public class WerewolfBehaviour : MonoBehaviour, InterfaceEnemy
         {
             werewolfModel.SetActive(true);
             humanModel.SetActive(false);
-
             werewolf_animator.Play("Base Layer.lookaround");
         }
         else
         {
             werewolfModel.SetActive(false);
             humanModel.SetActive(true);
-
             human_animator.Play("Base Layer.idle");
         }
-
+        InitializeHealthManager();
         nav.isStopped = true;
         nav.SetDestination(transform.position);
         IdleActions();
@@ -462,7 +462,6 @@ public class WerewolfBehaviour : MonoBehaviour, InterfaceEnemy
             werewolfModel.SetActive(false);
             humanModel.SetActive(true);
             curState = FSMState.DayRunAway;
-
             //  Day time & attackable
         }
         else if ((levelManager.isNightTime == false) && Vector3.Distance(transform.position, playerTransform.position) <= attackRange)
@@ -487,20 +486,41 @@ public class WerewolfBehaviour : MonoBehaviour, InterfaceEnemy
             humanModel.SetActive(false);
             curState = FSMState.NightAttack;
         }
+        InitializeHealthManager();
     }
 
-    void InitializeHealthManager()
-    {
-        if (healthManager == null)
-        {
-            healthManager = GetComponentInChildren<HealthManager>();
-            if (healthManager != null)
-            {
-                healthManager.SetMaxHealth(health);
-                healthManager.TurnOffHealthBar();
+    void InitializeHealthManager(){
+        // If it's night time, set the werewolf's health manager, otherwise set the human's
+        if (levelManager.isNightTime){
+            if (humanHealthManager != null){
+                humanHealthManager.TurnOffHealthBar();
+                humanHealthManager = null;
+            }
+            if (werewolfHealthManager == null){
+                werewolfHealthManager = werewolfModel.GetComponentInChildren<HealthManager>();
+                if (werewolfHealthManager != null){
+                    werewolfHealthManager.SetMaxHealth(health);
+                    werewolfHealthManager.TurnOffHealthBar();
+                    healthManager = werewolfHealthManager;
+                }
+            }
+        }
+        else{
+            if (werewolfHealthManager != null){
+                werewolfHealthManager.TurnOffHealthBar();
+                werewolfHealthManager = null;
+            }
+            if (humanModel != null){
+                humanHealthManager = humanModel.GetComponentInChildren<HealthManager>();
+                if (humanHealthManager != null){
+                    humanHealthManager.SetMaxHealth(health);
+                    humanHealthManager.TurnOffHealthBar();
+                    healthManager = humanHealthManager;
+                }
             }
         }
     }
+
 
     void OnDrawGizmos()
     {
