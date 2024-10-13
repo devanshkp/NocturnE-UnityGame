@@ -35,6 +35,7 @@ public class ImpBehaviour : MonoBehaviour, InterfaceEnemy
     private float maxOutOfSightTime = 2f;
 
     private Transform playerTransform;
+    private PlayerController playerController;
     private Rigidbody _rigidbody;
     private NavMeshAgent nav;
     private Animator _animator;
@@ -92,7 +93,9 @@ public class ImpBehaviour : MonoBehaviour, InterfaceEnemy
         curState = FSMState.Idle;
 
         // Locates the player before initialisation
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        playerTransform = playerObj.transform;
+        playerController = playerObj.GetComponent<PlayerController>();
 
         // Calls rigidbody before initialisation
         _rigidbody = GetComponent<Rigidbody>();
