@@ -28,6 +28,7 @@ public class FireBullet : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            gameObject.SetActive(false);
             FireBulletInfo damageInfo = new FireBulletInfo(fireTickDamage, fireTickRate, fireLifeTime);
             PlayerController playerController = other.GetComponent<PlayerController>();
             playerController.TakeFireDamage(damageInfo);
