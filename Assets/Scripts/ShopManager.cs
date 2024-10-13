@@ -138,3 +138,4 @@ public class ShopManager : MonoBehaviour
         shopAlert.SetActive(false);
     }
 }
+
